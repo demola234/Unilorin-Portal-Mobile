@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Config {
   static bool get isAndroid => Platform.isAndroid;
+  static bool get isIos => Platform.isIOS;
 
   static TextStyle h1(BuildContext context) => GoogleFonts.montserrat(
         fontSize: textSize(context, 4),
