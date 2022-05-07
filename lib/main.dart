@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'features/authentication/presentation/pages/splash/splash.dart';
+import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -13,16 +14,33 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var brightness = SchedulerBinding.instance!.window.platformBrightness;
+  @override
+  void initState() {
+    super.initState();
+    FlutterNativeSplash.remove();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Probitas App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        // scaffoldBackgroundColor: Color(0xFFFFFF),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Color(0xFF1A1A2A),
       ),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: OnBoarding(),
     );
   }
 }

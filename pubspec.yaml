@@ -9,6 +9,8 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  animate_do: ^2.1.0
+  cached_network_image: ^3.1.0
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   dio: ^4.0.6
@@ -17,7 +19,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.1.6
-  cached_network_image: ^3.1.0
   flutter_riverpod: ^1.0.3
   flutter_svg: ^1.0.3
   gap: ^2.0.0
@@ -29,6 +30,7 @@ dependencies:
   overlay_support: ^1.2.1
   pretty_dio_logger: ^1.1.1
   pull_to_refresh: ^2.0.0
+  shared_preferences: ^2.0.13
   timeago: ^3.2.2
 
 dev_dependencies:
@@ -38,18 +40,18 @@ dev_dependencies:
 flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/splash.png
+  color_dark: "#1A1A2A"
+  image_dark: assets/images/splashdark.png
   android: true
   ios: true
   fullscreen: true
 
 flutter:
   uses-material-design: true
-  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/jsons/
     - assets/icons/
-
   # example:
   # fonts:
   #   - family: Schyler
