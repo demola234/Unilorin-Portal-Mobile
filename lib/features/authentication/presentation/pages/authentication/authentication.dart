@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
+import 'package:probitas_app/data/remote/authentication/authentication_service.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../../core/constants/image_path.dart';
+import '../../../../../injection_container.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({Key? key}) : super(key: key);
@@ -13,6 +15,10 @@ class Authentication extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<Authentication> {
+  var authService = getIt<AuthenticationService>();
+  TextEditingController matricNumber = TextEditingController();
+  TextEditingController password = TextEditingController();
+
   bool visible = false;
   @override
   Widget build(BuildContext context) {
@@ -69,11 +75,13 @@ class _AuthenticationState extends State<Authentication> {
               child: Column(children: [
                 ProbitasTextFormField(
                   hintText: "Matric Number",
+                  controller: matricNumber,
                   inputType: TextInputType.text,
                 ),
                 YMargin(20),
                 ProbitasTextFormField(
                   hintText: "Password",
+                  controller: password,
                   inputType: TextInputType.visiblePassword,
                   obscureText: !visible,
                   suffixIcon: InkWell(
@@ -96,9 +104,12 @@ class _AuthenticationState extends State<Authentication> {
             YMargin(40),
             ProbitasButton(
               text: "Login",
-              onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => NavController()));
+              onTap: () async {
+                var user =
+                    await authService.login(matricNumber.text, password.text);
+                print(user);
+                // Navigator.pushReplacement(context,
+                //     MaterialPageRoute(builder: (context) => NavController()));
               },
             ),
             Align(

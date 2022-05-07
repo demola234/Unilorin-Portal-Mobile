@@ -4,13 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
 
-void main() {
+import 'injection_container.dart';
+
+void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  await init();
   runApp(MyApp());
 }
 

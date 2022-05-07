@@ -41,7 +41,7 @@ class _NavControllerState extends State<NavController> {
     return Scaffold(
         body: PageView(
           children: [
-            DashBoard(),
+            Dashboard(),
             PostFeeds(),
             Assignment(),
             Messages(),
