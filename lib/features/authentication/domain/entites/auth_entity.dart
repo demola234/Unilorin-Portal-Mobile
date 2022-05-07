@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'dart:convert';
+// import 'dart:convert';
 
 class AuthenticationEntity extends Equatable {
   AuthenticationEntity({

@@ -22,12 +22,24 @@ class Config {
   static TextStyle h3(BuildContext context) => GoogleFonts.montserrat(
         fontSize: textSize(context, 2.5),
         height: 1.6,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w400,
       );
 
   static TextStyle b1(BuildContext context) => GoogleFonts.montserrat(
-        fontSize: textSize(context, 2),
+        fontSize: textSize(context, 1.5),
         fontWeight: FontWeight.w600,
+        height: 1.6,
+      );
+
+  static TextStyle b2(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: textSize(context, 1.5),
+        fontWeight: FontWeight.w400,
+        height: 1.6,
+      );
+
+  static TextStyle b3(BuildContext context) => GoogleFonts.montserrat(
+        fontSize: textSize(context, 1.2),
+        fontWeight: FontWeight.w400,
         height: 1.6,
       );
 

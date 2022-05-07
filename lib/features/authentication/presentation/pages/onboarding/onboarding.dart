@@ -5,6 +5,7 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/authentication/data/model/onboarding_model.dart';
 
+import '../../../../../core/utils/components.dart';
 import '../authentication/authentication.dart';
 
 class OnBoarding extends StatefulWidget {
@@ -126,47 +127,18 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30, bottom: 60.0),
-              child: Container(
-                child: InkWell(
-                  onTap: () async {
-                    if (currentIndex == onboarding.length - 1) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Authentication()));
-                    }
-                    _pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
-                  child: Container(
-                    height: 72,
-                    width: context.screenWidth(),
-                    decoration: BoxDecoration(
-                        color:
-                            !isDarkMode ? Color(0xFF045257) : Color(0xFFD8ECEA),
-                        borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                    child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Continue to login",
-                          style: GoogleFonts.montserrat(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w300,
-                            color: !isDarkMode
-                                ? Color(0xFFE3D6C5)
-                                : Color(0xFF1A1A2A),
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-            ),
+          ProbitasButton(
+            text: "Continue to login",
+            onTap: () {
+              if (currentIndex == onboarding.length - 1) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Authentication()));
+              }
+              _pageController.nextPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            },
           )
         ],
       ),

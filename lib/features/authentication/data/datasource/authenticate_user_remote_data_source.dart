@@ -1,4 +1,4 @@
-import 'package:probitas_app/core/network/network_info.dart';
+import 'package:probitas_app/core/network/base_api.dart';
 
 abstract class AuthenticationRemoteDataSource {
   Future getUserAuthenticated(String username, String password);
