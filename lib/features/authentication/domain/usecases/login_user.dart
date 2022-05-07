@@ -5,10 +5,10 @@ import 'package:probitas_app/core/usecases/usecases.dart';
 import 'package:probitas_app/features/authentication/domain/entites/auth_entity.dart';
 import 'package:probitas_app/features/authentication/domain/repository/auth_repository.dart';
 
-class GetUserLoggedIn implements UseCase<AuthenticationEntity, Params> {
+class LoginUser implements UseCase<AuthenticationEntity, Params> {
   final AuthenticationRepository repository;
 
-  GetUserLoggedIn(this.repository);
+  LoginUser(this.repository);
 
   @override
   Future<Either<Failure, AuthenticationEntity>> call(Params params) async {

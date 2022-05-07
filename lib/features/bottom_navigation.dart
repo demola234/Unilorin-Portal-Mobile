@@ -3,11 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import '../core/constants/image_path.dart';
-import 'authentication/presentation/pages/assignments/assignment.dart';
-import 'authentication/presentation/pages/dashboard/dashboard.dart';
-import 'authentication/presentation/pages/messages/message.dart';
-import 'authentication/presentation/pages/posts/posts.dart';
-import 'authentication/presentation/pages/resources/resources.dart';
+import 'assignments/assignment.dart';
+import 'dashboard/dashboard.dart';
+import 'messages/message.dart';
+import 'posts/posts.dart';
+import 'resources/resources.dart';
 
 class NavController extends StatefulWidget {
   const NavController({Key? key}) : super(key: key);
@@ -55,11 +55,16 @@ class _NavControllerState extends State<NavController> {
           elevation: 0,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(ImagesAsset.home,
-                  height: 20,
-                  width: 20,
-                  allowDrawingOutsideViewBox: true,
-                  color: Colors.grey),
+              icon: Column(
+                children: [
+                  SvgPicture.asset(ImagesAsset.home,
+                      height: 20,
+                      width: 20,
+                      allowDrawingOutsideViewBox: true,
+                      color: Colors.grey),
+                  YMargin(9.0),
+                ],
+              ),
               label: "",
               tooltip: "Dashboard",
               activeIcon: Column(
@@ -84,11 +89,16 @@ class _NavControllerState extends State<NavController> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(ImagesAsset.post,
-                  height: 20,
-                  width: 20,
-                  allowDrawingOutsideViewBox: true,
-                  color: Colors.grey),
+              icon: Column(
+                children: [
+                  SvgPicture.asset(ImagesAsset.post,
+                      height: 20,
+                      width: 20,
+                      allowDrawingOutsideViewBox: true,
+                      color: Colors.grey),
+                  YMargin(9.0),
+                ],
+              ),
               label: "",
               tooltip: "Posts",
               activeIcon: Column(
@@ -111,12 +121,17 @@ class _NavControllerState extends State<NavController> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                ImagesAsset.resources,
-                height: 20,
-                width: 20,
-                allowDrawingOutsideViewBox: true,
-                color: Colors.grey,
+              icon: Column(
+                children: [
+                  SvgPicture.asset(
+                    ImagesAsset.resources,
+                    height: 20,
+                    width: 20,
+                    allowDrawingOutsideViewBox: true,
+                    color: Colors.grey,
+                  ),
+                  YMargin(9.0),
+                ],
               ),
               label: "",
               tooltip: "Tasks",
@@ -140,12 +155,17 @@ class _NavControllerState extends State<NavController> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                ImagesAsset.assignment,
-                height: 20,
-                width: 20,
-                allowDrawingOutsideViewBox: true,
-                color: Colors.grey,
+              icon: Column(
+                children: [
+                  SvgPicture.asset(
+                    ImagesAsset.assignment,
+                    height: 20,
+                    width: 20,
+                    allowDrawingOutsideViewBox: true,
+                    color: Colors.grey,
+                  ),
+                  YMargin(9.0),
+                ],
               ),
               label: "",
               tooltip: "Resources",
@@ -169,12 +189,17 @@ class _NavControllerState extends State<NavController> {
               ),
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                ImagesAsset.notifications,
-                height: 20,
-                width: 20,
-                allowDrawingOutsideViewBox: true,
-                color: Colors.grey,
+              icon: Column(
+                children: [
+                  SvgPicture.asset(
+                    ImagesAsset.notifications,
+                    height: 20,
+                    width: 20,
+                    allowDrawingOutsideViewBox: true,
+                    color: Colors.grey,
+                  ),
+                  YMargin(9.0),
+                ],
               ),
               label: "",
               tooltip: "Notification",
