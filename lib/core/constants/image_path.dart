@@ -6,6 +6,7 @@ class ImagesAsset {
   static String logo_light = 'assets/images/splash.png';
   static String logo_dark = 'assets/images/splashdark.png';
   static String senate_building = 'assets/images/senate_building.png';
+  static String default_image = 'assets/images/default.png';
 
   //Icons
   static String home = 'assets/icons/home.svg';
@@ -13,6 +14,7 @@ class ImagesAsset {
   static String assignment = 'assets/icons/Calendar.svg';
   static String resources = 'assets/icons/Paper.svg';
   static String notifications = 'assets/icons/Notification.svg';
+  static String drawer = 'assets/icons/Category.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

@@ -5,9 +5,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
-import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
-import 'package:probitas_app/features/bottom_navigation.dart';
 import 'core/utils/navigation_service.dart';
+import 'features/dashboard/presentation/pages/dashboard.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -47,7 +46,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: NavigationService().navigationKey,
       theme: ThemeData(
         brightness: Brightness.light,
-        // scaffoldBackgroundColor: Color(0xFFFFFF),
       ),
       darkTheme: ThemeData(
           brightness: Brightness.dark,
@@ -57,7 +55,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: ProbitasColor.ProbitasPrimary,
           )),
       debugShowCheckedModeBanner: false,
-      home: OnBoarding(),
+      home: Dashboard(),
     ));
   }
 }

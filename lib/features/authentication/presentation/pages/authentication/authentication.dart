@@ -3,20 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
-import 'package:probitas_app/features/authentication/data/infrastructure/authentication_state.dart';
-import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../../core/constants/image_path.dart';
 import '../../provider/authentication_provider.dart';
 
-class Authentication extends ConsumerWidget {
+class Authentication extends StatefulWidget {
+  @override
+  State<Authentication> createState() => _AuthenticationState();
+}
+
+class _AuthenticationState extends State<Authentication> {
   TextEditingController matricNumber = TextEditingController();
+
   TextEditingController password = TextEditingController();
 
   bool visible = false;
+
   bool isLoading = false;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(authenticationNotifierProvider);
+  Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: Stack(children: [
@@ -81,9 +86,9 @@ class Authentication extends ConsumerWidget {
                   obscureText: !visible,
                   suffixIcon: InkWell(
                       onTap: () {
-                        // setState(() {
-                        //   visible = !visible;
-                        // });
+                        setState(() {
+                          visible = !visible;
+                        });
                       },
                       child: Icon(
                         !visible
@@ -103,7 +108,7 @@ class Authentication extends ConsumerWidget {
                     watch.read(authenticationNotifierProvider.notifier);
                 return ProbitasButton(
                     text: "Login",
-                    showLoading: (state is AuthenticationLoading),
+                    showLoading: false,
                     onTap: () async {
                       return state.login(matricNumber.text, password.text);
                     });

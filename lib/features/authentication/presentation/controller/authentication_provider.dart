@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 
@@ -15,13 +14,18 @@ class LoginNotifier extends StateNotifier<AuthenticationState> {
   LoginNotifier(this.authService) : super(AuthenticationInitial());
 
   Future<void> login(String matricNumber, String password) async {
-    state = AuthenticationLoading();
+    bool isLoading = true;
+    state = AuthenticationLoading(isLoading);
     try {
       final response = await authService.login(matricNumber, password);
       state = AuthenticatingUser(response);
       NavigationService().replaceScreen(NavController());
+      bool isLoading = false;
+      state = AuthenticationLoading(isLoading);
     } catch (e) {
       state = AuthenticationError("An Error Occured");
+      bool isLoading = false;
+      state = AuthenticationLoading(isLoading);
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
   }

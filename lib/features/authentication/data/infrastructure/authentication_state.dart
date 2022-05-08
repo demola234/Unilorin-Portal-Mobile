@@ -9,7 +9,8 @@ class AuthenticationInitial extends AuthenticationState {
 }
 
 class AuthenticationLoading extends AuthenticationState {
-  const AuthenticationLoading();
+  late bool isLoading;
+  AuthenticationLoading(isLoading);
 }
 
 class AuthenticatingUser extends AuthenticationState {
@@ -21,4 +22,3 @@ class AuthenticationError extends AuthenticationState {
   late String errorMessage;
   AuthenticationError(errorMessage);
 }
- 

@@ -4,7 +4,7 @@ import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import '../core/constants/image_path.dart';
 import 'assignments/assignment.dart';
-import 'dashboard/dashboard.dart';
+import 'dashboard/presentation/pages/dashboard.dart';
 import 'messages/message.dart';
 import 'posts/posts.dart';
 import 'resources/resources.dart';
@@ -38,6 +38,7 @@ class _NavControllerState extends State<NavController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: PageView(
           children: [
@@ -74,7 +75,9 @@ class _NavControllerState extends State<NavController> {
                     height: 20,
                     width: 20,
                     allowDrawingOutsideViewBox: true,
-                    color: ProbitasColor.ProbitasSecondry,
+                    color: !isDarkMode
+                        ? ProbitasColor.ProbitasSecondry
+                        : ProbitasColor.ProbitasAccent,
                   ),
                   YMargin(4.0),
                   Container(
@@ -82,7 +85,9 @@ class _NavControllerState extends State<NavController> {
                     width: 5.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: ProbitasColor.ProbitasSecondry,
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent,
                     ),
                   )
                 ],
@@ -107,14 +112,18 @@ class _NavControllerState extends State<NavController> {
                       height: 20,
                       width: 20,
                       allowDrawingOutsideViewBox: true,
-                      color: ProbitasColor.ProbitasSecondry),
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
                     height: 5.0,
                     width: 5.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: ProbitasColor.ProbitasSecondry,
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent,
                     ),
                   )
                 ],
@@ -141,14 +150,18 @@ class _NavControllerState extends State<NavController> {
                       height: 20,
                       width: 20,
                       allowDrawingOutsideViewBox: true,
-                      color: ProbitasColor.ProbitasSecondry),
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
                     height: 5.0,
                     width: 5.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: ProbitasColor.ProbitasSecondry,
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent,
                     ),
                   )
                 ],
@@ -175,14 +188,18 @@ class _NavControllerState extends State<NavController> {
                       height: 20,
                       width: 20,
                       allowDrawingOutsideViewBox: true,
-                      color: ProbitasColor.ProbitasSecondry),
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
                     height: 5.0,
                     width: 5.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: ProbitasColor.ProbitasSecondry,
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent,
                     ),
                   )
                 ],
@@ -209,21 +226,27 @@ class _NavControllerState extends State<NavController> {
                       height: 20,
                       width: 20,
                       allowDrawingOutsideViewBox: true,
-                      color: ProbitasColor.ProbitasSecondry),
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
                     height: 5.0,
                     width: 5.0,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: ProbitasColor.ProbitasSecondry,
+                      color: !isDarkMode
+                          ? ProbitasColor.ProbitasSecondry
+                          : ProbitasColor.ProbitasAccent,
                     ),
                   )
                 ],
               ),
             ),
           ],
-          selectedItemColor: ProbitasColor.ProbitasSecondry,
+          selectedItemColor: !isDarkMode
+              ? ProbitasColor.ProbitasSecondry
+              : ProbitasColor.ProbitasAccent,
           unselectedItemColor: Colors.grey,
           selectedFontSize: 12,
           unselectedFontSize: 12,
