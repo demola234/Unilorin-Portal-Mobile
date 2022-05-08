@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:overlay_support/overlay_support.dart';
+import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
-
+import 'package:probitas_app/features/bottom_navigation.dart';
+import 'core/utils/navigation_service.dart';
 import 'injection_container.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -13,8 +18,12 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  await init();
-  runApp(MyApp());
+  await injector();
+  runApp(
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -32,18 +41,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return OverlaySupport.global(
+        child: MaterialApp(
       title: 'Probitas App',
+      navigatorKey: NavigationService().navigationKey,
       theme: ThemeData(
         brightness: Brightness.light,
         // scaffoldBackgroundColor: Color(0xFFFFFF),
       ),
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color(0xFF1A1A2A),
-      ),
+          brightness: Brightness.dark,
+          scaffoldBackgroundColor: Color(0xFF1A1A2A),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            elevation: 0,
+            backgroundColor: ProbitasColor.ProbitasPrimary,
+          )),
       debugShowCheckedModeBanner: false,
       home: OnBoarding(),
-    );
+    ));
   }
 }

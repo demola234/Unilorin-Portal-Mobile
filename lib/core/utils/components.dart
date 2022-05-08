@@ -8,10 +8,12 @@ class ProbitasButton extends StatelessWidget {
     Key? key,
     required this.onTap,
     required this.text,
+    this.showLoading,
   }) : super(key: key);
 
   final void Function() onTap;
   final String text;
+  final bool? showLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +31,30 @@ class ProbitasButton extends StatelessWidget {
               decoration: BoxDecoration(
                   color: !isDarkMode ? Color(0xFF045257) : Color(0xFFD8ECEA),
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
-              child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    text,
-                    style: Config.h3(context).copyWith(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w300,
-                      color:
-                          !isDarkMode ? Color(0xFFE3D6C5) : Color(0xFF1A1A2A),
-                    ),
-                  )),
+              child: showLoading != null && showLoading!
+                  ? Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                          // size: 30,
+                        ),
+                      ))
+                  : Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        text,
+                        style: Config.h3(context).copyWith(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w300,
+                          color: !isDarkMode
+                              ? Color(0xFFE3D6C5)
+                              : Color(0xFF1A1A2A),
+                        ),
+                      )),
             ),
           ),
         ),
@@ -67,7 +82,6 @@ class ProbitasTextFormField extends StatelessWidget {
   final Widget? prefixIcon;
   final TextEditingController? controller;
   final bool enabled;
-  
 
   const ProbitasTextFormField(
       {Key? key,

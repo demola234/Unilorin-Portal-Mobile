@@ -8,11 +8,18 @@ abstract class AuthenticationRepository {
 
 class AuthenticationRepositoryImpl extends BaseApi
     implements AuthenticationRepository {
-
   @override
-  Future<UserResponse> login(String matricNumber, String password) async {
-    var data = await post("auth/signin",
-        data: {"matricNumber": matricNumber, "password": password});
+  Future<UserResponse> login(
+    String matricNumber,
+    String password,
+  ) async {
+    var data = await post(
+      "auth/signin",
+      data: {
+        "matricNumber": matricNumber,
+        "password": password,
+      },
+    );
     return UserResponse.fromJson(data);
   }
 }

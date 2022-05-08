@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
-import 'package:probitas_app/data/remote/authentication/authentication_service.dart';
+import 'package:probitas_app/features/authentication/data/infrastructure/authentication_state.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../../core/constants/image_path.dart';
-import '../../../../../injection_container.dart';
+import '../../provider/authentication_provider.dart';
 
-class Authentication extends StatefulWidget {
-  const Authentication({Key? key}) : super(key: key);
-
-  @override
-  State<Authentication> createState() => _AuthenticationState();
-}
-
-class _AuthenticationState extends State<Authentication> {
-  var authService = getIt<AuthenticationService>();
+class Authentication extends ConsumerWidget {
   TextEditingController matricNumber = TextEditingController();
   TextEditingController password = TextEditingController();
 
   bool visible = false;
+  bool isLoading = false;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(authenticationNotifierProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: Stack(children: [
@@ -86,9 +81,9 @@ class _AuthenticationState extends State<Authentication> {
                   obscureText: !visible,
                   suffixIcon: InkWell(
                       onTap: () {
-                        setState(() {
-                          visible = !visible;
-                        });
+                        // setState(() {
+                        //   visible = !visible;
+                        // });
                       },
                       child: Icon(
                         !visible
@@ -102,14 +97,16 @@ class _AuthenticationState extends State<Authentication> {
               ]),
             ),
             YMargin(40),
-            ProbitasButton(
-              text: "Login",
-              onTap: () async {
-                var user =
-                    await authService.login(matricNumber.text, password.text);
-                print(user);
-                // Navigator.pushReplacement(context,
-                //     MaterialPageRoute(builder: (context) => NavController()));
+            Consumer(
+              builder: (context, watch, child) {
+                final state =
+                    watch.read(authenticationNotifierProvider.notifier);
+                return ProbitasButton(
+                    text: "Login",
+                    showLoading: (state is AuthenticationLoading),
+                    onTap: () async {
+                      return state.login(matricNumber.text, password.text);
+                    });
               },
             ),
             Align(

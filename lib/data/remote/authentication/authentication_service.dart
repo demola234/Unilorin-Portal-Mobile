@@ -1,18 +1,23 @@
 import 'package:probitas_app/data/remote/authentication/authentication_repository.dart';
 import '../../../features/authentication/data/model/user_request.dart';
+import '../../local/cache.dart';
 
 abstract class AuthenticationService {
-  Future<UserRequest> login(String matricNumber, String password);
+  Future<UserRequest?> login(String matricNumber, String password);
 }
 
 class AuthenticationServiceImpl extends AuthenticationService {
   AuthenticationRepository repository;
+  Cache cache;
 
-  AuthenticationServiceImpl({required this.repository});
+  AuthenticationServiceImpl({required this.repository, required this.cache});
 
   @override
-  Future<UserRequest> login(String matricNumber, String password) async {
+  Future<UserRequest?> login(String matricNumber, String password) async {
     var response = await repository.login(matricNumber, password);
-    return response.userRequest;
+    cache.saveUser(response.data);
+    cache.saveToken(response.data.token);
+    print("PRINNNTTTT=>>>>> ${response.data.token}");
+    return response.data;
   }
 }
