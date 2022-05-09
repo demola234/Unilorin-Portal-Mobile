@@ -8,6 +8,7 @@ abstract class Cache {
   Future<String> getToken();
   Future clear();
   Future saveUser(UserRequest user);
+  Future<bool> isFirstLoad();
   Future saveToken(String? token);
 
   static Cache get() => getIt<Cache>();
@@ -24,7 +25,10 @@ class CacheImpl implements Cache {
 
   @override
   Future<String> getToken() async {
-    return box.read("token");
+    if (box.hasData("token")) {
+      return box.read("token");
+    }
+    return "";
   }
 
   @override
@@ -34,6 +38,15 @@ class CacheImpl implements Cache {
       throw CustomException("Something went wrong");
     }
     return UserRequest.fromJson(box.read("user"));
+  }
+
+  @override
+  Future<bool> isFirstLoad() async {
+    if (box.hasData("first")) {
+      return false;
+    }
+    box.write("first", false);
+    return true;
   }
 
   @override

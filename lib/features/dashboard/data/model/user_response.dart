@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:probitas_app/features/dashboard/data/model/user_request.dart';
 
-import '../../../authentication/data/model/user_request.dart';
 
 class UserResponse {
   UserResponse({

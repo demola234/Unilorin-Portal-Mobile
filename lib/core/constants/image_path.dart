@@ -15,6 +15,10 @@ class ImagesAsset {
   static String resources = 'assets/icons/Paper.svg';
   static String notifications = 'assets/icons/Notification.svg';
   static String drawer = 'assets/icons/Category.svg';
+  static String liked = 'assets/icons/liked.svg';
+  static String notliked = 'assets/icons/notliked.svg';
+  static String share = 'assets/icons/share.svg';
+  static String chat = 'assets/icons/Chat.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

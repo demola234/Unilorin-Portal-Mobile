@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
@@ -80,15 +79,41 @@ class _DashboardState extends State<Dashboard>
                 ],
               ),
             ),
-            YMargin(20),
+            YMargin(30),
             Row(
-              children: [],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Your Schedule",
+                  style: Config.h3(context).copyWith(
+                    color: ProbitasColor.ProbitasPrimary,
+                    fontSize: 18,
+                  ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 35,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          color: ProbitasColor.ProbitasSecondry,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(12.0))),
+                      child: Center(
+                          child: Text("Manage Schedule",
+                              style: Config.b3(context).copyWith(
+                                color: Colors.white,
+                              ))),
+                    ),
+                  ),
+                )
+              ],
             ),
-            YMargin(20),
+            YMargin(30),
             new TabBar(
-                unselectedLabelColor: !isDarkMode
-                    ? ProbitasColor.ProbitasTextSecondary
-                    : ProbitasColor.ProbitasTextSecondary,
+                unselectedLabelColor: ProbitasColor.ProbitasTextSecondary,
                 labelColor: !isDarkMode
                     ? ProbitasColor.ProbitasPrimary
                     : ProbitasColor.ProbitasTextPrimary,
@@ -98,7 +123,9 @@ class _DashboardState extends State<Dashboard>
                 physics: BouncingScrollPhysics(),
                 indicator: UnderlineTabIndicator(
                     borderSide: BorderSide(
-                      color: ProbitasColor.ProbitasTextPrimary,
+                      color: isDarkMode
+                          ? ProbitasColor.ProbitasTextPrimary
+                          : ProbitasColor.ProbitasTextSecondary,
                       width: 1.0,
                     ),
                     insets: EdgeInsets.symmetric(horizontal: 10.0)),
@@ -132,11 +159,11 @@ class _DashboardState extends State<Dashboard>
                     controller: _tabcontroller,
                     physics: ClampingScrollPhysics(),
                     children: <Widget>[
-                      NoInvestmentYet(),
-                      NoLoanYet(),
-                      NoInvestmentYet(),
-                      NoLoanYet(),
-                      NoLoanYet(),
+                      Monday(),
+                      Tuesday(),
+                      Wednesday(),
+                      Thursday(),
+                      Friday(),
                     ]),
               ),
             ),
@@ -147,8 +174,8 @@ class _DashboardState extends State<Dashboard>
   }
 }
 
-class NoInvestmentYet extends StatelessWidget {
-  const NoInvestmentYet({Key? key}) : super(key: key);
+class Monday extends StatelessWidget {
+  const Monday({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +183,35 @@ class NoInvestmentYet extends StatelessWidget {
   }
 }
 
-class NoLoanYet extends StatelessWidget {
-  const NoLoanYet({Key? key}) : super(key: key);
+class Tuesday extends StatelessWidget {
+  const Tuesday({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class Wednesday extends StatelessWidget {
+  const Wednesday({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class Thursday extends StatelessWidget {
+  const Thursday({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class Friday extends StatelessWidget {
+  const Friday({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
