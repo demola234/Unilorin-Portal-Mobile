@@ -37,45 +37,7 @@ class _PostOverViewState extends State<PostOverView> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
-        child: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            "Post",
-            style: Config.h3(context).copyWith(
-              color: !isDarkMode ? ProbitasColor.ProbitasPrimary : Colors.white,
-            ),
-          ),
-          centerTitle: true,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(ImagesAsset.top_background),
-                    fit: BoxFit.cover)),
-          ),
-          leadingWidth: 80,
-          leading: Padding(
-            padding: const EdgeInsets.only(left: 24.0),
-            child: GestureDetector(
-              onTap: () {
-                NavigationService().goBack();
-              },
-              child: Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    border: Border.all()),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-        ),
+        child: CustomNavBar(title: "Posts"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -384,6 +346,58 @@ class _PostOverViewState extends State<PostOverView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+}
+
+class CustomNavBar extends StatelessWidget {
+  CustomNavBar({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      title: Text(
+        title,
+        style: Config.h3(context).copyWith(
+          color: !isDarkMode ? ProbitasColor.ProbitasPrimary : Colors.white,
+        ),
+      ),
+      centerTitle: true,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(ImagesAsset.top_background),
+                fit: BoxFit.cover)),
+      ),
+      leadingWidth: 80,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 24.0),
+        child: GestureDetector(
+          onTap: () {
+            NavigationService().goBack();
+          },
+          child: Container(
+            height: 30,
+            width: 30,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
+                border: Border.all()),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

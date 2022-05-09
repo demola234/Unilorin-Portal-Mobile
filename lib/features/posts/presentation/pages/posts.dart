@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:probitas_app/features/posts/presentation/pages/add_post.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import 'package:readmore/readmore.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -57,7 +58,9 @@ class _PostFeedsState extends State<PostFeeds> {
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      NavigationService().navigateToScreen(AddPost());
+                    },
                     child: Container(
                       height: 35,
                       width: 90,

@@ -115,6 +115,7 @@ class ProbitasTextFormField extends StatelessWidget {
       obscureText: obscureText!,
       enableInteractiveSelection: enableInteractiveSelection,
       maxLines: maxLines,
+      
       focusNode: focusNode,
       inputFormatters: inputFormatters,
       initialValue: initialValue,

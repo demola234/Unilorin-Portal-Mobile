@@ -44,9 +44,9 @@ class _NavControllerState extends State<NavController> {
           children: [
             Dashboard(),
             PostFeeds(),
+            Resources(),
             Assignment(),
             Messages(),
-            Resources(),
           ],
           onPageChanged: onPageChanged,
           controller: pageController,
