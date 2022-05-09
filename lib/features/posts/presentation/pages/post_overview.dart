@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
+import '../../../../core/utils/components.dart';
 import '../../../../core/utils/navigation_service.dart';
 
 class PostOverView extends StatefulWidget {
@@ -53,7 +55,7 @@ class _PostOverViewState extends State<PostOverView> {
           ),
           leadingWidth: 80,
           leading: Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+            padding: const EdgeInsets.only(left: 24.0),
             child: GestureDetector(
               onTap: () {
                 NavigationService().goBack();
@@ -78,7 +80,7 @@ class _PostOverViewState extends State<PostOverView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            YMargin(20),
+            YMargin(10),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
@@ -92,7 +94,7 @@ class _PostOverViewState extends State<PostOverView> {
                       image: AssetImage(ImagesAsset.default_image),
                     ),
                   ),
-                  XMargin(10),
+                  XMargin(5),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +131,7 @@ class _PostOverViewState extends State<PostOverView> {
                         YMargin(2.0),
                         Text("Today, 02:34 PM",
                             style: Config.b2(context).copyWith(
-                                color: ProbitasColor.ProbitasTextSecondary,
+                                color: ProbitasColor.ProbitasPrimary,
                                 fontSize: 14.0))
                       ],
                     ),
@@ -226,9 +228,162 @@ class _PostOverViewState extends State<PostOverView> {
                 ],
               ),
             ),
+            Divider(),
+            YMargin(20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Add Comment",
+                      textAlign: TextAlign.right,
+                      style: Config.h3(context).copyWith(
+                        fontSize: 19,
+                      ),
+                    ),
+                  ),
+                  YMargin(15),
+                  ProbitasTextFormField(
+                    hintText: "Write a comment",
+                  ),
+                  YMargin(20),
+                  Container(
+                    width: context.screenWidth(),
+                    child: ListView.builder(
+                      itemCount: 10,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          width: context.screenWidth(),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              border: Border.all(
+                                color: ProbitasColor.ProbitasTextPrimary,
+                              )),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 15),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 60,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15.0))),
+                                      child: Image(
+                                        image: AssetImage(
+                                            ImagesAsset.default_image),
+                                      ),
+                                    ),
+                                    XMargin(5),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Text(
+                                            "Femi Ademola",
+                                            style: Config.b2(context).copyWith(
+                                                color: ProbitasColor
+                                                    .ProbitasPrimary),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            softWrap: false,
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                        ),
+                                        YMargin(2.0),
+                                        Text(
+                                          "Microbiology",
+                                          style: Config.b2(context).copyWith(
+                                              color: ProbitasColor
+                                                  .ProbitasTextSecondary),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text("Level 200",
+                                              style: Config.b2(context).copyWith(
+                                                  color: ProbitasColor
+                                                      .ProbitasTextSecondary,
+                                                  fontSize: 14.0)),
+                                          YMargin(2.0),
+                                          Text("Today, 02:34 PM",
+                                              style: Config.b2(context)
+                                                  .copyWith(
+                                                      color: ProbitasColor
+                                                          .ProbitasPrimary,
+                                                      fontSize: 14.0))
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Divider(),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10.0),
+                                  child: Text(
+                                    "In Flutter, the overflosssssw property of the Text, RichText, and DefaultTextStyle widgets specifies how ",
+                                    style: Config.b3(context).copyWith(
+                                        color: ProbitasColor.ProbitasPrimary,
+                                        fontSize: 14.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 100,
+            )
           ],
         ),
       ),
+      floatingActionButton: InkWell(
+        onTap: () {},
+        child: Container(
+          height: 70,
+          width: 220,
+          decoration: BoxDecoration(
+              color: ProbitasColor.ProbitasSecondry,
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          child: Center(
+            child: Text(
+              "Add Comment",
+              style: Config.b2(context).copyWith(
+                color: ProbitasColor.ProbitasTextPrimary,
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
