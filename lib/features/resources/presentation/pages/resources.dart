@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
@@ -93,19 +93,34 @@ class _ResourcesState extends State<Resources> {
   }
 }
 
-class ResourceTile extends StatelessWidget {
+class ResourceTile extends StatefulWidget {
   ResourceTile({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<ResourceTile> createState() => _ResourceTileState();
+}
+
+class _ResourceTileState extends State<ResourceTile> {
+  bool isLoading = false;
+  late Dio dio;
+  late String progress;
+  late String _fileFullPath;
+  String url =
+      "http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf";
+  @override
+  void initState() {
+    dio = Dio();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => openFile(
-        url:
-            'http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf',
-        fileName: 'docs.pdf',
-      ),
+      onTap: () {
+        _downloadndSaveFileToStorage(url, "document.pdf");
+      },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         height: 120,
@@ -166,36 +181,59 @@ class ResourceTile extends StatelessWidget {
     );
   }
 
-  Future openFile({required String url, String? fileName}) async {
-    final name = fileName ?? url.split('/').last;
-
-    final file = await downloadFile(url, name);
-    print(file);
-    if (file == null) return;
-
-    print("${file.path}");
-
-    OpenFile.open(file.path);
+  Future<List<Directory>?> _getExternalStroagePath() {
+    return path.getExternalStorageDirectories(
+        type: path.StorageDirectory.documents);
   }
 
-  Future<File?> downloadFile(String url, String name) async {
-    final appStorage = await getApplicationDocumentsDirectory();
-    final file = File('${appStorage.path}/$name');
+  Future _downloadndSaveFileToStorage(String urlPath, String fileName) async {
     try {
-      final response = await Dio().get(url,
-          options: Options(
-            responseType: ResponseType.bytes,
-            followRedirects: false,
-            receiveTimeout: 0,
-          ));
-
-      final raf = file.openSync(mode: FileMode.write);
-      raf.writeByteSync(response.data);
-      await raf.close();
-
-      return file;
+      final dirList = await _getExternalStroagePath();
+      final path = dirList![0].path;
+      final file = File("$path/$fileName");
+      await dio.download(urlPath, file.path, onReceiveProgress: (rec, total) {
+        setState(() {
+          isLoading = true;
+          progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
+          print(progress);
+        });
+      });
+      _fileFullPath = file.path;
     } catch (e) {
-      return null;
+      print(e);
     }
   }
+
+  // Future openFile({required String url, String? fileName}) async {
+  //   final name = fileName ?? url.split('/').last;
+
+  //   final file = await downloadFile(url, name);
+  //   print(file);
+  //   if (file == null) return;
+
+  //   print("${file.path}");
+
+  //   OpenFile.open(file.path);
+  // }
+
+  // Future<File?> downloadFile(String url, String name) async {
+  //   final appStorage = await getApplicationDocumentsDirectory();
+  //   final file = File('${appStorage.path}/$name');
+  //   try {
+  //     final response = await Dio().get(url,
+  //         options: Options(
+  //           responseType: ResponseType.bytes,
+  //           followRedirects: false,
+  //           receiveTimeout: 0,
+  //         ));
+  //     print(response);
+  //     final raf = file.openSync(mode: FileMode.write);
+  //     raf.writeByteSync(response.data);
+  //     await raf.close();
+
+  //     return file;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
 }
