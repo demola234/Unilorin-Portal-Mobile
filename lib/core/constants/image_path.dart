@@ -23,6 +23,7 @@ class ImagesAsset {
   static String date = 'assets/icons/date.svg';
   static String time = 'assets/icons/Time.svg';
   static String filter = 'assets/icons/Filter.svg';
+  static String file = 'assets/icons/file.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

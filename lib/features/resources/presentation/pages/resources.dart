@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
+import 'package:probitas_app/core/utils/navigation_service.dart';
 
-import '../../core/constants/colors.dart';
-import '../../core/utils/config.dart';
-import '../../core/utils/customs/custom_appbar.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/utils/config.dart';
+import '../../../../core/utils/customs/custom_appbar.dart';
+import 'add_resources.dart';
 
 class Resources extends StatefulWidget {
   const Resources({Key? key}) : super(key: key);
@@ -78,7 +80,9 @@ class _ResourcesState extends State<Resources> {
         ]),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          NavigationService().navigateToScreen(AddResources());
+        },
         backgroundColor: ProbitasColor.ProbitasSecondry,
         child: Icon(Icons.add),
       ),

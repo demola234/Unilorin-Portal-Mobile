@@ -7,7 +7,7 @@ import 'assignments/assignment.dart';
 import 'dashboard/presentation/pages/dashboard.dart';
 import 'messages/message.dart';
 import 'posts/presentation/pages/posts.dart';
-import 'resources/resources.dart';
+import 'resources/presentation/pages/resources.dart';
 
 class NavController extends StatefulWidget {
   const NavController({Key? key}) : super(key: key);

@@ -55,31 +55,10 @@ class _PostFeedsState extends State<PostFeeds> {
                     fontSize: 18,
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: InkWell(
-                    onTap: () {
-                      NavigationService().navigateToScreen(AddPost());
-                    },
-                    child: Container(
-                      height: 35,
-                      width: 90,
-                      decoration: BoxDecoration(
-                          color: ProbitasColor.ProbitasSecondry,
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Add Posts",
-                              style: Config.b3(context).copyWith(
-                                color: ProbitasColor.ProbitasTextPrimary,
-                              )),
-                        ],
-                      )),
-                    ),
-                  ),
-                )
+                ProbitasSmallButton(
+                    title: "Add Posts",
+                    onTap: () =>
+                        NavigationService().navigateToScreen(AddPost()))
               ],
             ),
             YMargin(10),
@@ -321,6 +300,46 @@ class _PostFeedsState extends State<PostFeeds> {
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProbitasSmallButton extends StatelessWidget {
+  ProbitasSmallButton({
+    Key? key,
+    this.onTap,
+    this.icon,
+    required this.title,
+  }) : super(key: key);
+  final void Function()? onTap;
+  final String? icon;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 35,
+          width: 90,
+          decoration: BoxDecoration(
+              color: ProbitasColor.ProbitasSecondry,
+              borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          child: Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon != null ? SvgPicture.asset(icon!) : Container(),
+              icon != null ? XMargin(2) : XMargin(0),
+              Text(title,
+                  style: Config.b3(context).copyWith(
+                    color: ProbitasColor.ProbitasTextPrimary,
+                  )),
+            ],
+          )),
         ),
       ),
     );
