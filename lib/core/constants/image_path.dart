@@ -26,4 +26,5 @@ class ImagesAsset {
   static String student1 = 'assets/jsons/student.json';
   static String student2 = 'assets/jsons/back-to-school.json';
   static String student3 = 'assets/jsons/school-demo.json';
+  static String empty = 'assets/jsons/empty.json';
 }
