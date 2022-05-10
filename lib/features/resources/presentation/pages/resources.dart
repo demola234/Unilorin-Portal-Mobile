@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
@@ -96,9 +101,11 @@ class ResourceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        return _launchUrl();
-      },
+      onTap: () => openFile(
+        url:
+            'http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf',
+        fileName: 'docs.pdf',
+      ),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         height: 120,
@@ -159,10 +166,36 @@ class ResourceTile extends StatelessWidget {
     );
   }
 
-  final Uri _url = Uri.parse(
-      'http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf');
+  Future openFile({required String url, String? fileName}) async {
+    final name = fileName ?? url.split('/').last;
 
-  void _launchUrl() async {
-    if (!await launchUrl(_url)) throw 'Could not launch $_url';
+    final file = await downloadFile(url, name);
+    print(file);
+    if (file == null) return;
+
+    print("${file.path}");
+
+    OpenFile.open(file.path);
+  }
+
+  Future<File?> downloadFile(String url, String name) async {
+    final appStorage = await getApplicationDocumentsDirectory();
+    final file = File('${appStorage.path}/$name');
+    try {
+      final response = await Dio().get(url,
+          options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            receiveTimeout: 0,
+          ));
+
+      final raf = file.openSync(mode: FileMode.write);
+      raf.writeByteSync(response.data);
+      await raf.close();
+
+      return file;
+    } catch (e) {
+      return null;
+    }
   }
 }

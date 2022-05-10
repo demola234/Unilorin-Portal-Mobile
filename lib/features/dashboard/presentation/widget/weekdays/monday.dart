@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:probitas_app/core/utils/config.dart';
 import '../schedule_tile.dart/schedule_tile.dart';
 
 class Monday extends StatelessWidget {
@@ -8,11 +9,11 @@ class Monday extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SingleChildScrollView(
+        Expanded(
           child: Container(
-            height: 400,
             child: ListView.builder(
                 itemCount: 5,
+                shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   return ScheduleTile();
