@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:readmore/readmore.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
@@ -118,9 +119,12 @@ class _PostOverViewState extends State<PostOverView> {
                     itemCount: 3,
                     itemBuilder: (context, index) {
                       return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          border: Border.all(),
+                        decoration: BoxDecoration(),
+                        child: Image(
+                          image: AssetImage(
+                            ImagesAsset.post_default,
+                          ),
+                          fit: BoxFit.cover,
                         ),
                       );
                     },
@@ -139,10 +143,8 @@ class _PostOverViewState extends State<PostOverView> {
                 //         maxVisibleDots: 5,
                 //         radius: 8,
                 //         spacing: 10,
-                //         activeDotColor:
-                //             ProbitasColor.ProbitasSecondry,
-                //         dotColor:
-                //             ProbitasColor.ProbitasTextPrimary,
+                //         activeDotColor: ProbitasColor.ProbitasSecondry,
+                //         dotColor: ProbitasColor.ProbitasTextPrimary,
                 //         dotHeight: 12,
                 //         dotWidth: 12,
                 //       ),

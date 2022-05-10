@@ -195,9 +195,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                           itemCount: 3,
                                           itemBuilder: (context, index) {
                                             return Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.red,
-                                                border: Border.all(),
+                                              decoration: BoxDecoration(),
+                                              child: Image(
+                                                image: AssetImage(
+                                                  ImagesAsset.post_default,
+                                                ),
+                                                fit: BoxFit.cover,
                                               ),
                                             );
                                           },

@@ -84,11 +84,14 @@ class _AddPostState extends State<AddPost> {
           YMargin(10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: SizedBox(
-              height: 100,
-              width: double.maxFinite,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+            child: Container(
+              width: context.screenWidth(),
+              child: GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                ),
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 physics: BouncingScrollPhysics(),
                 children: images
                     .map((e) => Padding(
@@ -96,7 +99,8 @@ class _AddPostState extends State<AddPost> {
                           child: Material(
                               borderRadius: BorderRadius.circular(16.0),
                               clipBehavior: Clip.antiAlias,
-                              child: SizedBox(
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 5.0),
                                 height: 100,
                                 width: 120,
                                 child: Stack(
@@ -119,7 +123,7 @@ class _AddPostState extends State<AddPost> {
                                               });
                                             },
                                             icon: Icon(
-                                              Icons.close,
+                                              Icons.cancel_presentation_rounded,
                                               color: Colors.white,
                                             )))
                                   ],

@@ -173,7 +173,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
                               width: 15,
                             ),
                           ),
-                          onTap: startTime,
+                          onTap: endTime,
                         ),
                       ),
                     ],
