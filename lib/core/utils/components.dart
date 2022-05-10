@@ -146,3 +146,91 @@ class ProbitasTextFormField extends StatelessWidget {
     );
   }
 }
+
+class ProbitasDropDown extends StatelessWidget {
+  final String? labelText;
+  final String? initialValue;
+  final Widget? textFieldIcon;
+  final bool enableInteractiveSelection;
+  final TextAlign textAlign;
+  final String? hintText;
+  final bool? obscureText;
+  final Widget? prefixIcon;
+  final TextInputType? inputType;
+  final String? Function(String? input)? validator;
+  final Function(String?)? onChanged;
+  final Function(String?)? onSaved;
+  final Function()? onEditingComplete;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
+  final bool enabled;
+  final List<String> items;
+  final String? value;
+
+  const ProbitasDropDown(
+      {Key? key,
+      this.labelText,
+      this.initialValue,
+      this.textFieldIcon,
+      this.inputType,
+      this.onChanged,
+      this.onEditingComplete,
+      this.onSaved,
+      this.validator,
+      this.inputFormatters,
+      this.maxLines = 1,
+      this.focusNode,
+      this.textAlign = TextAlign.start,
+      this.obscureText = false,
+      this.enableInteractiveSelection = true,
+      this.hintText,
+      this.prefixIcon,
+      this.controller,
+      required this.items,
+      required this.value,
+      this.enabled = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return DropdownButtonFormField<String>(
+        isExpanded: true,
+        validator: validator,
+        onSaved: onSaved,
+        style: Config.b2(context).copyWith(
+          color: ProbitasColor.ProbitasPrimary,
+        ),
+        decoration: InputDecoration(
+          fillColor: !isDarkMode
+              ? ProbitasColor.ProbitasTextPrimary.withOpacity(0.3)
+              : ProbitasColor.ProbitasAccent.withOpacity(0.3),
+          filled: true,
+          prefixIcon: prefixIcon,
+          suffixIcon: textFieldIcon,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15.0),
+            ),
+          ),
+          hintText: hintText,
+          labelText: labelText,
+          labelStyle: Config.b2(context).copyWith(),
+          hintStyle: Config.b2(context).copyWith(),
+        ),
+        items: items
+            .map((e) => DropdownMenuItem<String>(value: e, child: Text("$e")))
+            .toList(),
+        onChanged: onChanged,
+        value: value);
+  }
+}

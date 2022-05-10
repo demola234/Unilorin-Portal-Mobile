@@ -19,6 +19,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
   TextEditingController dateController = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
+  var remindMe, day, course;
 
   @override
   void initState() {
@@ -108,20 +109,22 @@ class _ManageScheduleState extends State<ManageSchedule> {
                     ),
                   ),
                   YMargin(10),
-                  ProbitasTextFormField(
+                  ProbitasDropDown(
                     hintText: "Choose Week days",
-                    readOnly: true,
-                    controller: dateController,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        ImagesAsset.date,
-                        height: 15,
-                        width: 15,
-                      ),
-                    ),
-                    onTap: pickDate,
-                  ),
+                    items: [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday"
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        remindMe = value;
+                      });
+                    },
+                    value: remindMe,
+                  )
                 ],
               ),
             ),
@@ -166,11 +169,11 @@ class _ManageScheduleState extends State<ManageSchedule> {
                             padding: const EdgeInsets.all(8.0),
                             child: SvgPicture.asset(
                               ImagesAsset.time,
-                              height: 10,
-                              width: 10,
+                              height: 15,
+                              width: 15,
                             ),
                           ),
-                          onTap: endTime,
+                          onTap: startTime,
                         ),
                       ),
                     ],
@@ -222,26 +225,6 @@ class _ManageScheduleState extends State<ManageSchedule> {
     );
   }
 
-  void pickDate() async {
-    DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2101));
-
-    if (pickedDate != null) {
-      print(pickedDate);
-      String formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
-      print(formattedDate);
-
-      setState(() {
-        dateController.text = formattedDate;
-      });
-    } else {
-      print("Date is not selected");
-    }
-  }
-
   startTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
       initialTime: TimeOfDay.now(),
@@ -252,11 +235,9 @@ class _ManageScheduleState extends State<ManageSchedule> {
       print(pickedTime.format(context));
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
-      //converting to DateTime so that we can further format on different pattern.
-      print(parsedTime); //output 1970-01-01 22:53:00.000
+      print(parsedTime);
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
-      print(formattedTime); //output 14:59:00
-      //DateFormat() is from intl package, you can format the time on any pattern you need.
+      print(formattedTime);
 
       setState(() {
         startController.text = formattedTime;
