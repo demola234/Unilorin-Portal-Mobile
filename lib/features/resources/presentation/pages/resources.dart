@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
@@ -72,10 +73,7 @@ class _ResourcesState extends State<Resources> {
                   child: ListView.builder(
                       itemCount: 3,
                       itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {},
-                          child: ResourceTile(),
-                        );
+                        return ResourceTile();
                       })))
         ]),
       ),
@@ -91,68 +89,80 @@ class _ResourcesState extends State<Resources> {
 }
 
 class ResourceTile extends StatelessWidget {
-  const ResourceTile({
+  ResourceTile({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5.0),
-      height: 120,
-      width: context.screenWidth(),
-      decoration: BoxDecoration(
-          color: ProbitasColor.ProbitasTextSecondary,
-          borderRadius: BorderRadius.circular(12.0)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 6.0,
-              height: 100,
-              decoration: BoxDecoration(
-                  color: ProbitasColor.ProbitasTextPrimary,
-                  borderRadius: BorderRadius.circular(12.0)),
-            ),
-            XMargin(15),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                YMargin(20.0),
-                Text(
-                  "LIS121",
-                  style: Config.b2(context).copyWith(
-                    color: Colors.white,
-                    fontSize: 12,
+    return GestureDetector(
+      onTap: () {
+        return _launchUrl();
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 5.0),
+        height: 120,
+        width: context.screenWidth(),
+        decoration: BoxDecoration(
+            color: ProbitasColor.ProbitasTextSecondary,
+            borderRadius: BorderRadius.circular(12.0)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 6.0,
+                height: 100,
+                decoration: BoxDecoration(
+                    color: ProbitasColor.ProbitasTextPrimary,
+                    borderRadius: BorderRadius.circular(12.0)),
+              ),
+              XMargin(15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  YMargin(20.0),
+                  Text(
+                    "LIS121",
+                    style: Config.b2(context).copyWith(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                YMargin(2.0),
-                Text(
-                  "Library and Information Techiniques",
-                  style: Config.b2(context).copyWith(
-                    color: Colors.white,
-                    fontSize: 12,
+                  YMargin(2.0),
+                  Text(
+                    "Library and Information Techiniques",
+                    style: Config.b2(context).copyWith(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
                   ),
-                ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text("By Stephen Peter",
-                        style: Config.b2(context).copyWith(
-                          color: Colors.white,
-                          fontSize: 12,
-                        )),
-                  ],
-                ),
-              ],
-            )
-          ],
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text("By Stephen Peter",
+                          style: Config.b2(context).copyWith(
+                            color: Colors.white,
+                            fontSize: 12,
+                          )),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  final Uri _url = Uri.parse(
+      'http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf');
+
+  void _launchUrl() async {
+    if (!await launchUrl(_url)) throw 'Could not launch $_url';
   }
 }

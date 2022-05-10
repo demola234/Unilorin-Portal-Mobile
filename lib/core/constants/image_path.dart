@@ -8,6 +8,8 @@ class ImagesAsset {
   static String senate_building = 'assets/images/senate_building.png';
   static String default_image = 'assets/images/default.png';
   static String post_default = 'assets/images/post_default.jpg';
+  static String test1 = 'assets/images/test1.docx';
+  static String test2 = 'assets/images/test2.pdf';
 
   //Icons
   static String home = 'assets/icons/home.svg';
