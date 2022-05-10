@@ -100,6 +100,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //TODO:// Redo pick date to drop down
                   Text(
                     "Date",
                     style: Config.b2(context).copyWith(
@@ -225,8 +226,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
     DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(
-            2000), //DateTime.now() - not to allow to choose before today.
+        firstDate: DateTime(2000),
         lastDate: DateTime(2101));
 
     if (pickedDate != null) {
@@ -235,8 +235,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
       print(formattedDate);
 
       setState(() {
-        dateController.text =
-            formattedDate; //set output date to TextField value.
+        dateController.text = formattedDate;
       });
     } else {
       print("Date is not selected");
@@ -250,7 +249,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
     );
 
     if (pickedTime != null) {
-      print(pickedTime.format(context)); //output 10:51 PM
+      print(pickedTime.format(context));
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
       //converting to DateTime so that we can further format on different pattern.
@@ -274,14 +273,13 @@ class _ManageScheduleState extends State<ManageSchedule> {
     );
 
     if (pickedTime != null) {
-      print(pickedTime.format(context)); //output 10:51 PM
+      print(pickedTime.format(context));
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
-      //converting to DateTime so that we can further format on different pattern.
-      print(parsedTime); //output 1970-01-01 22:53:00.000
+
+      print(parsedTime);
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
-      print(formattedTime); //output 14:59:00
-      //DateFormat() is from intl package, you can format the time on any pattern you need.
+      print(formattedTime);
 
       setState(() {
         endController.text = formattedTime;

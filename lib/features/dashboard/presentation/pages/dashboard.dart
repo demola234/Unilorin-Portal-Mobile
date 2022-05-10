@@ -6,6 +6,11 @@ import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedu
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../widget/weekdays/friday.dart';
+import '../widget/weekdays/monday.dart';
+import '../widget/weekdays/thursday.dart';
+import '../widget/weekdays/tuesday.dart';
+import '../widget/weekdays/wed.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -175,50 +180,5 @@ class _DashboardState extends State<Dashboard>
         ),
       ),
     );
-  }
-}
-
-class Monday extends StatelessWidget {
-  const Monday({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Tuesday extends StatelessWidget {
-  const Tuesday({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Wednesday extends StatelessWidget {
-  const Wednesday({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Thursday extends StatelessWidget {
-  const Thursday({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class Friday extends StatelessWidget {
-  const Friday({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
