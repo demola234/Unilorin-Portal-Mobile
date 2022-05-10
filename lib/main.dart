@@ -5,6 +5,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
+import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import 'core/utils/navigation_service.dart';
 import 'injection_container.dart';

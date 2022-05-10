@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
+import '../../../../core/utils/navigation_service.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -93,7 +95,9 @@ class _DashboardState extends State<Dashboard>
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      NavigationService().navigateToScreen(ManageSchedule());
+                    },
                     child: Container(
                       height: 35,
                       width: 130,

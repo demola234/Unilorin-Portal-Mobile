@@ -89,6 +89,7 @@ class _AddPostState extends State<AddPost> {
               width: double.maxFinite,
               child: ListView(
                 scrollDirection: Axis.horizontal,
+                physics: BouncingScrollPhysics(),
                 children: images
                     .map((e) => Padding(
                           padding: const EdgeInsets.only(right: 8.0),
@@ -107,9 +108,6 @@ class _AddPostState extends State<AddPost> {
                                         height: 100,
                                         width: 120,
                                       ),
-                                    ),
-                                    Container(
-                                      color: Colors.black26,
                                     ),
                                     Positioned(
                                         top: -10,

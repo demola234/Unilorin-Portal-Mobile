@@ -19,6 +19,8 @@ class ImagesAsset {
   static String notliked = 'assets/icons/notliked.svg';
   static String share = 'assets/icons/share.svg';
   static String chat = 'assets/icons/Chat.svg';
+  static String date = 'assets/icons/date.svg';
+  static String time = 'assets/icons/Time.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

@@ -82,6 +82,8 @@ class ProbitasTextFormField extends StatelessWidget {
   final Widget? prefixIcon;
   final TextEditingController? controller;
   final bool enabled;
+  final bool? readOnly;
+  final void Function()? onTap;
 
   const ProbitasTextFormField(
       {Key? key,
@@ -102,6 +104,8 @@ class ProbitasTextFormField extends StatelessWidget {
       this.hintText,
       this.prefixIcon,
       this.controller,
+      this.readOnly = false,
+      this.onTap,
       this.enabled = true})
       : super(key: key);
 
@@ -115,7 +119,7 @@ class ProbitasTextFormField extends StatelessWidget {
       obscureText: obscureText!,
       enableInteractiveSelection: enableInteractiveSelection,
       maxLines: maxLines,
-      
+      readOnly: readOnly!,
       focusNode: focusNode,
       inputFormatters: inputFormatters,
       initialValue: initialValue,
@@ -138,6 +142,7 @@ class ProbitasTextFormField extends StatelessWidget {
           hintStyle: Config.b2(context).copyWith()),
       onChanged: onChanged,
       validator: validator,
+      onTap: onTap,
     );
   }
 }
