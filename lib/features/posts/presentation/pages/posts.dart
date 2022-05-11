@@ -9,6 +9,7 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
+import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/navigation_service.dart';
 
 class PostFeeds extends StatefulWidget {
@@ -19,6 +20,7 @@ class PostFeeds extends StatefulWidget {
 }
 
 class _PostFeedsState extends State<PostFeeds> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   int currentIndex = 0;
   late PageController controller;
   @override
@@ -36,10 +38,16 @@ class _PostFeedsState extends State<PostFeeds> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
-        child: CustomAppbar(),
+        child: CustomAppbar(
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
       ),
+      drawer: ProbitasDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(

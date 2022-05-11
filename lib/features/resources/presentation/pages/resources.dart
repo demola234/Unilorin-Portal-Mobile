@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
+import '../../../../core/utils/customs/custom_drawers.dart';
 import 'add_resources.dart';
 
 class Resources extends StatefulWidget {
@@ -23,13 +24,20 @@ class Resources extends StatefulWidget {
 }
 
 class _ResourcesState extends State<Resources> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
-        child: CustomAppbar(),
+        child: CustomAppbar(
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
       ),
+      drawer: ProbitasDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(children: [
@@ -77,6 +85,7 @@ class _ResourcesState extends State<Resources> {
                   width: context.screenWidth(),
                   child: ListView.builder(
                       itemCount: 3,
+                      shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return ResourceTile();
                       })))

@@ -6,9 +6,12 @@ import '../../constants/colors.dart';
 import '../../constants/image_path.dart';
 
 class CustomAppbar extends StatelessWidget {
-  const CustomAppbar({
+  CustomAppbar({
     Key? key,
+    this.onPressed
   }) : super(key: key);
+
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class CustomAppbar extends StatelessWidget {
                 fit: BoxFit.cover)),
       ),
       leading: IconButton(
-        onPressed: () {},
+        onPressed: onPressed,
         icon: SvgPicture.asset(
           ImagesAsset.drawer,
           height: 25,

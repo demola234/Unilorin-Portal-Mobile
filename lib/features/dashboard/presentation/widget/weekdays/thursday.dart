@@ -9,17 +9,15 @@ class Thursday extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SingleChildScrollView(
-          child: Expanded(
-            child: Container(
-              child: ListView.builder(
-                  itemCount: 1,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) {
-                    return ScheduleTile();
-                  }),
-            ),
+        Expanded(
+          child: Container(
+            child: ListView.builder(
+                itemCount: 10,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (context, index) {
+                  return ScheduleTile();
+                }),
           ),
         )
       ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/utils/customs/custom_appbar.dart';
+import '../../core/utils/customs/custom_drawers.dart';
 
 class Messages extends StatefulWidget {
   const Messages({Key? key}) : super(key: key);
@@ -10,22 +11,26 @@ class Messages extends StatefulWidget {
 }
 
 class _MessagesState extends State<Messages> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
-        child: CustomAppbar(),
-      ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              
-            ],
-          )
-        ],
-      )
-    );
+        key: _key,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(70.0),
+          child: CustomAppbar(
+            onPressed: () {
+              _key.currentState!.openDrawer();
+            },
+          ),
+        ),
+        drawer: ProbitasDrawer(),
+        body: Column(
+          children: [
+            Row(
+              children: [],
+            )
+          ],
+        ));
   }
 }

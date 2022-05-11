@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 
 import '../../../../core/constants/colors.dart';
-import '../../../../core/utils/allowed_extention.dart';
+import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
 import '../../../posts/presentation/pages/post_overview.dart';
@@ -158,6 +158,25 @@ class _AddResourcesState extends State<AddResources> {
                 ))
             : SizedBox.shrink()
       ])),
+      floatingActionButton: InkWell(
+        onTap: () {},
+        child: Container(
+          height: 70,
+          width: 220,
+          decoration: BoxDecoration(
+              color: ProbitasColor.ProbitasSecondry,
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          child: Center(
+            child: Text(
+              "Add Material",
+              style: Config.b2(context).copyWith(
+                color: ProbitasColor.ProbitasTextPrimary,
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

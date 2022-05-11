@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
@@ -21,6 +22,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late TabController _tabcontroller;
 
   @override
@@ -33,10 +35,16 @@ class _DashboardState extends State<Dashboard>
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
+      key: _key,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
-        child: CustomAppbar(),
+        child: CustomAppbar(
+          onPressed: () {
+            _key.currentState!.openDrawer();
+          },
+        ),
       ),
+      drawer: ProbitasDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
