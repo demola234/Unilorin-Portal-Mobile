@@ -110,7 +110,7 @@ class _AddResourcesState extends State<AddResources> {
                 height: 60,
                 width: context.screenWidth(),
                 decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasSecondry,
+                    color: ProbitasColor.ProbitasSecondary,
                     borderRadius: BorderRadius.circular(12.0)),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -164,7 +164,7 @@ class _AddResourcesState extends State<AddResources> {
           height: 70,
           width: 220,
           decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasSecondry,
+              color: ProbitasColor.ProbitasSecondary,
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
           child: Center(
             child: Text(

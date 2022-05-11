@@ -68,7 +68,7 @@ class _ResourcesState extends State<Resources> {
                   width: 45,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: ProbitasColor.ProbitasSecondry,
+                    color: ProbitasColor.ProbitasSecondary,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -95,7 +95,7 @@ class _ResourcesState extends State<Resources> {
         onPressed: () {
           NavigationService().navigateToScreen(AddResources());
         },
-        backgroundColor: ProbitasColor.ProbitasSecondry,
+        backgroundColor: ProbitasColor.ProbitasSecondary,
         child: Icon(Icons.add),
       ),
     );

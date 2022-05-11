@@ -207,7 +207,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
                 height: 70,
                 width: 220,
                 decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasSecondry,
+                    color: ProbitasColor.ProbitasSecondary,
                     borderRadius: BorderRadius.all(Radius.circular(15.0))),
                 child: Center(
                   child: Text(

@@ -63,7 +63,7 @@ class _AuthenticationState extends State<Authentication> {
                     "LOGIN",
                     style: Config.b1(context).copyWith(
                         color: !isDarkMode
-                            ? ProbitasColor.ProbitasSecondry
+                            ? ProbitasColor.ProbitasSecondary
                             : ProbitasColor.ProbitasAccent),
                   ),
                 ),
@@ -95,7 +95,7 @@ class _AuthenticationState extends State<Authentication> {
                             ? Icons.visibility_outlined
                             : Icons.visibility_off_outlined,
                         color: !isDarkMode
-                            ? ProbitasColor.ProbitasSecondry
+                            ? ProbitasColor.ProbitasSecondary
                             : ProbitasColor.ProbitasAccent,
                       )),
                 ),
@@ -121,7 +121,7 @@ class _AuthenticationState extends State<Authentication> {
                 textAlign: TextAlign.center,
                 style: Config.b3(context).copyWith(
                     color: !isDarkMode
-                        ? ProbitasColor.ProbitasSecondry
+                        ? ProbitasColor.ProbitasSecondary
                         : ProbitasColor.ProbitasAccent),
               ),
             )

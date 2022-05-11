@@ -76,7 +76,7 @@ class _NavControllerState extends State<NavController> {
                     width: 20,
                     allowDrawingOutsideViewBox: true,
                     color: !isDarkMode
-                        ? ProbitasColor.ProbitasSecondry
+                        ? ProbitasColor.ProbitasSecondary
                         : ProbitasColor.ProbitasAccent,
                   ),
                   YMargin(4.0),
@@ -86,7 +86,7 @@ class _NavControllerState extends State<NavController> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent,
                     ),
                   )
@@ -113,7 +113,7 @@ class _NavControllerState extends State<NavController> {
                       width: 20,
                       allowDrawingOutsideViewBox: true,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
@@ -122,7 +122,7 @@ class _NavControllerState extends State<NavController> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent,
                     ),
                   )
@@ -151,7 +151,7 @@ class _NavControllerState extends State<NavController> {
                       width: 20,
                       allowDrawingOutsideViewBox: true,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
@@ -160,7 +160,7 @@ class _NavControllerState extends State<NavController> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent,
                     ),
                   )
@@ -189,7 +189,7 @@ class _NavControllerState extends State<NavController> {
                       width: 20,
                       allowDrawingOutsideViewBox: true,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
@@ -198,7 +198,7 @@ class _NavControllerState extends State<NavController> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent,
                     ),
                   )
@@ -227,7 +227,7 @@ class _NavControllerState extends State<NavController> {
                       width: 20,
                       allowDrawingOutsideViewBox: true,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent),
                   YMargin(4.0),
                   Container(
@@ -236,7 +236,7 @@ class _NavControllerState extends State<NavController> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondry
+                          ? ProbitasColor.ProbitasSecondary
                           : ProbitasColor.ProbitasAccent,
                     ),
                   )
@@ -245,7 +245,7 @@ class _NavControllerState extends State<NavController> {
             ),
           ],
           selectedItemColor: !isDarkMode
-              ? ProbitasColor.ProbitasSecondry
+              ? ProbitasColor.ProbitasSecondary
               : ProbitasColor.ProbitasAccent,
           unselectedItemColor: Colors.grey,
           selectedFontSize: 12,

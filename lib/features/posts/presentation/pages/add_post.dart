@@ -63,7 +63,7 @@ class _AddPostState extends State<AddPost> {
                       height: 35,
                       width: 90,
                       decoration: BoxDecoration(
-                          color: ProbitasColor.ProbitasSecondry,
+                          color: ProbitasColor.ProbitasSecondary,
                           borderRadius: BorderRadius.all(Radius.circular(5.0))),
                       child: Center(
                           child: Row(
@@ -142,7 +142,7 @@ class _AddPostState extends State<AddPost> {
           height: 70,
           width: 220,
           decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasSecondry,
+              color: ProbitasColor.ProbitasSecondary,
               borderRadius: BorderRadius.all(Radius.circular(15.0))),
           child: Center(
             child: Text(

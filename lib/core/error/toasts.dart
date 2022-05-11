@@ -42,7 +42,7 @@ class Toasts {
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Material(
-              color: ProbitasColor.ProbitasSecondry,
+              color: ProbitasColor.ProbitasSecondary,
               borderRadius: BorderRadius.circular(8.0),
               child: Container(
                 width: double.maxFinite,

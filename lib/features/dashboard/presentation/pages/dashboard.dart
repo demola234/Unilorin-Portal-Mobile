@@ -115,7 +115,7 @@ class _DashboardState extends State<Dashboard>
                       height: 35,
                       width: 130,
                       decoration: BoxDecoration(
-                          color: ProbitasColor.ProbitasSecondry,
+                          color: ProbitasColor.ProbitasSecondary,
                           borderRadius:
                               BorderRadius.all(Radius.circular(12.0))),
                       child: Center(
