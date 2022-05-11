@@ -6,6 +6,7 @@ import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
+import '../../../../core/utils/greetings.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../widget/weekdays/friday.dart';
 import '../widget/weekdays/monday.dart';
@@ -78,7 +79,7 @@ class _DashboardState extends State<Dashboard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Good Afternoon, Femi!",
+                        "${getGreetings()}, Femi!",
                         style: Config.b2(context)
                             .copyWith(color: ProbitasColor.ProbitasPrimary),
                       ),
