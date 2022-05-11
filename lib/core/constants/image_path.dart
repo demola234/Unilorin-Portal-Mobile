@@ -8,7 +8,7 @@ class ImagesAsset {
   static String senate_building = 'assets/images/senate_building.png';
   static String default_image = 'assets/images/default.png';
   static String post_default = 'assets/images/post_default.jpg';
-    static String news_default = 'assets/images/sug.png';
+  static String news_default = 'assets/images/sug.png';
   static String test1 = 'assets/images/test1.docx';
   static String test2 = 'assets/images/test2.pdf';
 
@@ -27,6 +27,7 @@ class ImagesAsset {
   static String time = 'assets/icons/Time.svg';
   static String filter = 'assets/icons/Filter.svg';
   static String file = 'assets/icons/file.svg';
+  static String calculator = 'assets/icons/calculator.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

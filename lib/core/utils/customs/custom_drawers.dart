@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/profile/profile.dart';
+import 'package:probitas_app/features/result/results.dart';
+import 'package:probitas_app/features/settings/settings.dart';
 
+import '../../../features/result/local_auth.dart';
 import '../../constants/image_path.dart';
 import '../config.dart';
 
@@ -55,45 +60,33 @@ class ProbitasDrawer extends StatelessWidget {
                   DrawerListTile(
                     title: 'Profile',
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Container(),
-                          ));
+                      NavigationService().goBack();
+                      NavigationService().navigateToScreen(Profile());
                     },
                   ),
                   DrawerListTile(
-                    title: 'Check Result',
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Container(),
-                          ));
-                    },
-                  ),
+                      title: 'Check Result',
+                      onPressed: () async {
+                        final isAuthenticated =
+                            await LocalAuthApi.authenticate();
+
+                        if (isAuthenticated) {
+                        NavigationService().goBack();
+                        NavigationService().navigateToScreen(Result());
+                        }
+                      }),
                   DrawerListTile(
                     title: 'Locate Theaters',
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Container(),
-                          ));
+                      NavigationService().goBack();
+                      // NavigationService().navigateToScreen(Profile());
                     },
                   ),
                   DrawerListTile(
                     title: 'Settings',
                     onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Container(),
-                          ));
+                      NavigationService().goBack();
+                      NavigationService().navigateToScreen(Settings());
                     },
                   ),
                 ]),
