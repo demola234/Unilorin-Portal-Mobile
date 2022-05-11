@@ -374,9 +374,11 @@ class CustomNavBar extends StatelessWidget {
       centerTitle: true,
       flexibleSpace: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(ImagesAsset.top_background),
-                fit: BoxFit.cover)),
+          image: DecorationImage(
+            image: AssetImage(ImagesAsset.top_background),
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
       leadingWidth: 80,
       leading: Padding(
@@ -385,17 +387,30 @@ class CustomNavBar extends StatelessWidget {
           onTap: () {
             NavigationService().goBack();
           },
-          child: Container(
-            height: 30,
-            width: 30,
-            decoration: BoxDecoration(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 4.0),
+            child: Container(
+              height: 30,
+              width: 30,
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
-                border: Border.all()),
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
+                border: Border.all(),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 9.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
