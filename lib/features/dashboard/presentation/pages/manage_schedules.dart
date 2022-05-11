@@ -19,7 +19,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
   TextEditingController dateController = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
-  var remindMe, day, course;
+  var remindMe;
 
   @override
   void initState() {
@@ -101,7 +101,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //TODO:// Redo pick date to drop down
+                
                   Text(
                     "Date",
                     style: Config.b2(context).copyWith(
