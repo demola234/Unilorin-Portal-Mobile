@@ -1,11 +1,7 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
-
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';

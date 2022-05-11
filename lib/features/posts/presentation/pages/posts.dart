@@ -192,6 +192,7 @@ class _PostFeedsState extends State<PostFeeds> {
                                             onPageChanged: (int index) {
                                               setState(() {
                                                 currentIndex = index;
+                                                print(currentIndex);
                                               });
                                             },
                                             itemCount: 3,
@@ -208,29 +209,29 @@ class _PostFeedsState extends State<PostFeeds> {
                                             },
                                           ),
                                         ),
-                                        // Positioned.fill(
-                                        //   bottom: 8.0,
-                                        //   child: Align(
-                                        //     alignment: Alignment.bottomCenter,
-                                        //     child: SmoothPageIndicator(
-                                        //       controller: controller,
-                                        //       count: currentIndex,
-                                        //       effect: ScrollingDotsEffect(
-                                        //         activeStrokeWidth: 2.6,
-                                        //         activeDotScale: 1.3,
-                                        //         maxVisibleDots: 5,
-                                        //         radius: 8,
-                                        //         spacing: 10,
-                                        //         activeDotColor:
-                                        //             ProbitasColor.ProbitasSecondry,
-                                        //         dotColor:
-                                        //             ProbitasColor.ProbitasTextPrimary,
-                                        //         dotHeight: 12,
-                                        //         dotWidth: 12,
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
+                                        Positioned.fill(
+                                          bottom: 8.0,
+                                          child: Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: SmoothPageIndicator(
+                                              controller: controller,
+                                              count: currentIndex + 1,
+                                              effect: ScrollingDotsEffect(
+                                                activeStrokeWidth: 2.6,
+                                                activeDotScale: 1.3,
+                                                maxVisibleDots: 5,
+                                                radius: 8,
+                                                spacing: 10,
+                                                activeDotColor: ProbitasColor
+                                                    .ProbitasSecondary,
+                                                dotColor: ProbitasColor
+                                                    .ProbitasTextPrimary,
+                                                dotHeight: 12,
+                                                dotWidth: 12,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                         Divider(),
                                       ],
                                     )
