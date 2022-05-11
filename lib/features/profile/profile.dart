@@ -3,7 +3,7 @@ import 'package:probitas_app/core/utils/config.dart';
 
 import '../../core/constants/colors.dart';
 import '../../core/constants/image_path.dart';
-import '../posts/presentation/pages/post_overview.dart';
+import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -68,7 +68,145 @@ class Profile extends StatelessWidget {
               ],
             ),
           ),
-          
+          YMargin(20),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  Text(
+                    "Your Details",
+                    style: Config.h3(context).copyWith(
+                      fontSize: 19,
+                    ),
+                  ),
+                  YMargin(10),
+                  Divider(),
+                  YMargin(10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 6.0,
+                        height: 295,
+                        decoration: BoxDecoration(
+                            color: ProbitasColor.ProbitasSecondary,
+                            borderRadius: BorderRadius.circular(12.0)),
+                      ),
+                      XMargin(15),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          YMargin(5.0),
+                          Text(
+                            "Full Name:  Femi Ademola",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Sex: Male",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Current Session: 2020/2021",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Phone Number: 08028929292",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Faculty: Physical Science",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Department: Induestral Chemistry",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Programme: B.sc ICS",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Studentship Status: Returning",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Charges Paid: Yes",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Mode of Entry: UTME",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Student Email: 12/EQ33123@students.....",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Permanent/Home Address:",
+                            style: Config.b3(context),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  YMargin(30),
+                  Text(
+                    "Your Level Adviser Details",
+                    style: Config.h3(context).copyWith(
+                      fontSize: 19,
+                    ),
+                  ),
+                  YMargin(10),
+                  Divider(),
+                  YMargin(10),
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Container(
+                      width: 6.0,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          color: ProbitasColor.ProbitasSecondary,
+                          borderRadius: BorderRadius.circular(12.0)),
+                    ),
+                    XMargin(15),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          YMargin(5.0),
+                          Text(
+                            "Full Name: Idowu Adisa",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Phone Number: 0712929292",
+                            style: Config.b3(context),
+                          ),
+                          YMargin(5),
+                          Text(
+                            "Email:Adisa@gmail.com",
+                            style: Config.b3(context),
+                          ),
+                        ])
+                  ])
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

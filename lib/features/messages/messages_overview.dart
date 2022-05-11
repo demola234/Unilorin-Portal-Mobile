@@ -4,6 +4,7 @@ import '../../core/constants/colors.dart';
 import '../../core/constants/image_path.dart';
 import '../../core/utils/config.dart';
 import '../posts/presentation/pages/post_overview.dart';
+import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class MessageOverview extends StatelessWidget {
   const MessageOverview({Key? key}) : super(key: key);

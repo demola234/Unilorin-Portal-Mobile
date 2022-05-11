@@ -5,8 +5,7 @@ import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
-
-import '../../../posts/presentation/pages/post_overview.dart';
+import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class ManageSchedule extends StatefulWidget {
   const ManageSchedule({Key? key}) : super(key: key);

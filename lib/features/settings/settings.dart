@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../posts/presentation/pages/post_overview.dart';
+import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class Settings extends StatelessWidget {
   const Settings({Key? key}) : super(key: key);

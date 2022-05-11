@@ -6,7 +6,7 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
-import '../../../posts/presentation/pages/post_overview.dart';
+import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../posts/presentation/pages/posts.dart';
 
 class AddResources extends StatefulWidget {
