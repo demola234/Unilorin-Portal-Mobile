@@ -79,13 +79,13 @@ class _DashboardState extends State<Dashboard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${getGreetings()}, Femi!",
+                        "${getGreetings()}, Femi👋🏾",
                         style: Config.b2(context)
                             .copyWith(color: ProbitasColor.ProbitasPrimary),
                       ),
                       YMargin(2.0),
                       Text(
-                        "You are in the Rain semester",
+                        "You are in the Rain Semester",
                         style: Config.b2(context).copyWith(
                             color: ProbitasColor.ProbitasTextSecondary),
                       ),

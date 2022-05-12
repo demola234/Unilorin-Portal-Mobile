@@ -5,6 +5,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/features/posts/presentation/pages/add_post.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import 'package:readmore/readmore.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
@@ -311,7 +312,9 @@ class _PostFeedsState extends State<PostFeeds> {
                                     ),
                                     Spacer(),
                                     IconButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Share.share('Great Post');
+                                      },
                                       tooltip: "Share",
                                       icon: SvgPicture.asset(ImagesAsset.share,
                                           height: 18, width: 18),

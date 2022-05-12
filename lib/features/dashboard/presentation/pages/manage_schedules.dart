@@ -228,6 +228,22 @@ class _ManageScheduleState extends State<ManageSchedule> {
     TimeOfDay? pickedTime = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,
+       builder: (context, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: ColorScheme.light(
+                      primary: ProbitasColor.ProbitasSecondary,
+                      onPrimary: ProbitasColor.ProbitasTextPrimary,
+                      onSurface: ProbitasColor.ProbitasSecondary,
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        primary: ProbitasColor.ProbitasSecondary,
+                      ),
+                    ),
+                  ),
+                  child: child!,
+                )}
     );
 
     if (pickedTime != null) {
@@ -248,8 +264,25 @@ class _ManageScheduleState extends State<ManageSchedule> {
 
   endTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
+      
       initialTime: TimeOfDay.now(),
       context: context,
+      builder: (context, child) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    colorScheme: ColorScheme.light(
+                      primary: ProbitasColor.ProbitasSecondary,
+                      onPrimary: ProbitasColor.ProbitasTextPrimary,
+                      onSurface: ProbitasColor.ProbitasSecondary,
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        primary: ProbitasColor.ProbitasSecondary,
+                      ),
+                    ),
+                  ),
+                  child: child!,
+                )}
     );
 
     if (pickedTime != null) {

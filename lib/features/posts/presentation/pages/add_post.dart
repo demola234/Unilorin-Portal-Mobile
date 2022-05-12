@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:images_picker/images_picker.dart';
+import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
@@ -59,7 +60,13 @@ class _AddPostState extends State<AddPost> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   child: InkWell(
-                    onTap: selectImage,
+                    onTap: () {
+                      if (images.length >= 5) {
+                        Toasts.showErrorToast("Only 5 Images can be Selected");
+                      } else {
+                        selectImage();
+                      }
+                    },
                     child: Container(
                       height: 35,
                       width: 90,
@@ -172,8 +179,9 @@ class _AddPostState extends State<AddPost> {
     List<Media>? res = await ImagesPicker.pick(
       cropOpt: CropOption(
         aspectRatio: CropAspectRatio.custom,
-        cropType: CropType.rect, // currently for android
+        cropType: CropType.rect,
       ),
+      gif: true,
       count: 5 - images.length,
       pickType: PickType.image,
     );
@@ -182,6 +190,8 @@ class _AddPostState extends State<AddPost> {
       setState(() {
         images.addAll(res.map((e) => File(e.path)));
       });
+    } else if (res == null) {
+      Toasts.showErrorToast("No Image Selected");
     }
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
+import 'package:probitas_app/core/error/toasts.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';
@@ -181,14 +182,16 @@ class _AddResourcesState extends State<AddResources> {
         type: FileType.custom,
         allowMultiple: _multiPick,
         allowedExtensions: allowed);
-    print(result!.files.map((e) => e.name));
-    print(result.files.map((e) => e.extension));
+
+    // ignore: unnecessary_null_comparison
     if (result != null && result.files.map((e) => e.path) != null) {
       setState(() {
         file = File(result.files.map((e) => e.name).toString());
         selectedFile = result.files.map((e) => e.name).toString();
         fileType = result.files.map((e) => e.extension).toString();
       });
+    } else if (file == null) {
+      Toasts.showErrorToast("No Document Selected");
     }
   }
 }

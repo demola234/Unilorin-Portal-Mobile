@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../core/constants/colors.dart';
 import '../../core/constants/image_path.dart';
 import '../../core/utils/config.dart';
@@ -66,7 +67,9 @@ class MessageOverview extends StatelessWidget {
                               ],
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Share.share('Great news');
+                              },
                               tooltip: "Share",
                               icon: SvgPicture.asset(ImagesAsset.share,
                                   height: 18, width: 18),

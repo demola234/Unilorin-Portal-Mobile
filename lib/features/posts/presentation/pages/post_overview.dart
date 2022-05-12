@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
-
 
 class PostOverView extends StatefulWidget {
   const PostOverView({Key? key}) : super(key: key);
@@ -181,7 +181,9 @@ class _PostOverViewState extends State<PostOverView> {
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Share.share('Great picture');
+                    },
                     tooltip: "Share",
                     icon: SvgPicture.asset(ImagesAsset.share,
                         height: 18, width: 18),
