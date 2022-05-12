@@ -79,7 +79,7 @@ class MessageOverview extends StatelessWidget {
             ),
           ),
           Divider(),
-          Flexible(
+          Expanded(
             child: Container(
               child: ListView(
                 shrinkWrap: true,

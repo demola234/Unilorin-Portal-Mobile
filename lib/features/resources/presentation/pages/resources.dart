@@ -61,21 +61,25 @@ class _ResourcesState extends State<Resources> {
                 ),
               ),
               XMargin(5.0),
-              InkWell(
-                onTap: () {},
-                child: Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: ProbitasColor.ProbitasSecondary,
+              PopupMenuButton(
+                  child: Container(
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: ProbitasColor.ProbitasSecondary,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(ImagesAsset.filter),
+                    ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(ImagesAsset.filter),
-                  ),
-                ),
-              ),
+                  onSelected: (selectedValue) {
+                    print(selectedValue);
+                  },
+                  itemBuilder: (BuildContext ctx) => [
+                        PopupMenuItem(child: Text('Sort'), value: '1'),
+                      ]),
             ],
           ),
           YMargin(15),

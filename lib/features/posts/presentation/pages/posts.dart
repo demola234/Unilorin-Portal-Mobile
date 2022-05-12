@@ -154,27 +154,31 @@ class _PostFeedsState extends State<PostFeeds> {
                                       ],
                                     ),
                                     Spacer(),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 15),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          GestureDetector(
-                                              onTap: () {},
-                                              child: Icon(
-                                                Icons.more_vert,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        PopupMenuButton(
+                                            child: Icon(
+                                              Icons.more_vert,
+                                              color: ProbitasColor
+                                                  .ProbitasTextSecondary,
+                                            ),
+                                            onSelected: (selectedValue) {
+                                              print(selectedValue);
+                                            },
+                                            itemBuilder: (BuildContext ctx) => [
+                                                  PopupMenuItem(
+                                                      child: Text('Delete'),
+                                                      value: '1'),
+                                                ]),
+                                        YMargin(2.0),
+                                        Text("Level 200",
+                                            style: Config.b2(context).copyWith(
                                                 color: ProbitasColor
                                                     .ProbitasTextSecondary,
-                                              )),
-                                          YMargin(2.0),
-                                          Text("Level 200",
-                                              style: Config.b2(context).copyWith(
-                                                  color: ProbitasColor
-                                                      .ProbitasTextSecondary,
-                                                  fontSize: 14.0))
-                                        ],
-                                      ),
+                                                fontSize: 14.0))
+                                      ],
                                     )
                                   ],
                                 ),

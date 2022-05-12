@@ -83,56 +83,64 @@ class _AddPostState extends State<AddPost> {
             ],
           ),
           YMargin(10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          Expanded(
             child: Container(
-              width: context.screenWidth(),
-              child: GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                ),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                children: images
-                    .map((e) => Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Material(
-                              borderRadius: BorderRadius.circular(16.0),
-                              clipBehavior: Clip.antiAlias,
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 5.0),
-                                height: 100,
-                                width: 120,
-                                child: Stack(
-                                  children: [
-                                    Positioned.fill(
-                                      child: Image.file(
-                                        e,
-                                        fit: BoxFit.cover,
-                                        height: 100,
-                                        width: 120,
+              child: ListView(shrinkWrap: true, children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Container(
+                    width: context.screenWidth(),
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      children: images
+                          .map((e) => Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Material(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 5.0),
+                                      height: 100,
+                                      width: 120,
+                                      child: Stack(
+                                        children: [
+                                          Positioned.fill(
+                                            child: Image.file(
+                                              e,
+                                              fit: BoxFit.cover,
+                                              height: 100,
+                                              width: 120,
+                                            ),
+                                          ),
+                                          Positioned(
+                                              top: -10,
+                                              right: -10,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      images.remove(e);
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons
+                                                        .cancel_presentation_rounded,
+                                                    color: Colors.white,
+                                                  )))
+                                        ],
                                       ),
-                                    ),
-                                    Positioned(
-                                        top: -10,
-                                        right: -10,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                images.remove(e);
-                                              });
-                                            },
-                                            icon: Icon(
-                                              Icons.cancel_presentation_rounded,
-                                              color: Colors.white,
-                                            )))
-                                  ],
-                                ),
-                              )),
-                        ))
-                    .toList(),
-              ),
+                                    )),
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                )
+              ]),
             ),
           )
         ],
