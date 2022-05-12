@@ -85,11 +85,11 @@ class Profile extends StatelessWidget {
                   Divider(),
                   YMargin(10),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
                         width: 6.0,
-                        height: 295,
+                        height: 330,
                         decoration: BoxDecoration(
                             color: ProbitasColor.ProbitasSecondary,
                             borderRadius: BorderRadius.circular(12.0)),
@@ -102,62 +102,62 @@ class Profile extends StatelessWidget {
                           YMargin(5.0),
                           Text(
                             "Full Name:  Femi Ademola",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Sex: Male",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Current Session: 2020/2021",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Phone Number: 08028929292",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Faculty: Physical Science",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Department: Induestral Chemistry",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Programme: B.sc ICS",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Studentship Status: Returning",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Charges Paid: Yes",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Mode of Entry: UTME",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Student Email: 12/EQ33123@students.....",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Permanent/Home Address:",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                         ],
                       )
@@ -173,33 +173,33 @@ class Profile extends StatelessWidget {
                   YMargin(10),
                   Divider(),
                   YMargin(10),
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                     Container(
                       width: 6.0,
-                      height: 80,
+                      height: 70,
                       decoration: BoxDecoration(
                           color: ProbitasColor.ProbitasSecondary,
                           borderRadius: BorderRadius.circular(12.0)),
                     ),
                     XMargin(15),
                     Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           YMargin(5.0),
                           Text(
                             "Full Name: Idowu Adisa",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Phone Number: 0712929292",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                           YMargin(5),
                           Text(
                             "Email:Adisa@gmail.com",
-                            style: Config.b3(context),
+                            style: Config.b2(context),
                           ),
                         ])
                   ])
