@@ -156,8 +156,7 @@ class _PostOverViewState extends State<PostOverView> {
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10.0),
               child: SelectableText(
                 "In Flutter, the overflow property of the Text, RichText, and DefaultTextStyle widgets specifies how overflowed content that is not displayed should be signaled to the user. It can be clipped, display an ellipsis (three dots), fade, or overflowing outside its parent widget.",
-                style: Config.b3(context).copyWith(
-                    color: ProbitasColor.ProbitasPrimary, fontSize: 14.0),
+                style: Config.b3(context).copyWith(fontSize: 14.0),
               ),
             ),
             Padding(
@@ -307,9 +306,8 @@ class _PostOverViewState extends State<PostOverView> {
                                       horizontal: 20, vertical: 10.0),
                                   child: SelectableText(
                                     "In Flutter, the overflosssssw property of the Text, RichText, and DefaultTextStyle widgets specifies how ",
-                                    style: Config.b3(context).copyWith(
-                                        color: ProbitasColor.ProbitasPrimary,
-                                        fontSize: 14.0),
+                                    style: Config.b3(context)
+                                        .copyWith(fontSize: 14.0),
                                   ),
                                 ),
                               ],

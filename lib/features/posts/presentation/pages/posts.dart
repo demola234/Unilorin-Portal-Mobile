@@ -101,13 +101,15 @@ class _PostFeedsState extends State<PostFeeds> {
                           margin: EdgeInsets.symmetric(vertical: 15),
                           width: context.screenWidth(),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                              border: Border.all(
-                                color: ProbitasColor.ProbitasTextPrimary
-                                    .withOpacity(0.7),
-                              )),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            ),
+                            border: Border.all(
+                              color:
+                                  ProbitasColor.ProbitasTextPrimary.withOpacity(
+                                      0.7),
+                            ),
+                          ),
                           child: Column(
                             children: [
                               Padding(
@@ -119,8 +121,10 @@ class _PostFeedsState extends State<PostFeeds> {
                                       width: 60,
                                       height: 60,
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15.0))),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0),
+                                        ),
+                                      ),
                                       child: Image(
                                         image: AssetImage(
                                             ImagesAsset.default_image),
@@ -136,9 +140,7 @@ class _PostFeedsState extends State<PostFeeds> {
                                         Container(
                                           child: Text(
                                             "Femi Ademola",
-                                            style: Config.b2(context).copyWith(
-                                                color: ProbitasColor
-                                                    .ProbitasPrimary),
+                                            style: Config.b2(context),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             softWrap: false,
@@ -149,8 +151,9 @@ class _PostFeedsState extends State<PostFeeds> {
                                         Text(
                                           "Microbiology",
                                           style: Config.b2(context).copyWith(
-                                              color: ProbitasColor
-                                                  .ProbitasTextSecondary),
+                                            color: ProbitasColor
+                                                .ProbitasTextSecondary,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -160,25 +163,29 @@ class _PostFeedsState extends State<PostFeeds> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         PopupMenuButton(
-                                            child: Icon(
-                                              Icons.more_vert,
-                                              color: ProbitasColor
-                                                  .ProbitasTextSecondary,
-                                            ),
-                                            onSelected: (selectedValue) {
-                                              print(selectedValue);
-                                            },
-                                            itemBuilder: (BuildContext ctx) => [
-                                                  PopupMenuItem(
-                                                      child: Text('Delete'),
-                                                      value: '1'),
-                                                ]),
+                                          child: Icon(
+                                            Icons.more_vert,
+                                            color: ProbitasColor
+                                                .ProbitasTextSecondary,
+                                          ),
+                                          onSelected: (selectedValue) {
+                                            print(selectedValue);
+                                          },
+                                          itemBuilder: (BuildContext ctx) => [
+                                            PopupMenuItem(
+                                                child: Text('Delete'),
+                                                value: '1'),
+                                          ],
+                                        ),
                                         YMargin(2.0),
-                                        Text("Level 200",
-                                            style: Config.b2(context).copyWith(
-                                                color: ProbitasColor
-                                                    .ProbitasTextSecondary,
-                                                fontSize: 14.0))
+                                        Text(
+                                          "Level 200",
+                                          style: Config.b2(context).copyWith(
+                                            color: ProbitasColor
+                                                .ProbitasTextSecondary,
+                                            fontSize: 14.0,
+                                          ),
+                                        )
                                       ],
                                     )
                                   ],
@@ -246,9 +253,8 @@ class _PostFeedsState extends State<PostFeeds> {
                                     horizontal: 20, vertical: 10.0),
                                 child: ReadMoreText(
                                   "In Flutter, the overflow property of the Text, RichText, and DefaultTextStyle widgets specifies how overflowed content that is not displayed should be signaled to the user. It can be clipped, display an ellipsis (three dots), fade, or overflowing outside its parent widget.",
-                                  style: Config.b3(context).copyWith(
-                                      color: ProbitasColor.ProbitasPrimary,
-                                      fontSize: 14.0),
+                                  style: Config.b3(context)
+                                      .copyWith(fontSize: 14.0),
                                   trimLines: 3,
                                   delimiter: "...",
                                   colorClickableText:
@@ -276,13 +282,14 @@ class _PostFeedsState extends State<PostFeeds> {
                                     Row(
                                       children: [
                                         InkWell(
-                                            onTap: () {},
-                                            child: SvgPicture.asset(
-                                                index % 3 == 0
-                                                    ? ImagesAsset.liked
-                                                    : ImagesAsset.notliked,
-                                                height: 18,
-                                                width: 18)),
+                                          onTap: () {},
+                                          child: SvgPicture.asset(
+                                              index % 3 == 0
+                                                  ? ImagesAsset.liked
+                                                  : ImagesAsset.notliked,
+                                              height: 18,
+                                              width: 18),
+                                        ),
                                         XMargin(4),
                                         Text(
                                           "2",
@@ -303,11 +310,13 @@ class _PostFeedsState extends State<PostFeeds> {
                                                 height: 18,
                                                 width: 18)),
                                         XMargin(4),
-                                        Text("20",
-                                            style: Config.b3(context).copyWith(
-                                              color: ProbitasColor
-                                                  .ProbitasTextSecondary,
-                                            )),
+                                        Text(
+                                          "20",
+                                          style: Config.b3(context).copyWith(
+                                            color: ProbitasColor
+                                                .ProbitasTextSecondary,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     Spacer(),
