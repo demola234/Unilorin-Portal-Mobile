@@ -80,14 +80,18 @@ class _DashboardState extends State<Dashboard>
                     children: [
                       Text(
                         "${getGreetings()}, Femi👋🏾",
-                        style: Config.b2(context)
-                            .copyWith(color: ProbitasColor.ProbitasPrimary),
+                        style: Config.b2(context).copyWith(
+                            color: isDarkMode
+                                ? Colors.white
+                                : ProbitasColor.ProbitasPrimary),
                       ),
                       YMargin(2.0),
                       Text(
                         "You are in the Rain Semester",
                         style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasTextSecondary),
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextPrimary
+                                : ProbitasColor.ProbitasTextSecondary),
                       ),
                     ],
                   ),
@@ -102,7 +106,9 @@ class _DashboardState extends State<Dashboard>
                 Text(
                   "Your Schedule",
                   style: Config.h3(context).copyWith(
-                    color: ProbitasColor.ProbitasPrimary,
+                    color: isDarkMode
+                        ? ProbitasColor.ProbitasTextPrimary
+                        : ProbitasColor.ProbitasPrimary,
                     fontSize: 18,
                   ),
                 ),

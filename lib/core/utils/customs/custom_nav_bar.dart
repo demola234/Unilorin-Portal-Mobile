@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../../constants/colors.dart';
@@ -51,7 +49,10 @@ class CustomNavBar extends StatelessWidget {
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
-                border: Border.all(),
+                border: Border.all(
+                  color:
+                      isDarkMode ? Colors.white : ProbitasColor.ProbitasPrimary,
+                ),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +62,9 @@ class CustomNavBar extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 9.0),
                     child: Icon(
                       Icons.arrow_back_ios,
-                      color: Colors.black,
+                      color: isDarkMode
+                          ? Colors.white
+                          : ProbitasColor.ProbitasPrimary,
                     ),
                   ),
                 ],

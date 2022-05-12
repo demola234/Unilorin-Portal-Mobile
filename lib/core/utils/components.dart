@@ -201,7 +201,7 @@ class ProbitasDropDown extends StatelessWidget {
         validator: validator,
         onSaved: onSaved,
         style: Config.b2(context).copyWith(
-          color: ProbitasColor.ProbitasPrimary,
+          color: isDarkMode ? Colors.white : ProbitasColor.ProbitasPrimary,
         ),
         decoration: InputDecoration(
           fillColor: !isDarkMode
