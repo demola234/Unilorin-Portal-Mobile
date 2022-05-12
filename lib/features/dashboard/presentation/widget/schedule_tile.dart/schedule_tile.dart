@@ -58,7 +58,7 @@ class ScheduleTile extends StatelessWidget {
                   ),
                   YMargin(2.0),
                   Text(
-                    "Library and Information Techiniques",
+                    "Library and Information Techniques",
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,

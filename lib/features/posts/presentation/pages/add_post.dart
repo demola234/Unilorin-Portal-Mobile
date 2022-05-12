@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
-import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';

@@ -24,12 +24,12 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-  late TabController _tabcontroller;
+  late TabController _controller;
 
   @override
   void initState() {
     super.initState();
-    _tabcontroller = new TabController(length: 5, vsync: this);
+    _controller = new TabController(length: 5, vsync: this);
   }
 
   @override
@@ -148,7 +148,7 @@ class _DashboardState extends State<Dashboard>
                     ),
                     insets: EdgeInsets.symmetric(horizontal: 10.0)),
                 indicatorWeight: 1,
-                controller: _tabcontroller,
+                controller: _controller,
                 isScrollable: true,
                 tabs: [
                   new Tab(
@@ -174,7 +174,7 @@ class _DashboardState extends State<Dashboard>
                 height: context.screenHeight(),
                 decoration: BoxDecoration(),
                 child: TabBarView(
-                    controller: _tabcontroller,
+                    controller: _controller,
                     physics: ClampingScrollPhysics(),
                     children: <Widget>[
                       Monday(),

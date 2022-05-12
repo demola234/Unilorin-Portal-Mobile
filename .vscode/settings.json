@@ -1,4 +1,14 @@
 {
-  "cSpell.words": ["Appbar", "CGPA", "matric", "Probitas"],
+  "cSpell.words": [
+    "Appbar",
+    "CGPA",
+    "Femi",
+    "fullscreen",
+    "matric",
+    "Probitas",
+    "riverpod",
+    "UNILORIN",
+    "vsync"
+  ],
   "cSpell.enableFiletypes": ["dart"]
 }

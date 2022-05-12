@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:probitas_app/core/utils/config.dart';
 import '../schedule_tile.dart/schedule_tile.dart';
 
 class Monday extends StatelessWidget {

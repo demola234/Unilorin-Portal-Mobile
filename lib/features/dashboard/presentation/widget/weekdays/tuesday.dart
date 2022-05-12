@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
-import 'package:probitas_app/features/dashboard/presentation/widget/schedule_tile.dart/schedule_tile.dart';
 
 class Tuesday extends StatelessWidget {
   const Tuesday({Key? key}) : super(key: key);

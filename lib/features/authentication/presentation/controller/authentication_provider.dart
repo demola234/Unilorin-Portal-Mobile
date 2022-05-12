@@ -14,13 +14,12 @@ class LoginNotifier extends StateNotifier<AuthenticationState> {
   LoginNotifier(this.authService) : super(AuthenticationInitial());
 
   Future<void> login(String matricNumber, String password) async {
-    bool isLoading;
-    state = AuthenticationLoading(isLoading = true);
+    state = AuthenticationLoading(true);
     try {
       final response = await authService.login(matricNumber, password);
       state = AuthenticatingUser(response);
       NavigationService().replaceScreen(NavController());
-      state = AuthenticationLoading(isLoading = false);
+      state = AuthenticationLoading(false);
     } catch (e) {
       state = AuthenticationError("An Error Occurred");
       bool isLoading = false;

@@ -28,6 +28,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
