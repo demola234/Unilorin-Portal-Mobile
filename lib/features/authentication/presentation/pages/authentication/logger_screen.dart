@@ -22,8 +22,10 @@ class LoggerScreen extends ConsumerWidget {
             return NavController();
           }
         }
-        return CircularProgressIndicator(
-          color: Colors.white,
+        return Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
         );
       },
     ));

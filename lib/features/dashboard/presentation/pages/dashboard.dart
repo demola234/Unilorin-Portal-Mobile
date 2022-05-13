@@ -75,11 +75,13 @@ class _DashboardState extends ConsumerState<Dashboard>
                   Container(
                       width: 60,
                       height: 60,
-                      decoration: BoxDecoration(shape: BoxShape.circle),
                       child: value.when(
-                        data: (data) => CachedNetworkImage(
-                          fit: BoxFit.fitWidth,
-                          imageUrl: data.data!.user!.avatar!,
+                        data: (data) => ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: CachedNetworkImage(
+                            fit: BoxFit.fitWidth,
+                            imageUrl: data.data!.user!.avatar!,
+                          ),
                         ),
                         error: (err, str) => Text("error"),
                         loading: () => Text("loading"),

@@ -45,14 +45,17 @@ class ProbitasDrawer extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: ref.read(getUsers).when(
-                                  data: (data) => CachedNetworkImage(
-                                    fit: BoxFit.contain,
-                                    imageUrl: data.data!.user!.avatar!,
+                                  data: (data) => ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl: data.data!.user!.avatar!,
+                                    ),
                                   ),
                                   error: (err, str) => Text("error"),
                                   loading: () => Text("loading"),
                                 )))),
-                    YMargin(5),
+                    YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
                         final response = watch.read(getUsers);
