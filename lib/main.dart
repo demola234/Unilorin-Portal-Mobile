@@ -65,10 +65,10 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.hasData) {
               if (snapshot.data! == true) {
                 Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(LoggerScreen()));
+                    () => NavigationService().replaceScreen(OnBoarding()));
               } else {
                 Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(OnBoarding()));
+                    () => NavigationService().replaceScreen(LoggerScreen()));
               }
             }
             return Scaffold();

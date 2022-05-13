@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
+import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
@@ -116,7 +117,8 @@ class _DashboardState extends State<Dashboard>
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   child: InkWell(
                     onTap: () {
-                      NavigationService().navigateToScreen(ManageSchedule());
+                      // NavigationService().navigateToScreen(ManageSchedule());
+                      Cache.get().clear();
                     },
                     child: Container(
                       height: 35,

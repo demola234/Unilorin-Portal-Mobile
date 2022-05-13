@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../../core/utils/navigation_service.dart';
 import '../../../../bottom_navigation.dart';
 import '../../../data/model/user_request.dart';
 import '../../provider/authentication_provider.dart';
@@ -21,9 +19,9 @@ class LoggerScreen extends ConsumerWidget {
             if (snapshot.hasData ||
                 snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data == null) {
-                return NavController();
-              } else {
                 return Authentication();
+              } else {
+                return NavController();
               }
             }
             return Center(
