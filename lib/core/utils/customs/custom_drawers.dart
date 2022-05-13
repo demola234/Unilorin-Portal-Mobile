@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/profile/profile.dart';
 import 'package:probitas_app/features/result/results.dart';
 import 'package:probitas_app/features/settings/settings.dart';
@@ -15,10 +19,13 @@ class ProbitasDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       width: MediaQuery.of(context).size.width / 1.5,
       margin: const EdgeInsets.only(right: 30),
       child: Drawer(
+        backgroundColor:
+            isDarkMode ? ProbitasColor.ProbitasPrimary : Colors.white,
         child: Padding(
           padding: EdgeInsets.only(top: 70),
           child: Column(
@@ -30,23 +37,38 @@ class ProbitasDrawer extends StatelessWidget {
                   Container(
                       child: Column(children: [
                     YMargin(15),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image(
-                        width: 110,
-                        height: 110,
-                        fit: BoxFit.contain,
-                        image: AssetImage(
-                          ImagesAsset.default_image,
-                        ),
-                      ),
-                    ),
+                    Consumer(
+                        builder: ((context, ref, child) => Container(
+                            width: 110,
+                            height: 110,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10))),
+                            child: ref.read(getUsers).when(
+                                  data: (data) => CachedNetworkImage(
+                                    fit: BoxFit.contain,
+                                    imageUrl: data.data!.user!.avatar!,
+                                  ),
+                                  error: (err, str) => Text("error"),
+                                  loading: () => Text("loading"),
+                                )))),
                     YMargin(5),
-                    Text(
-                      "James Daniel",
-                      style: Config.b3(context),
+                    Consumer(
+                      builder: ((context, watch, child) {
+                        final response = watch.read(getUsers);
+                        return response.when(
+                            data: (response) => Text(
+                                  "${response.data!.user!.fullName!}",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: Config.b3(context).copyWith(
+                                      color: isDarkMode
+                                          ? Colors.white
+                                          : ProbitasColor.ProbitasPrimary),
+                                ),
+                            error: (err, st) => Text("error"),
+                            loading: () => Text("loading..."));
+                      }),
                     ),
                     YMargin(30),
                   ])),
@@ -70,8 +92,8 @@ class ProbitasDrawer extends StatelessWidget {
                             await LocalAuthApi.authenticate();
 
                         if (isAuthenticated) {
-                        NavigationService().goBack();
-                        NavigationService().navigateToScreen(Result());
+                          NavigationService().goBack();
+                          NavigationService().navigateToScreen(Result());
                         }
                       }),
                   DrawerListTile(

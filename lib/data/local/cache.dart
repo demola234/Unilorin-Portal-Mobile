@@ -9,7 +9,7 @@ abstract class Cache {
   Future clear();
   Future saveUser(UserRequest user);
   Future<bool> isFirstLoad();
-  Future saveToken(String? token);
+  Future saveToken(String token);
 
   static Cache get() => getIt<Cache>();
 }
@@ -51,7 +51,7 @@ class CacheImpl implements Cache {
   }
 
   @override
-  Future saveToken(String? token) {
+  Future saveToken(String token) {
     return box.write('token', token);
   }
 

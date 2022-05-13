@@ -10,25 +10,22 @@ class LoggerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
-        body: SafeArea(
-      child: FutureBuilder<UserRequest>(
-          future: ref
-              .read(authenticationNotifierProvider.notifier)
-              .getUserFromCache(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData ||
-                snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data == null) {
-                return Authentication();
-              } else {
-                return NavController();
-              }
-            }
-            return Center(
-                child: CircularProgressIndicator(
-              color: Colors.white,
-            ));
-          }),
+        body: FutureBuilder<UserRequest>(
+      future:
+          ref.read(authenticationNotifierProvider.notifier).getUserFromCache(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData ||
+            snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == null) {
+            return Authentication();
+          } else {
+            return NavController();
+          }
+        }
+        return CircularProgressIndicator(
+          color: Colors.white,
+        );
+      },
     ));
   }
 }

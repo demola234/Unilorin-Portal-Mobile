@@ -1,9 +1,10 @@
 import 'package:probitas_app/data/remote/dashboard/dasboard_repository.dart';
 import 'package:probitas_app/features/authentication/data/model/user_request.dart';
+import '../../../features/dashboard/data/model/user_response.dart';
 import '../../local/cache.dart';
 
 abstract class DashBoardService {
-  Future<UserRequest> fetchUsers(String token);
+  Future<UserResponses> fetchUsers();
 }
 
 class DashBoardServiceImpl extends DashBoardService {
@@ -14,7 +15,7 @@ class DashBoardServiceImpl extends DashBoardService {
       {required this.dashboardRepository, required this.cache});
 
   @override
-  Future<UserRequest> fetchUsers(String token) async {
+  Future<UserResponses> fetchUsers() async {
     return dashboardRepository.fetchUser(await cache.getToken());
   }
 }

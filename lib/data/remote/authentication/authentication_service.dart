@@ -13,10 +13,11 @@ class AuthenticationServiceImpl extends AuthenticationService {
   AuthenticationServiceImpl({required this.repository, required this.cache});
 
   @override
-  Future<UserRequest?> login(String matricNumber, String password) async {
+  Future<UserRequest> login(String matricNumber, String password) async {
     var response = await repository.login(matricNumber, password);
-    cache.saveUser(response.data);
-    cache.saveToken(response.data.token);
-    return response.data;
+    print("Response=>>> ${response.data!.token.toString()}");
+    cache.saveUser(response.data!);
+    cache.saveToken(response.data!.token!);
+    return response.data!;
   }
 }

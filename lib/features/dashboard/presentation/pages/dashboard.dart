@@ -1,28 +1,33 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
 import 'package:probitas_app/data/local/cache.dart';
+import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/greetings.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../provider/dashboard_provider.dart';
 import '../widget/weekdays/friday.dart';
 import '../widget/weekdays/monday.dart';
 import '../widget/weekdays/thursday.dart';
 import '../widget/weekdays/tuesday.dart';
 import '../widget/weekdays/wed.dart';
 
-class Dashboard extends StatefulWidget {
+class Dashboard extends ConsumerStatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
   @override
-  State<Dashboard> createState() => _DashboardState();
+  ConsumerState<Dashboard> createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard>
+class _DashboardState extends ConsumerState<Dashboard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late TabController _controller;
@@ -31,10 +36,12 @@ class _DashboardState extends State<Dashboard>
   void initState() {
     super.initState();
     _controller = new TabController(length: 5, vsync: this);
+    final value = ref.read(getUsers);
   }
 
   @override
   Widget build(BuildContext context) {
+    final value = ref.read(getUsers);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -66,33 +73,57 @@ class _DashboardState extends State<Dashboard>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                    child: Image(
-                      image: AssetImage(ImagesAsset.default_image),
-                    ),
-                  ),
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(shape: BoxShape.circle),
+                      child: value.when(
+                        data: (data) => CachedNetworkImage(
+                          fit: BoxFit.fitWidth,
+                          imageUrl: data.data!.user!.avatar!,
+                        ),
+                        error: (err, str) => Text("error"),
+                        loading: () => Text("loading"),
+                      )),
                   XMargin(20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "${getGreetings()}, Femi👋🏾",
-                        style: Config.b2(context).copyWith(
-                            color: isDarkMode
-                                ? Colors.white
-                                : ProbitasColor.ProbitasPrimary),
+                      Consumer(
+                        builder: ((context, watch, child) {
+                          final response = watch.read(getUsers);
+                          return response.when(
+                              data: (response) => Text(
+                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ").last}",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: Config.b2(context).copyWith(
+                                        color: isDarkMode
+                                            ? Colors.white
+                                            : ProbitasColor.ProbitasPrimary),
+                                  ),
+                              error: (err, st) => Text("error"),
+                              loading: () => Text("loading..."));
+                        }),
                       ),
                       YMargin(2.0),
-                      Text(
-                        "You are in the Rain Semester",
-                        style: Config.b2(context).copyWith(
-                            color: isDarkMode
-                                ? ProbitasColor.ProbitasTextPrimary
-                                : ProbitasColor.ProbitasTextSecondary),
+                      Consumer(
+                        builder: ((context, watch, child) {
+                          final response = watch.read(getUsers);
+                          return response.when(
+                              data: (response) => Text(
+                                    "You are in the ${response.data!.user!.semester!.type} Semester",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: Config.b2(context).copyWith(
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor
+                                                .ProbitasTextSecondary),
+                                  ),
+                              error: (err, st) => Text("error"),
+                              loading: () => Text("loading..."));
+                        }),
                       ),
                     ],
                   ),

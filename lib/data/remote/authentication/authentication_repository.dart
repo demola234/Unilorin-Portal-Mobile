@@ -20,6 +20,8 @@ class AuthenticationRepositoryImpl extends BaseApi
         "password": password,
       },
     );
-    return UserResponse.fromJson(data);
+    final s = UserResponse.fromJson(data);
+    print(s.data!.token);
+    return s;
   }
 }
