@@ -96,7 +96,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                           final response = watch.read(getUsers);
                           return response.when(
                               data: (response) => Text(
-                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ").last}",
+                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}",
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: Config.b2(context).copyWith(
