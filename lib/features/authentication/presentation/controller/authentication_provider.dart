@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
+import 'package:probitas_app/features/authentication/data/model/user_request.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
@@ -26,5 +27,10 @@ class LoginNotifier extends StateNotifier<AuthenticationState> {
       state = AuthenticationLoading(isLoading);
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
+  }
+
+  Future<UserRequest> getUserFromCache() async {
+    var usr = await cache.getUser();
+    return usr;
   }
 }

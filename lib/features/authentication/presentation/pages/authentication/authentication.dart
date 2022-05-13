@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
+import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/authentication/data/model/user_request.dart';
+import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../../core/constants/image_path.dart';
+import '../../../../../data/local/cache.dart';
 import '../../provider/authentication_provider.dart';
 
 class Authentication extends StatefulWidget {
@@ -13,9 +17,7 @@ class Authentication extends StatefulWidget {
 
 class _AuthenticationState extends State<Authentication> {
   TextEditingController matricNumber = TextEditingController();
-
   TextEditingController password = TextEditingController();
-
   bool visible = false;
 
   bool isLoading = false;
@@ -105,11 +107,14 @@ class _AuthenticationState extends State<Authentication> {
               YMargin(40),
               Consumer(
                 builder: (context, watch, child) {
+                  isLoading = true;
                   final state =
                       watch.read(authenticationNotifierProvider.notifier);
+                  isLoading = false;
+
                   return ProbitasButton(
                       text: "Login",
-                      showLoading: false,
+                      showLoading: isLoading,
                       onTap: () async {
                         return state.login(matricNumber.text, password.text);
                       });
@@ -117,14 +122,16 @@ class _AuthenticationState extends State<Authentication> {
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Text(
-                  "Note: Use Matric Number and Password \nfrom your student portal to proceed",
-                  textAlign: TextAlign.center,
-                  style: Config.b3(context).copyWith(
-                      color: !isDarkMode
-                          ? ProbitasColor.ProbitasSecondary
-                          : ProbitasColor.ProbitasAccent),
-                ),
+                child: Consumer(builder: (context, watch, child) {
+                  return Text(
+                    "Note: Use Matric Number and Password \nfrom your student portal to proceed",
+                    textAlign: TextAlign.center,
+                    style: Config.b3(context).copyWith(
+                        color: !isDarkMode
+                            ? ProbitasColor.ProbitasSecondary
+                            : ProbitasColor.ProbitasAccent),
+                  );
+                }),
               )
             ],
           ),

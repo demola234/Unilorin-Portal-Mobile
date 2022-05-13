@@ -3,10 +3,13 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
-import 'package:probitas_app/features/bottom_navigation.dart';
+import 'package:probitas_app/features/authentication/presentation/pages/authentication/logger_screen.dart';
+import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
 import 'core/utils/navigation_service.dart';
+import 'data/local/cache.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -18,6 +21,7 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await injector();
+  await GetStorage.init();
   runApp(
     ProviderScope(
       child: MyApp(),
@@ -55,7 +59,20 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: ProbitasColor.ProbitasPrimary,
           )),
       debugShowCheckedModeBanner: false,
-      home: NavController(),
+      home: FutureBuilder<bool>(
+          future: Cache.get().isFirstLoad(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data! == true) {
+                Future.delayed(Duration(microseconds: 1),
+                    () => NavigationService().replaceScreen(LoggerScreen()));
+              } else {
+                Future.delayed(Duration(microseconds: 1),
+                    () => NavigationService().replaceScreen(OnBoarding()));
+              }
+            }
+            return Scaffold();
+          }),
     ));
   }
 }
