@@ -11,6 +11,7 @@ class MessageOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(70.0),
@@ -53,14 +54,18 @@ class MessageOverview extends StatelessWidget {
                                 Text(
                                   "Author: UnilorinSU",
                                   style: Config.b3(context).copyWith(
-                                    color: ProbitasColor.ProbitasSecondary,
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasSecondary,
                                   ),
                                 ),
                                 YMargin(4),
                                 Text(
                                   "MAY 12, 2022  4:14 PM",
                                   style: Config.b3(context).copyWith(
-                                    color: ProbitasColor.ProbitasSecondary,
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasSecondary,
                                   ),
                                 ),
                               ],
@@ -70,8 +75,14 @@ class MessageOverview extends StatelessWidget {
                                 Share.share('Great news');
                               },
                               tooltip: "Share",
-                              icon: SvgPicture.asset(ImagesAsset.share,
-                                  height: 18, width: 18),
+                              icon: SvgPicture.asset(
+                                ImagesAsset.share,
+                                height: 18,
+                                width: 18,
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                    : ProbitasColor.ProbitasSecondary,
+                              ),
                             ),
                           ])
                     ],

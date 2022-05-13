@@ -21,6 +21,7 @@ class _ResultState extends State<Result> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -61,14 +62,18 @@ class _ResultState extends State<Result> {
                         Text(
                           "Femi Ademola",
                           maxLines: 1,
-                          style: Config.b2(context)
-                              .copyWith(color: ProbitasColor.ProbitasPrimary),
+                          style: Config.b2(context).copyWith(
+                              color: isDarkMode
+                                  ? Colors.white
+                                  : ProbitasColor.ProbitasPrimary),
                         ),
                         YMargin(2.0),
                         Text(
                           "First Semester",
                           style: Config.b2(context).copyWith(
-                              color: ProbitasColor.ProbitasTextSecondary),
+                              color: isDarkMode
+                                  ? ProbitasColor.ProbitasTextPrimary
+                                  : ProbitasColor.ProbitasTextSecondary),
                         ),
                       ],
                     ),
@@ -81,8 +86,10 @@ class _ResultState extends State<Result> {
                 children: [
                   Text(
                     "CGPA",
-                    style: Config.b2(context)
-                        .copyWith(color: ProbitasColor.ProbitasPrimary),
+                    style: Config.b2(context).copyWith(
+                        color: isDarkMode
+                            ? Colors.white
+                            : ProbitasColor.ProbitasPrimary),
                   ),
                   YMargin(2.0),
                   InkWell(
@@ -93,12 +100,17 @@ class _ResultState extends State<Result> {
                     },
                     child: Row(
                       children: [
-                        SvgPicture.asset(ImagesAsset.calculator),
+                        SvgPicture.asset(ImagesAsset.calculator,
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextPrimary
+                                : ProbitasColor.ProbitasTextSecondary),
                         XMargin(2),
                         Text(
                           isVisible ? "4.34" : "---",
                           style: Config.b2(context).copyWith(
-                              color: ProbitasColor.ProbitasTextSecondary),
+                              color: isDarkMode
+                                  ? ProbitasColor.ProbitasTextPrimary
+                                  : ProbitasColor.ProbitasTextSecondary),
                         ),
                       ],
                     ),

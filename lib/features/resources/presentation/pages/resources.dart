@@ -24,6 +24,7 @@ class _ResourcesState extends State<Resources> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
       appBar: PreferredSize(
@@ -43,7 +44,9 @@ class _ResourcesState extends State<Resources> {
             Text(
               "Resources",
               style: Config.h3(context).copyWith(
-                color: ProbitasColor.ProbitasPrimary,
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasPrimary,
                 fontSize: 18,
               ),
             ),
@@ -97,7 +100,10 @@ class _ResourcesState extends State<Resources> {
           NavigationService().navigateToScreen(AddResources());
         },
         backgroundColor: ProbitasColor.ProbitasSecondary,
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }

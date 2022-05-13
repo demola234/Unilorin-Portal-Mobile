@@ -46,6 +46,7 @@ class _PostFeedsState extends State<PostFeeds> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
       appBar: PreferredSize(
@@ -68,7 +69,9 @@ class _PostFeedsState extends State<PostFeeds> {
                 Text(
                   "Posts",
                   style: Config.h3(context).copyWith(
-                    color: ProbitasColor.ProbitasPrimary,
+                    color: isDarkMode
+                        ? ProbitasColor.ProbitasTextPrimary
+                        : ProbitasColor.ProbitasPrimary,
                     fontSize: 18,
                   ),
                 ),
@@ -140,7 +143,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                         Container(
                                           child: Text(
                                             "Femi Ademola",
-                                            style: Config.b2(context),
+                                            style: Config.b2(context).copyWith(
+                                                color: isDarkMode
+                                                    ? ProbitasColor
+                                                        .ProbitasTextPrimary
+                                                    : ProbitasColor
+                                                        .ProbitasPrimary),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             softWrap: false,
@@ -151,8 +159,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                         Text(
                                           "Microbiology",
                                           style: Config.b2(context).copyWith(
-                                            color: ProbitasColor
-                                                .ProbitasTextSecondary,
+                                            color: isDarkMode
+                                                ? ProbitasColor
+                                                        .ProbitasTextPrimary
+                                                    .withOpacity(0.5)
+                                                : ProbitasColor
+                                                    .ProbitasTextSecondary,
                                           ),
                                         ),
                                       ],
@@ -165,8 +177,10 @@ class _PostFeedsState extends State<PostFeeds> {
                                         PopupMenuButton(
                                           child: Icon(
                                             Icons.more_vert,
-                                            color: ProbitasColor
-                                                .ProbitasTextSecondary,
+                                            color: isDarkMode
+                                                ? ProbitasColor
+                                                    .ProbitasTextPrimary
+                                                : ProbitasColor.ProbitasPrimary,
                                           ),
                                           onSelected: (selectedValue) {
                                             print(selectedValue);
@@ -181,8 +195,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                         Text(
                                           "Level 200",
                                           style: Config.b2(context).copyWith(
-                                            color: ProbitasColor
-                                                .ProbitasTextSecondary,
+                                            color: isDarkMode
+                                                ? ProbitasColor
+                                                        .ProbitasTextPrimary
+                                                    .withOpacity(0.5)
+                                                : ProbitasColor
+                                                    .ProbitasTextSecondary,
                                             fontSize: 14.0,
                                           ),
                                         )
@@ -191,7 +209,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                   ],
                                 ),
                               ),
-                              Divider(),
+                              Divider(
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                        .withOpacity(0.5)
+                                    : ProbitasColor.ProbitasTextSecondary,
+                              ),
                               index % 3 == 0
                                   ? Stack(
                                       children: [
@@ -257,17 +280,22 @@ class _PostFeedsState extends State<PostFeeds> {
                                       .copyWith(fontSize: 14.0),
                                   trimLines: 3,
                                   delimiter: "...",
-                                  colorClickableText:
-                                      ProbitasColor.ProbitasSecondary,
+                                  colorClickableText: isDarkMode
+                                      ? ProbitasColor.ProbitasTextPrimary
+                                      : ProbitasColor.ProbitasPrimary,
                                   trimMode: TrimMode.Line,
                                   trimCollapsedText: 'Read More',
                                   trimExpandedText: 'Close',
                                   lessStyle: Config.b2(context).copyWith(
-                                      color: ProbitasColor.ProbitasSecondary,
+                                      color: isDarkMode
+                                          ? ProbitasColor.ProbitasTextPrimary
+                                          : ProbitasColor.ProbitasSecondary,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14.0),
                                   moreStyle: Config.b2(context).copyWith(
-                                    color: ProbitasColor.ProbitasSecondary,
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasSecondary,
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -282,20 +310,31 @@ class _PostFeedsState extends State<PostFeeds> {
                                     Row(
                                       children: [
                                         InkWell(
-                                          onTap: () {},
-                                          child: SvgPicture.asset(
-                                              index % 3 == 0
-                                                  ? ImagesAsset.liked
-                                                  : ImagesAsset.notliked,
-                                              height: 18,
-                                              width: 18),
-                                        ),
+                                            onTap: () {},
+                                            child: index % 3 == 0
+                                                ? SvgPicture.asset(
+                                                    ImagesAsset.liked,
+                                                    height: 18,
+                                                    width: 18)
+                                                : SvgPicture.asset(
+                                                    ImagesAsset.notliked,
+                                                    height: 18,
+                                                    width: 18,
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                            .ProbitasTextPrimary
+                                                        : ProbitasColor
+                                                            .ProbitasTextSecondary,
+                                                  )),
                                         XMargin(4),
                                         Text(
                                           "2",
                                           style: Config.b3(context).copyWith(
-                                            color: ProbitasColor
-                                                .ProbitasTextSecondary,
+                                            color: isDarkMode
+                                                ? ProbitasColor
+                                                    .ProbitasTextPrimary
+                                                : ProbitasColor
+                                                    .ProbitasTextSecondary,
                                           ),
                                         ),
                                       ],
@@ -306,16 +345,24 @@ class _PostFeedsState extends State<PostFeeds> {
                                         InkWell(
                                             onTap: () {},
                                             child: SvgPicture.asset(
-                                                ImagesAsset.chat,
-                                                height: 18,
-                                                width: 18)),
+                                              ImagesAsset.chat,
+                                              height: 18,
+                                              width: 18,
+                                              color: isDarkMode
+                                                  ? ProbitasColor
+                                                      .ProbitasTextPrimary
+                                                  : ProbitasColor
+                                                      .ProbitasPrimary,
+                                            )),
                                         XMargin(4),
                                         Text(
                                           "20",
                                           style: Config.b3(context).copyWith(
-                                            color: ProbitasColor
-                                                .ProbitasTextSecondary,
-                                          ),
+                                              color: isDarkMode
+                                                  ? ProbitasColor
+                                                      .ProbitasTextPrimary
+                                                  : ProbitasColor
+                                                      .ProbitasTextSecondary),
                                         ),
                                       ],
                                     ),
@@ -326,7 +373,12 @@ class _PostFeedsState extends State<PostFeeds> {
                                       },
                                       tooltip: "Share",
                                       icon: SvgPicture.asset(ImagesAsset.share,
-                                          height: 18, width: 18),
+                                          color: isDarkMode
+                                              ? ProbitasColor
+                                                  .ProbitasTextPrimary
+                                              : ProbitasColor.ProbitasPrimary,
+                                          height: 18,
+                                          width: 18),
                                     ),
                                   ],
                                 ),

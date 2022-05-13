@@ -10,6 +10,7 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -51,14 +52,18 @@ class Profile extends StatelessWidget {
                           Text(
                             "Femi Ademola",
                             maxLines: 1,
-                            style: Config.b2(context)
-                                .copyWith(color: ProbitasColor.ProbitasPrimary),
+                            style: Config.b2(context).copyWith(
+                                color: isDarkMode
+                                    ? Colors.white
+                                    : ProbitasColor.ProbitasPrimary),
                           ),
                           YMargin(2.0),
                           Text(
                             "200 Level",
                             style: Config.b2(context).copyWith(
-                                color: ProbitasColor.ProbitasTextSecondary),
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                    : ProbitasColor.ProbitasTextSecondary),
                           ),
                         ],
                       ),
@@ -91,7 +96,9 @@ class Profile extends StatelessWidget {
                         width: 6.0,
                         height: 330,
                         decoration: BoxDecoration(
-                            color: ProbitasColor.ProbitasSecondary,
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextSecondary
+                                : ProbitasColor.ProbitasSecondary,
                             borderRadius: BorderRadius.circular(12.0)),
                       ),
                       XMargin(15),
@@ -178,7 +185,9 @@ class Profile extends StatelessWidget {
                       width: 6.0,
                       height: 70,
                       decoration: BoxDecoration(
-                          color: ProbitasColor.ProbitasSecondary,
+                          color: isDarkMode
+                              ? ProbitasColor.ProbitasTextSecondary
+                              : ProbitasColor.ProbitasSecondary,
                           borderRadius: BorderRadius.circular(12.0)),
                     ),
                     XMargin(15),

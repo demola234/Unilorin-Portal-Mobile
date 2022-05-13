@@ -26,6 +26,7 @@ class _MessagesState extends State<Messages> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         key: _key,
         appBar: PreferredSize(
@@ -48,7 +49,9 @@ class _MessagesState extends State<Messages> {
                   Text(
                     "News",
                     style: Config.h3(context).copyWith(
-                      color: ProbitasColor.ProbitasPrimary,
+                      color: isDarkMode
+                          ? ProbitasColor.ProbitasTextPrimary
+                          : ProbitasColor.ProbitasPrimary,
                       fontSize: 18,
                     ),
                   ),
@@ -81,7 +84,9 @@ class _MessagesState extends State<Messages> {
                                     Radius.circular(10.0),
                                   ),
                                   border: Border.all(
-                                    color: ProbitasColor.ProbitasSecondary,
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasSecondary,
                                   ),
                                 ),
                                 child: Padding(
@@ -121,8 +126,11 @@ class _MessagesState extends State<Messages> {
                                                   "3 weeks ago",
                                                   style: Config.b3(context)
                                                       .copyWith(
-                                                    color: ProbitasColor
-                                                        .ProbitasSecondary,
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                            .ProbitasTextPrimary
+                                                        : ProbitasColor
+                                                            .ProbitasSecondary,
                                                   ),
                                                 ),
                                               ],

@@ -17,7 +17,6 @@ class AuthenticationServiceImpl extends AuthenticationService {
     var response = await repository.login(matricNumber, password);
     cache.saveUser(response.data);
     cache.saveToken(response.data.token);
-    print("PRINNNTTTT=>>>>> ${response.data.token}");
     return response.data;
   }
 }

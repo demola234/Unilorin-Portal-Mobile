@@ -62,8 +62,10 @@ class _PostOverViewState extends State<PostOverView> {
                       Container(
                         child: Text(
                           "Femi Ademola",
-                          style: Config.b2(context)
-                              .copyWith(color: ProbitasColor.ProbitasPrimary),
+                          style: Config.b2(context).copyWith(
+                              color: isDarkMode
+                                  ? ProbitasColor.ProbitasTextPrimary
+                                  : ProbitasColor.ProbitasPrimary),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
                           softWrap: false,
@@ -74,7 +76,10 @@ class _PostOverViewState extends State<PostOverView> {
                       Text(
                         "Microbiology",
                         style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasTextSecondary),
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextPrimary.withOpacity(
+                                    0.5)
+                                : ProbitasColor.ProbitasTextSecondary),
                       ),
                     ],
                   ),
@@ -86,12 +91,17 @@ class _PostOverViewState extends State<PostOverView> {
                       children: [
                         Text("Level 200",
                             style: Config.b2(context).copyWith(
-                                color: ProbitasColor.ProbitasTextSecondary,
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                    : ProbitasColor.ProbitasTextSecondary,
                                 fontSize: 14.0)),
                         YMargin(2.0),
                         Text("Today, 02:34 PM",
                             style: Config.b2(context).copyWith(
-                                color: ProbitasColor.ProbitasPrimary,
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                        .withOpacity(0.5)
+                                    : ProbitasColor.ProbitasPrimary,
                                 fontSize: 14.0))
                       ],
                     ),
@@ -173,7 +183,9 @@ class _PostOverViewState extends State<PostOverView> {
                       Text(
                         "300",
                         style: Config.b3(context).copyWith(
-                          color: ProbitasColor.ProbitasTextSecondary,
+                          color: isDarkMode
+                              ? ProbitasColor.ProbitasTextPrimary
+                              : ProbitasColor.ProbitasTextSecondary,
                         ),
                       ),
                     ],
@@ -184,8 +196,14 @@ class _PostOverViewState extends State<PostOverView> {
                       Share.share('Great picture');
                     },
                     tooltip: "Share",
-                    icon: SvgPicture.asset(ImagesAsset.share,
-                        height: 18, width: 18),
+                    icon: SvgPicture.asset(
+                      ImagesAsset.share,
+                      height: 18,
+                      width: 18,
+                      color: isDarkMode
+                          ? ProbitasColor.ProbitasTextPrimary
+                          : ProbitasColor.ProbitasPrimary,
+                    ),
                   ),
                 ],
               ),
@@ -259,8 +277,11 @@ class _PostOverViewState extends State<PostOverView> {
                                           child: Text(
                                             "Femi Ademola",
                                             style: Config.b2(context).copyWith(
-                                                color: ProbitasColor
-                                                    .ProbitasPrimary),
+                                                color: isDarkMode
+                                                    ? ProbitasColor
+                                                        .ProbitasTextPrimary
+                                                    : ProbitasColor
+                                                        .ProbitasPrimary),
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 1,
                                             softWrap: false,
@@ -268,12 +289,15 @@ class _PostOverViewState extends State<PostOverView> {
                                           ),
                                         ),
                                         YMargin(2.0),
-                                        Text(
-                                          "Microbiology",
-                                          style: Config.b2(context).copyWith(
-                                              color: ProbitasColor
-                                                  .ProbitasTextSecondary),
-                                        ),
+                                        Text("Microbiology",
+                                            style: Config.b2(context).copyWith(
+                                              color: isDarkMode
+                                                  ? ProbitasColor
+                                                          .ProbitasTextPrimary
+                                                      .withOpacity(0.5)
+                                                  : ProbitasColor
+                                                      .ProbitasTextSecondary,
+                                            )),
                                       ],
                                     ),
                                     Spacer(),
@@ -285,8 +309,12 @@ class _PostOverViewState extends State<PostOverView> {
                                         children: [
                                           Text("Level 200",
                                               style: Config.b2(context).copyWith(
-                                                  color: ProbitasColor
-                                                      .ProbitasTextSecondary,
+                                                  color: isDarkMode
+                                                      ? ProbitasColor
+                                                              .ProbitasTextPrimary
+                                                          .withOpacity(0.5)
+                                                      : ProbitasColor
+                                                          .ProbitasTextSecondary,
                                                   fontSize: 14.0)),
                                           YMargin(2.0),
                                           Text("Today, 02:34 PM",

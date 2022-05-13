@@ -128,7 +128,7 @@ class _DashboardState extends State<Dashboard>
                       child: Center(
                           child: Text("Manage Schedule",
                               style: Config.b3(context).copyWith(
-                                color: Colors.white,
+                                color: ProbitasColor.ProbitasTextPrimary,
                               ))),
                     ),
                   ),
