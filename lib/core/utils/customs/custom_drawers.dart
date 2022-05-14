@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/core/utils/shimmer_loading.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/authentication/authentication.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/profile/profile.dart';
@@ -44,22 +45,23 @@ class ProbitasDrawer extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            child: ref.read(getUsers).when(
-                                  data: (data) => ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: data.data!.user!.avatar!,
-                                      
+                            child: ref.read(getUsersProvider).when(
+                                data: (data) => ClipRRect(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        imageUrl: data.data!.user!.avatar!,
+                                      ),
                                     ),
-                                  ),
-                                  error: (err, str) => Text("error"),
-                                  loading: () => Text("loading"),
-                                )))),
+                                error: (err, str) => Text("error"),
+                                loading: () => Loading(
+                                      width: 110,
+                                      height: 110,
+                                    ))))),
                     YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
-                        final response = watch.read(getUsers);
+                        final response = watch.read(getUsersProvider);
                         return response.when(
                             data: (response) => Text(
                                   "${response.data!.user!.fullName!}",
@@ -71,7 +73,7 @@ class ProbitasDrawer extends StatelessWidget {
                                           : ProbitasColor.ProbitasPrimary),
                                 ),
                             error: (err, st) => Text("error"),
-                            loading: () => Text("loading..."));
+                            loading: () => Loading(width: 100, height: 10));
                       }),
                     ),
                     YMargin(30),

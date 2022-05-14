@@ -16,8 +16,6 @@ class _AuthenticationState extends State<Authentication> {
   TextEditingController password = TextEditingController();
   bool visible = false;
 
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
@@ -103,16 +101,16 @@ class _AuthenticationState extends State<Authentication> {
               YMargin(40),
               Consumer(
                 builder: (context, watch, child) {
-                  isLoading = true;
                   final state =
                       watch.read(authenticationNotifierProvider.notifier);
-                  isLoading = false;
 
                   return ProbitasButton(
                       text: "Login",
-                      showLoading: isLoading,
+                      showLoading: watch
+                          .watch(authenticationNotifierProvider.notifier)
+                          .loading,
                       onTap: () async {
-                        return state.login(matricNumber.text, password.text);
+                        await state.login(matricNumber.text, password.text);
                       });
                 },
               ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +42,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
+    Timer(const Duration(days: 5), () => Cache.get().clear());
   }
 
   @override

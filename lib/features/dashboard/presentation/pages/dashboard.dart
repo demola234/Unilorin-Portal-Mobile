@@ -10,6 +10,7 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/greetings.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../../core/utils/shimmer_loading.dart';
 import '../widget/weekdays/friday.dart';
 import '../widget/weekdays/monday.dart';
 import '../widget/weekdays/thursday.dart';
@@ -36,7 +37,7 @@ class _DashboardState extends ConsumerState<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    final value = ref.read(getUsers);
+    final value = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -71,16 +72,18 @@ class _DashboardState extends ConsumerState<Dashboard>
                       width: 60,
                       height: 60,
                       child: value.when(
-                        data: (data) => ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.fitWidth,
-                            imageUrl: data.data!.user!.avatar!,
-                          ),
-                        ),
-                        error: (err, str) => Text("error"),
-                        loading: () => Text("loading"),
-                      )),
+                          data: (data) => ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.fitWidth,
+                                  imageUrl: data.data!.user!.avatar!,
+                                ),
+                              ),
+                          error: (err, str) => Text("error"),
+                          loading: () => Loading(
+                                height: 60,
+                                width: 60,
+                              ))),
                   XMargin(20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -88,7 +91,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                     children: [
                       Consumer(
                         builder: ((context, watch, child) {
-                          final response = watch.read(getUsers);
+                          final response = watch.read(getUsersProvider);
                           return response.when(
                               data: (response) => Text(
                                     "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}👋🏾",
@@ -100,44 +103,40 @@ class _DashboardState extends ConsumerState<Dashboard>
                                             : ProbitasColor.ProbitasPrimary),
                                   ),
                               error: (err, st) => Text("error"),
-                              loading: () => Text("loading..."));
+                              loading: () => Loading(
+                                    height: 20,
+                                    width: 200,
+                                  ));
                         }),
                       ),
-                      YMargin(2.0),
+                      YMargin(5.0),
                       Consumer(
                         builder: ((context, watch, child) {
-                          final response = watch.read(getUsers);
+                          final response = watch.read(getUsersProvider);
                           return response.when(
-                              data: (response) => Text(
-                                    "You are in the ${response.data!.user!.semester!.type} Semester",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Config.b2(context).copyWith(
-                                        color: isDarkMode
-                                            ? ProbitasColor.ProbitasTextPrimary
-                                            : ProbitasColor
-                                                .ProbitasTextSecondary),
-                                  ),
-                              error: (err, st) => Text(
-                                    "You are in the Rain Semester",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Config.b2(context).copyWith(
-                                        color: isDarkMode
-                                            ? ProbitasColor.ProbitasTextPrimary
-                                            : ProbitasColor
-                                                .ProbitasTextSecondary),
-                                  ),
-                              loading: () => Text(
-                                    "You are in the loading... Semester",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Config.b2(context).copyWith(
-                                        color: isDarkMode
-                                            ? ProbitasColor.ProbitasTextPrimary
-                                            : ProbitasColor
-                                                .ProbitasTextSecondary),
-                                  ));
+                            data: (response) => Text(
+                              "You are in the ${response.data!.user!.semester!.type} Semester",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: Config.b2(context).copyWith(
+                                  color: isDarkMode
+                                      ? ProbitasColor.ProbitasTextPrimary
+                                      : ProbitasColor.ProbitasTextSecondary),
+                            ),
+                            error: (err, st) => Text(
+                              "You are in the Rain Semester",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: Config.b2(context).copyWith(
+                                  color: isDarkMode
+                                      ? ProbitasColor.ProbitasTextPrimary
+                                      : ProbitasColor.ProbitasTextSecondary),
+                            ),
+                            loading: () => Loading(
+                              height: 20,
+                              width: 200,
+                            ),
+                          );
                         }),
                       ),
                     ],

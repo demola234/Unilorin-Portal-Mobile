@@ -7,24 +7,22 @@ import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../data/remote/authentication/authentication_service.dart';
 import '../../../../injection_container.dart';
-import '../../data/infrastructure/authentication_state.dart';
 
-class LoginNotifier extends StateNotifier<AuthenticationState> {
+class LoginNotifier extends StateNotifier {
   var authService = getIt<AuthenticationService>();
   var cache = getIt<Cache>();
-  LoginNotifier(this.authService) : super(AuthenticationInitial());
+  bool? loading;
+  LoginNotifier(this.authService, loading) : super(loading);
 
   Future<void> login(String matricNumber, String password) async {
-    state = AuthenticationLoading(true);
+    loading = true;
     try {
-      final response = await authService.login(matricNumber, password);
-      state = AuthenticatingUser(response);
+      await authService.login(matricNumber, password);
       NavigationService().replaceScreen(NavController());
-      state = AuthenticationLoading(false);
+      loading = false;
+      print(loading);
     } catch (e) {
-      state = AuthenticationError("An Error Occurred");
-      bool isLoading = false;
-      state = AuthenticationLoading(isLoading);
+      loading = false;
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
   }

@@ -21,7 +21,6 @@ class CacheImpl implements Cache {
   Future clear() async {
     box.remove('user');
     box.remove('token');
-    box.remove('first');
   }
 
   @override
