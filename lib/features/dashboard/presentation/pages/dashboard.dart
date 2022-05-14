@@ -1,19 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
-import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/greetings.dart';
 import '../../../../core/utils/navigation_service.dart';
-import '../provider/dashboard_provider.dart';
 import '../widget/weekdays/friday.dart';
 import '../widget/weekdays/monday.dart';
 import '../widget/weekdays/thursday.dart';
@@ -36,7 +32,6 @@ class _DashboardState extends ConsumerState<Dashboard>
   void initState() {
     super.initState();
     _controller = new TabController(length: 5, vsync: this);
-    final value = ref.read(getUsers);
   }
 
   @override
@@ -96,7 +91,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                           final response = watch.read(getUsers);
                           return response.when(
                               data: (response) => Text(
-                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}",
+                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}👋🏾",
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
                                     style: Config.b2(context).copyWith(
@@ -123,8 +118,26 @@ class _DashboardState extends ConsumerState<Dashboard>
                                             : ProbitasColor
                                                 .ProbitasTextSecondary),
                                   ),
-                              error: (err, st) => Text("error"),
-                              loading: () => Text("loading..."));
+                              error: (err, st) => Text(
+                                    "You are in the Rain Semester",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: Config.b2(context).copyWith(
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor
+                                                .ProbitasTextSecondary),
+                                  ),
+                              loading: () => Text(
+                                    "You are in the loading... Semester",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: Config.b2(context).copyWith(
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor
+                                                .ProbitasTextSecondary),
+                                  ));
                         }),
                       ),
                     ],
@@ -150,8 +163,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   child: InkWell(
                     onTap: () {
-                      // NavigationService().navigateToScreen(ManageSchedule());
-                      Cache.get().clear();
+                      NavigationService().navigateToScreen(ManageSchedule());
                     },
                     child: Container(
                       height: 35,

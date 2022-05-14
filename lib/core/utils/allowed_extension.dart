@@ -1,5 +1,5 @@
 
-List<String> allowed = [
+List<String> allowedExtensions = [
   "png",
   "jpg",
   "jpeg",

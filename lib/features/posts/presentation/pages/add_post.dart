@@ -18,6 +18,7 @@ class AddPost extends StatefulWidget {
 class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(

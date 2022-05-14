@@ -181,7 +181,7 @@ class _AddResourcesState extends State<AddResources> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: _multiPick,
-        allowedExtensions: allowed);
+        allowedExtensions: allowedExtensions);
 
     // ignore: unnecessary_null_comparison
     if (result != null && result.files.map((e) => e.path) != null) {

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/authentication/presentation/pages/authentication/authentication.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/profile/profile.dart';
 import 'package:probitas_app/features/result/results.dart';
 import 'package:probitas_app/features/settings/settings.dart';
-
+import '../../../data/local/cache.dart';
 import '../../../features/result/local_auth.dart';
-import '../../constants/image_path.dart';
 import '../config.dart';
 
 class ProbitasDrawer extends StatelessWidget {
@@ -50,6 +50,7 @@ class ProbitasDrawer extends StatelessWidget {
                                     child: CachedNetworkImage(
                                       fit: BoxFit.cover,
                                       imageUrl: data.data!.user!.avatar!,
+                                      
                                     ),
                                   ),
                                   error: (err, str) => Text("error"),
@@ -137,12 +138,8 @@ class ProbitasDrawer extends StatelessWidget {
                   ),
                 ),
               ).ripple(() {
-                Navigator.of(context).pop();
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Container(),
-                    ));
+                Cache.get().clear();
+                NavigationService().replaceScreen(Authentication());
               }),
               YMargin(50),
             ],

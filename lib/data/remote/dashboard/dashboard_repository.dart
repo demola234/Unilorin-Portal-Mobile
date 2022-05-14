@@ -1,6 +1,5 @@
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
-import '../../../features/authentication/data/model/user_request.dart';
 import '../../../features/dashboard/data/model/user_response.dart';
 
 abstract class DashboardRepository {

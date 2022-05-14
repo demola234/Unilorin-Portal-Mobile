@@ -1,8 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:probitas_app/features/authentication/data/model/user_request.dart';
-
-import '../../../../data/remote/dashboard/dashboard_service.dart';
-import '../../../../injection_container.dart';
 import '../../data/model/user_response.dart';
 import '../provider/dashboard_provider.dart';
 

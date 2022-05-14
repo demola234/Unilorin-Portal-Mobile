@@ -1,9 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:probitas_app/data/remote/authentication/authentication_repository.dart';
 import 'package:probitas_app/data/remote/authentication/authentication_service.dart';
-import 'package:probitas_app/data/remote/dashboard/dasboard_repository.dart';
+import 'package:probitas_app/data/remote/dashboard/dashboard_repository.dart';
 import 'package:probitas_app/data/remote/dashboard/dashboard_service.dart';
-
 import 'data/local/cache.dart';
 
 final GetIt getIt = GetIt.instance;

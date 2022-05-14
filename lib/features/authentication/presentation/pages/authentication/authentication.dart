@@ -3,11 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
-import 'package:probitas_app/core/utils/navigation_service.dart';
-import 'package:probitas_app/features/authentication/data/model/user_request.dart';
-import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../../core/constants/image_path.dart';
-import '../../../../../data/local/cache.dart';
 import '../../provider/authentication_provider.dart';
 
 class Authentication extends StatefulWidget {

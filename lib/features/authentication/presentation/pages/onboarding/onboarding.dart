@@ -65,18 +65,18 @@ class _OnBoardingState extends State<OnBoarding> {
               },
               itemBuilder: (_, index) {
                 return Column(children: [
-                  YMargin(220),
+                  YMargin(120),
                   Column(children: [
                     Lottie.asset(
                       onboarding[index].img,
-                      height: 325,
-                      width: 325,
+                      height: 250,
+                      width: 250,
                       animate: true,
                       repeat: false,
                     ),
                     YMargin(20),
                     Container(
-                        width: context.screenWidth() - 50,
+                        width: context.screenWidth(),
                         height: 103,
                         decoration: BoxDecoration(
                             color: Color(0xFFE3D6C5).withOpacity(0.3),
@@ -97,7 +97,7 @@ class _OnBoardingState extends State<OnBoarding> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 180.0),
+              padding: const EdgeInsets.only(bottom: 150.0),
               child: Container(
                 height: 10.0,
                 child: ListView.builder(

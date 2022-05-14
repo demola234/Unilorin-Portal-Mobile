@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+// ignore: unused_import
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
@@ -122,7 +123,8 @@ class _ResourceTileState extends State<ResourceTile> {
   bool isLoading = false;
   late Dio dio;
   late String progress;
-  late String _fileFullPath;
+  // ignore: unused_field
+  String? _fileFullPath;
   String url =
       "http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf";
   @override
@@ -170,7 +172,7 @@ class _ResourceTileState extends State<ResourceTile> {
                   ),
                   YMargin(2.0),
                   Text(
-                    "Library and Information Techiniques",
+                    "Library and Information Techniques",
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
