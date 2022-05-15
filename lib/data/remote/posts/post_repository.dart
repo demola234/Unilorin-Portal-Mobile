@@ -23,7 +23,7 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
           multiPart.add(await MultipartFile.fromFile(img.path,
               contentType: MediaType.parse("image/jpeg"),
               filename:
-                  "post_image_${DateTime.now().millisecondsSinceEpoch}.${img.path.split(".").last}"));
+                  "post_image${DateTime.now().millisecondsSinceEpoch}.${img.path.split(".").last}"));
         }
         data['images'] = multiPart;
       }

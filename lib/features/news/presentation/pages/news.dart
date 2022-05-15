@@ -79,7 +79,7 @@ class _MessagesState extends ConsumerState<Messages> {
                                 return GestureDetector(
                                   onTap: () {
                                     NavigationService().navigateToScreen(
-                                        MessageOverview(
+                                        NewsOverview(
                                             url: data.data![index].link!));
                                   },
                                   child: Container(

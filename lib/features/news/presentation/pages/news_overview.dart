@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 
-class MessageOverview extends StatefulWidget {
+class NewsOverview extends StatefulWidget {
   String url;
-  MessageOverview({Key? key, required this.url}) : super(key: key);
+  NewsOverview({Key? key, required this.url}) : super(key: key);
 
   @override
-  State<MessageOverview> createState() => _MessageOverviewState();
+  State<NewsOverview> createState() => _NewsOverviewState();
 }
 
-class _MessageOverviewState extends State<MessageOverview> {
+class _NewsOverviewState extends State<NewsOverview> {
   WebViewController? webViewController;
   @override
   Widget build(BuildContext context) {
