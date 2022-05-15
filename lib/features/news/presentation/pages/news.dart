@@ -78,8 +78,9 @@ class _MessagesState extends ConsumerState<Messages> {
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onTap: () {
-                                    NavigationService()
-                                        .navigateToScreen(MessageOverview());
+                                    NavigationService().navigateToScreen(
+                                        MessageOverview(
+                                            url: data.data![index].link!));
                                   },
                                   child: Container(
                                     margin: EdgeInsets.symmetric(vertical: 15),
