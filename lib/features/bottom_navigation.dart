@@ -5,7 +5,7 @@ import 'package:probitas_app/core/utils/config.dart';
 import '../core/constants/image_path.dart';
 import 'assignments/assignment.dart';
 import 'dashboard/presentation/pages/dashboard.dart';
-import 'messages/message.dart';
+import 'news/presentation/pages/news.dart';
 import 'posts/presentation/pages/posts.dart';
 import 'resources/presentation/pages/resources.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../core/constants/colors.dart';
-import '../../core/constants/image_path.dart';
-import '../../core/utils/config.dart';
+import '../../../../../core/utils/config.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class MessageOverview extends StatelessWidget {
