@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/components.dart';
@@ -7,15 +8,18 @@ import 'package:probitas_app/core/utils/config.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../provider/post_provider.dart';
 
-class AddPost extends StatefulWidget {
+class AddPost extends ConsumerStatefulWidget {
   const AddPost({Key? key}) : super(key: key);
 
   @override
-  State<AddPost> createState() => _AddPostState();
+  ConsumerState<AddPost> createState() => _AddPostState();
 }
 
-class _AddPostState extends State<AddPost> {
+class _AddPostState extends ConsumerState<AddPost> {
+  TextEditingController postText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -44,6 +48,7 @@ class _AddPostState extends State<AddPost> {
                 XMargin(10.0),
                 Flexible(
                   child: ProbitasTextFormField(
+                    controller: postText,
                     hintText: "Say Something...",
                   ),
                 ),
@@ -152,7 +157,11 @@ class _AddPostState extends State<AddPost> {
         ],
       ),
       floatingActionButton: InkWell(
-        onTap: () {},
+        onTap: () {
+          ref
+              .watch(postNotifierProvider.notifier)
+              .createPost(postText.text, images);
+        },
         child: Container(
           height: 70,
           width: 220,

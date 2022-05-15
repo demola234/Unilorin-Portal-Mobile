@@ -5,6 +5,8 @@ import 'package:probitas_app/data/remote/dashboard/dashboard_repository.dart';
 import 'package:probitas_app/data/remote/dashboard/dashboard_service.dart';
 import 'package:probitas_app/data/remote/news/news_repository.dart';
 import 'package:probitas_app/data/remote/news/news_service.dart';
+import 'package:probitas_app/data/remote/posts/post_repository.dart';
+import 'package:probitas_app/data/remote/posts/post_service.dart';
 import 'data/local/cache.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -26,6 +28,11 @@ Future<void> injector() async {
   getIt.registerLazySingleton<NewsRepository>(() => NewsRepositoryImpl());
   getIt.registerLazySingleton<NewsService>(
       () => NewsServiceImpl(cache: getIt(), newsRepository: getIt()));
+
+ ///Post
+  getIt.registerLazySingleton<PostRepository>(() => PostRepositoryImpl());
+  getIt.registerLazySingleton<PostService>(
+      () => PostServiceImpl(cache: getIt(), postRepository: getIt()));
 
   ///cache
   getIt.registerLazySingleton<Cache>(() => CacheImpl());
