@@ -194,17 +194,15 @@ class _AddResourcesState extends ConsumerState<AddResources> {
       if (courseCodeText.trim().isEmpty && courseCodeText.length == 6) {
         Toasts.showErrorToast("Please pick a Proper Course Code");
         return;
-      }
-      if (courseTitleText.trim().isEmpty && courseTitleText.length >= 8) {
+      } else if (courseTitleText.trim().isEmpty &&
+          courseTitleText.length >= 8) {
         Toasts.showErrorToast(
             "Your Course name cannot be shorter than 8 Characters");
         return;
-      }
-      if (file == null) {
+      } else if (file == null) {
         Toasts.showErrorToast("Select a resource");
         return;
-      }
-      if (topicText.trim().isEmpty) {
+      } else if (topicText.trim().isEmpty) {
         Toasts.showErrorToast(
             "You must write a short description of your topic");
         return;
