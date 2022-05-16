@@ -4,10 +4,10 @@ import 'package:probitas_app/features/news/data/model/news_response.dart';
 import 'package:probitas_app/injection_container.dart';
 
 var newsService = getIt<NewsService>();
-int page = 1;
+int currentPage = 1;
 final getNewsProvider = FutureProvider<NewsResponse>((ref) async {
-  final profile = await newsService.fetchUsers("unilorinsu", page.toString());
-  page++;
+  final profile = await newsService.fetchUsers("unilorinsu", currentPage);
+  currentPage++;
 
   return profile;
 });

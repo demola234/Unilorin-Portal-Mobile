@@ -22,6 +22,7 @@ class _MessagesState extends ConsumerState<Messages> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
       GlobalKey<LiquidPullToRefreshState>();
+  final scrollController = ScrollController();
 
   Future<void> _handleRefresh() async {
     return await ref.watch(getNewsProvider);
@@ -65,7 +66,7 @@ class _MessagesState extends ConsumerState<Messages> {
                 child: LiquidPullToRefresh(
                     key: _refreshIndicatorKey,
                     onRefresh: _handleRefresh,
-                    color: ProbitasColor.ProbitasSecondary,
+                    color: Color(0xFF045257),
                     backgroundColor: ProbitasColor.ProbitasTextPrimary,
                     animSpeedFactor: 5,
                     showChildOpacityTransition: true,
@@ -73,6 +74,7 @@ class _MessagesState extends ConsumerState<Messages> {
                         width: context.screenWidth(),
                         child: value.when(
                           data: (data) => ListView.builder(
+                              controller: scrollController,
                               itemCount: data.data!.length,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {

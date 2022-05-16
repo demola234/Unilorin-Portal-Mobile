@@ -3,13 +3,13 @@ import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
 
 abstract class NewsRepository {
-  Future<NewsResponse> fetchNews(String token, String source, String page);
+  Future<NewsResponse> fetchNews(String token, String source, int page);
 }
 
 class NewsRepositoryImpl extends BaseApi implements NewsRepository {
   @override
   Future<NewsResponse> fetchNews(
-      String token, String source, String page) async {
+      String token, String source, int page) async {
     try {
       var data = await get("news", headers: getHeader(token), query: {
         "source": source,
