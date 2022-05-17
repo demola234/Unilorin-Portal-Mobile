@@ -1,26 +1,34 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:probitas_app/features/authentication/presentation/provider/authentication_provider.dart';
+import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
+import 'package:probitas_app/features/result/presentation/controller/result_controller.dart';
 
-import '../../core/constants/colors.dart';
-import '../../core/constants/image_path.dart';
-import '../../core/utils/components.dart';
-import '../../core/utils/config.dart';
-import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/image_path.dart';
+import '../../../../core/utils/components.dart';
+import '../../../../core/utils/config.dart';
+import '../../../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../../../core/utils/shimmer_loading.dart';
 
-class Result extends StatefulWidget {
+class Result extends ConsumerStatefulWidget {
   Result({Key? key}) : super(key: key);
 
   @override
-  State<Result> createState() => _ResultState();
+  ConsumerState<Result> createState() => _ResultState();
 }
 
-class _ResultState extends State<Result> {
+class _ResultState extends ConsumerState<Result> {
   bool isVisible = false;
   bool isResult = false;
   var session, semester;
 
   @override
   Widget build(BuildContext context) {
+    final userDetails = ref.watch(getUsersProvider);
+    final cgpaDetails = ref.watch(getResultsProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
@@ -45,22 +53,31 @@ class _ResultState extends State<Result> {
                 child: Row(
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(15.0))),
-                      child: Image(
-                        image: AssetImage(ImagesAsset.default_image),
-                      ),
-                    ),
+                        width: 60,
+                        height: 60,
+                        child: userDetails.when(
+                            data: (data) => ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fitWidth,
+                                    imageUrl: data.data!.user!.avatar!,
+                                  ),
+                                ),
+                            error: (err, str) => Text("error"),
+                            loading: () => Loading(
+                                  height: 60,
+                                  width: 60,
+                                ))),
                     XMargin(20),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Femi Ademola",
+                          userDetails.when(
+                              data: (data) => data.data!.user!.fullName!,
+                              error: (err, str) => "error",
+                              loading: () => "loading"),
                           maxLines: 1,
                           style: Config.b2(context).copyWith(
                               color: isDarkMode
@@ -69,10 +86,15 @@ class _ResultState extends State<Result> {
                         ),
                         YMargin(2.0),
                         Text(
-                          "First Semester",
+                          userDetails.when(
+                              data: (data) =>
+                                  "${data.data!.user!.semester!.type!} Semester",
+                              error: (err, str) => "error",
+                              loading: () => "loading"),
+                          maxLines: 1,
                           style: Config.b2(context).copyWith(
                               color: isDarkMode
-                                  ? ProbitasColor.ProbitasTextPrimary
+                                  ? Colors.white
                                   : ProbitasColor.ProbitasTextSecondary),
                         ),
                       ],
@@ -106,7 +128,11 @@ class _ResultState extends State<Result> {
                                 : ProbitasColor.ProbitasTextSecondary),
                         XMargin(2),
                         Text(
-                          isVisible ? "4.34" : "---",
+                          cgpaDetails.when(
+                              data: (data) =>
+                                  isVisible ? "${data.data!.cgpa}" : "---",
+                              error: (err, str) => "---",
+                              loading: () => "---"),
                           style: Config.b2(context).copyWith(
                               color: isDarkMode
                                   ? ProbitasColor.ProbitasTextPrimary

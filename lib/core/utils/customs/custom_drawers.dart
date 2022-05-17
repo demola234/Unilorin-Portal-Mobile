@@ -7,10 +7,10 @@ import 'package:probitas_app/core/utils/shimmer_loading.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/authentication/authentication.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/profile/profile.dart';
-import 'package:probitas_app/features/result/results.dart';
+import 'package:probitas_app/features/result/presentation/pages/results.dart';
 import 'package:probitas_app/features/settings/settings.dart';
 import '../../../data/local/cache.dart';
-import '../../../features/result/local_auth.dart';
+import '../../../features/result/presentation/controller/local_auth.dart';
 import '../config.dart';
 
 class ProbitasDrawer extends StatelessWidget {

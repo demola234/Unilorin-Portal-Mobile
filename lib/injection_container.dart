@@ -8,6 +8,8 @@ import 'package:probitas_app/data/remote/news/news_service.dart';
 import 'package:probitas_app/data/remote/posts/post_repository.dart';
 import 'package:probitas_app/data/remote/posts/post_service.dart';
 import 'package:probitas_app/data/remote/resources/resources_repository.dart';
+import 'package:probitas_app/data/remote/result/result_repository.dart';
+import 'package:probitas_app/data/remote/result/result_service.dart';
 import 'data/local/cache.dart';
 import 'data/remote/resources/resources_services.dart';
 
@@ -41,6 +43,11 @@ Future<void> injector() async {
       () => ResourceRepositoryRepositoryImpl());
   getIt.registerLazySingleton<ResourcesService>(
       () => ResourcesServiceImpl(cache: getIt(), resourceRepository: getIt()));
+
+  ///Results
+  getIt.registerLazySingleton<ResultRepository>(() => ResultRepositoryImpl());
+  getIt.registerLazySingleton<ResultService>(
+      () => ResultServiceImpl(cache: getIt(), resultRepository: getIt()));
 
   ///cache
   getIt.registerLazySingleton<Cache>(() => CacheImpl());

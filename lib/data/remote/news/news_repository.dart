@@ -8,8 +8,7 @@ abstract class NewsRepository {
 
 class NewsRepositoryImpl extends BaseApi implements NewsRepository {
   @override
-  Future<NewsResponse> fetchNews(
-      String token, String source, int page) async {
+  Future<NewsResponse> fetchNews(String token, String source, int page) async {
     try {
       var data = await get("news", headers: getHeader(token), query: {
         "source": source,
@@ -17,7 +16,9 @@ class NewsRepositoryImpl extends BaseApi implements NewsRepository {
       });
 
       final s = NewsResponse.fromJson(data);
+
       return s;
+    
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

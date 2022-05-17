@@ -5,6 +5,7 @@ import 'package:probitas_app/injection_container.dart';
 
 var newsService = getIt<NewsService>();
 int currentPage = 1;
+bool isPullUp = false;
 final getNewsProvider = FutureProvider<NewsResponse>((ref) async {
   final profile = await newsService.fetchUsers("unilorinsu", currentPage);
   currentPage++;
