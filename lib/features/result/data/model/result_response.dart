@@ -35,22 +35,22 @@ class ResultResponse {
 
 class Data {
   Data({
-    this.results,
+    this.result,
   });
 
-  List<Result>? results;
+  List<Result>? result;
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        results:
+        result:
             List<Result>.from(json["results"].map((x) => Result.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "results": List<dynamic>.from(results!.map((x) => x.toJson())),
+        "results": List<dynamic>.from(result!.map((x) => x.toJson())),
       };
 }
 

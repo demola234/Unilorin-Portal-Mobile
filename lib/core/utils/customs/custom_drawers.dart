@@ -99,7 +99,7 @@ class ProbitasDrawer extends StatelessWidget {
 
                         if (isAuthenticated) {
                           NavigationService().goBack();
-                          NavigationService().navigateToScreen(Result());
+                          NavigationService().navigateToScreen(Results());
                         }
                       }),
                   DrawerListTile(

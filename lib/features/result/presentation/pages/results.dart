@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/features/authentication/presentation/provider/authentication_provider.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
+import 'package:probitas_app/features/result/data/model/result_response.dart';
 import 'package:probitas_app/features/result/presentation/controller/result_controller.dart';
 
 import '../../../../core/constants/colors.dart';
@@ -13,22 +14,24 @@ import '../../../../core/utils/config.dart';
 import '../../../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../../core/utils/shimmer_loading.dart';
 
-class Result extends ConsumerStatefulWidget {
-  Result({Key? key}) : super(key: key);
+class Results extends ConsumerStatefulWidget {
+  Results({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<Result> createState() => _ResultState();
+  ConsumerState<Results> createState() => _ResultsState();
 }
 
-class _ResultState extends ConsumerState<Result> {
+class _ResultsState extends ConsumerState<Results> {
   bool isVisible = false;
   bool isResult = false;
-  var session, semester;
+  var session = "2020/2021", semester;
 
   @override
   Widget build(BuildContext context) {
     final userDetails = ref.watch(getUsersProvider);
-    final cgpaDetails = ref.watch(getResultsProvider);
+    final cgpaDetails = ref.watch(getCgpaProvider);
+    final resultDetails = ref.watch(getResultsProvider(session));
+
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
@@ -176,7 +179,7 @@ class _ResultState extends ConsumerState<Result> {
                 ],
                 onChanged: (value) {
                   setState(() {
-                    session = value;
+                    session = value!;
                   });
                 },
                 value: session,
@@ -184,38 +187,10 @@ class _ResultState extends ConsumerState<Result> {
             ],
           ),
         ),
-        YMargin(10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Choose Semester",
-                style: Config.b2(context).copyWith(
-                  color: ProbitasColor.ProbitasTextSecondary,
-                ),
-              ),
-              YMargin(10),
-              ProbitasDropDown(
-                hintText: "First Semester",
-                items: [
-                  "First Semester",
-                  "Second Semester",
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    semester = value;
-                  });
-                },
-                value: semester,
-              )
-            ],
-          ),
-        ),
-        YMargin(30),
+        YMargin(50),
         InkWell(
           onTap: () {
+            ref.refresh(getResultsProvider(session));
             setState(() {
               isResult = true;
             });
@@ -237,14 +212,30 @@ class _ResultState extends ConsumerState<Result> {
           ),
         ),
         YMargin(20),
-        isResult == true ? GetResults() : SizedBox.shrink(),
+        isResult
+            ? resultDetails.when(
+                data: (data) => GetResults(result: data.data!.result!),
+                error: (err, str) => Text("err"),
+                loading: () => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Align(
+                            alignment: Alignment.center,
+                            child: CircularProgressIndicator()),
+                      ],
+                    ))
+            : SizedBox.fromSize()
       ]),
     );
   }
 }
 
 class GetResults extends StatelessWidget {
-  const GetResults({
+  List<Result> result;
+  RegExp regex = RegExp(r'([.]*00)(?!.*\d)');
+  GetResults({
+    required this.result,
     Key? key,
   }) : super(key: key);
 
@@ -264,7 +255,7 @@ class GetResults extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: DataTable(
                         dividerThickness: 1,
-                        columnSpacing: 22,
+                        columnSpacing: 15,
                         sortColumnIndex: 1,
                         sortAscending: true,
                         columns: [
@@ -339,72 +330,74 @@ class GetResults extends StatelessWidget {
                             tooltip: 'Grade',
                           ),
                         ],
-                        rows: [
-                          //TODO 3:For Loop to return DataSnapShots
-                          for (int i = 1; i <= 10; i++)
-                            DataRow(
-                              cells: [
-                                DataCell(
-                                  Text(
-                                    'LIS212',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    'C',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    '2',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    '30',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    '50',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(
-                                  Text(
-                                    '80',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.visible,
-                                    style: Config.b3(context),
-                                  ),
-                                ),
-                                DataCell(Row(
-                                  children: [
-                                    Text(
-                                      'A',
-                                      maxLines: 2,
-                                      overflow: TextOverflow.visible,
-                                      style: Config.b3(context),
-                                    ),
-                                  ],
-                                )),
-                              ].toList(),
+                        rows: List.generate(result.length, (index) {
+                          return DataRow(cells: [
+                            DataCell(
+                              Text(
+                                result[index].title!.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
                             ),
-                        ],
+                            DataCell(
+                              Text(
+                                result[index].status!.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                result[index].unit!.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                result[index]
+                                    .ca!
+                                    .toString()
+                                    .replaceAll(regex, ' '),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                result[index]
+                                    .exam!
+                                    .toString()
+                                    .replaceAll(regex, ' '),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                result[index].total!.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                                style: Config.b3(context),
+                              ),
+                            ),
+                            DataCell(Row(
+                              children: [
+                                Text(
+                                  result[index].grade!.toString(),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.visible,
+                                  style: Config.b3(context),
+                                ),
+                              ],
+                            )),
+                          ]);
+                        }),
                       ))
                 ])
               ])),
