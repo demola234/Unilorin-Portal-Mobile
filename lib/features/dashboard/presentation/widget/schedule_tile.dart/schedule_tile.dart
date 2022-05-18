@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
 import '../../../../../core/constants/colors.dart';
+import '../../../data/model/schedules_response.dart';
 
 class ScheduleTile extends StatelessWidget {
-  const ScheduleTile({
+  var timeFormat = DateFormat.jm();
+  String courseCode;
+  String courseTitle;
+  String venue;
+  DateTime startTime;
+  DateTime endTime;
+  ScheduleTile({
+    required this.courseCode,
+    required this.courseTitle,
+    required this.venue,
+    required this.startTime,
+    required this.endTime,
     Key? key,
   }) : super(key: key);
 
@@ -50,7 +63,7 @@ class ScheduleTile extends StatelessWidget {
                 children: [
                   YMargin(20.0),
                   Text(
-                    "LIS121",
+                    courseCode,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -58,7 +71,7 @@ class ScheduleTile extends StatelessWidget {
                   ),
                   YMargin(2.0),
                   Text(
-                    "Library and Information Techniques",
+                    courseTitle,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -69,14 +82,15 @@ class ScheduleTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "8:00 AM - 9:00AM",
+                        "${timeFormat.format(startTime)} - ${timeFormat.format(endTime)}",
+                        textAlign: TextAlign.left,
                         style: Config.b2(context).copyWith(
                           color: Colors.white,
                           fontSize: 12,
                         ),
                       ),
-                      XMargin(context.screenWidth() - 240),
-                      Text("SLT",
+                      Text(venue,
+                          textAlign: TextAlign.right,
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,
@@ -84,7 +98,7 @@ class ScheduleTile extends StatelessWidget {
                     ],
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Text(
                         "Time",
@@ -93,7 +107,6 @@ class ScheduleTile extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                      XMargin(context.screenWidth() - 175),
                       Text("Venue",
                           style: Config.b2(context).copyWith(
                             color: Colors.white,

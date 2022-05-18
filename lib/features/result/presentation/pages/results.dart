@@ -30,7 +30,7 @@ class _ResultsState extends ConsumerState<Results> {
   Widget build(BuildContext context) {
     final userDetails = ref.watch(getUsersProvider);
     final cgpaDetails = ref.watch(getCgpaProvider);
-    final resultDetails = ref.watch(getResultsProvider(session));
+    final resultDetails = ref.read(getResultsProvider(session));
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
