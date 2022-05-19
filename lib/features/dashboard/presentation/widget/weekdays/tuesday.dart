@@ -11,12 +11,12 @@ class Tuesday extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vaule = ref.watch(getSchedulesProvider);
+    final value = ref.watch(getSchedulesProvider);
 
     return Column(
       children: [
         Expanded(
-            child: vaule.when(
+            child: value.when(
           data: (data) => Container(
             child: data.data!.schedules![0].weekdays![0].contains("Tuesday")
                 ? ListView.builder(

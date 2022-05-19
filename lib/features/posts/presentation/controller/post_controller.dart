@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
+import 'package:probitas_app/features/posts/data/model/all_posts.dart';
+import 'package:probitas_app/features/posts/data/model/single_post.dart';
+import 'package:probitas_app/features/posts/presentation/provider/post_provider.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
@@ -17,6 +20,7 @@ class PostNotifier extends StateNotifier {
     loading = true;
     try {
       await postService.createPost(text: text, images: images);
+      print(images);
       NavigationService().goBack();
       Toasts.showSuccessToast("Post Have been uploaded successfully");
       print(loading);
@@ -24,4 +28,27 @@ class PostNotifier extends StateNotifier {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
   }
+
+  Future<void> likedOrUnliked(String postId) async {
+    try {
+      await postService.likeOrUnlikePost(postId);
+      Toasts.showSuccessToast("You have successfully liked the post");
+      print(loading);
+    } catch (e) {
+      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    }
+  }
 }
+
+final getPostsProvider = FutureProvider<PostResponse>((ref) async {
+  final getAllPosts = await postService.getPosts();
+
+  return getAllPosts;
+});
+
+final getSinglePostProvider =
+    FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
+  final getSinglePost = await postService.getSinglePost(postId);
+
+  return getSinglePost;
+});

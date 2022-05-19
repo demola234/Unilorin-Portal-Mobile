@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 // ignore: unused_import
 import 'package:intl/intl.dart';
@@ -14,21 +16,21 @@ import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../controller/post_controller.dart';
 
-class PostFeeds extends StatefulWidget {
+class PostFeeds extends ConsumerStatefulWidget {
   const PostFeeds({Key? key}) : super(key: key);
 
   @override
-  State<PostFeeds> createState() => _PostFeedsState();
+  ConsumerState<PostFeeds> createState() => _PostFeedsState();
 }
 
-class _PostFeedsState extends State<PostFeeds> {
+class _PostFeedsState extends ConsumerState<PostFeeds> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
       GlobalKey<LiquidPullToRefreshState>();
 
-  int currentIndex = 0;
-  late PageController controller;
+  var controller = PageController();
   @override
   void initState() {
     super.initState();
@@ -36,14 +38,14 @@ class _PostFeedsState extends State<PostFeeds> {
   }
 
   Future<void> _handleRefresh() async {
-    return await Future.delayed(Duration(seconds: 1));
+    return await ref.refresh(getPostsProvider);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   controller.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -93,306 +95,365 @@ class _PostFeedsState extends State<PostFeeds> {
                   backgroundColor: ProbitasColor.ProbitasTextPrimary,
                   animSpeedFactor: 5,
                   showChildOpacityTransition: true,
-                  child: ListView.builder(
-                    itemCount: 200,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          NavigationService().navigateToScreen(PostOverView());
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 15),
-                          width: context.screenWidth(),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                            border: Border.all(
-                              color:
-                                  ProbitasColor.ProbitasTextPrimary.withOpacity(
-                                      0.7),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0, horizontal: 20.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(15.0),
+                  child: ref.watch(getPostsProvider).when(
+                      data: (data) => ListView.builder(
+                            itemCount: data.data!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  print(data.data![index].images.length);
+                                  NavigationService()
+                                      .navigateToScreen(PostOverView());
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  width: context.screenWidth(),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    border: Border.all(
+                                      color: ProbitasColor.ProbitasTextPrimary
+                                          .withOpacity(0.7),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 20.0, horizontal: 20.0),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 60,
+                                              height: 60,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15.0),
+                                                ),
+                                              ),
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(15.0),
+                                                ),
+                                                child: CachedNetworkImage(
+                                                  fit: BoxFit.fitWidth,
+                                                  imageUrl: data.data![index]
+                                                      .user!.avatar!,
+                                                ),
+                                              ),
+                                            ),
+                                            XMargin(10),
+                                            Flexible(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width: 400,
+                                                    child: Text(
+                                                      data.data![index].user!
+                                                          .fullName!,
+                                                      style: Config.b2(context).copyWith(
+                                                          color: isDarkMode
+                                                              ? ProbitasColor
+                                                                  .ProbitasTextPrimary
+                                                              : ProbitasColor
+                                                                  .ProbitasPrimary),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      softWrap: false,
+                                                      textAlign:
+                                                          TextAlign.justify,
+                                                    ),
+                                                  ),
+                                                  YMargin(2.0),
+                                                  Text(
+                                                    data.data![index].user!
+                                                        .department!,
+                                                    style: Config.b2(context)
+                                                        .copyWith(
+                                                      color: isDarkMode
+                                                          ? ProbitasColor
+                                                                  .ProbitasTextPrimary
+                                                              .withOpacity(0.5)
+                                                          : ProbitasColor
+                                                              .ProbitasTextSecondary,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                PopupMenuButton(
+                                                  child: Icon(
+                                                    Icons.more_vert,
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                            .ProbitasTextPrimary
+                                                        : ProbitasColor
+                                                            .ProbitasPrimary,
+                                                  ),
+                                                  onSelected: (selectedValue) {
+                                                    print(selectedValue);
+                                                  },
+                                                  itemBuilder:
+                                                      (BuildContext ctx) => [
+                                                    PopupMenuItem(
+                                                        child: Text('Delete'),
+                                                        value: '1'),
+                                                  ],
+                                                ),
+                                                YMargin(2.0),
+                                                Text(
+                                                  "${data.data![index].user!.level!} Level",
+                                                  style: Config.b2(context)
+                                                      .copyWith(
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                                .ProbitasTextPrimary
+                                                            .withOpacity(0.5)
+                                                        : ProbitasColor
+                                                            .ProbitasTextSecondary,
+                                                    fontSize: 14.0,
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
                                         ),
                                       ),
-                                      child: Image(
-                                        image: AssetImage(
-                                            ImagesAsset.default_image),
+                                      Divider(
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                                .withOpacity(0.5)
+                                            : ProbitasColor
+                                                .ProbitasTextSecondary,
                                       ),
-                                    ),
-                                    XMargin(10),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            "Femi Ademola",
-                                            style: Config.b2(context).copyWith(
-                                                color: isDarkMode
-                                                    ? ProbitasColor
-                                                        .ProbitasTextPrimary
-                                                    : ProbitasColor
-                                                        .ProbitasPrimary),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            softWrap: false,
-                                            textAlign: TextAlign.justify,
-                                          ),
-                                        ),
-                                        YMargin(2.0),
-                                        Text(
-                                          "Microbiology",
-                                          style: Config.b2(context).copyWith(
-                                            color: isDarkMode
-                                                ? ProbitasColor
-                                                        .ProbitasTextPrimary
-                                                    .withOpacity(0.5)
-                                                : ProbitasColor
-                                                    .ProbitasTextSecondary,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        PopupMenuButton(
-                                          child: Icon(
-                                            Icons.more_vert,
+                                      data.data![index].images.isNotEmpty
+                                          ? Stack(
+                                              children: [
+                                                Container(
+                                                  height: 160,
+                                                  width: context.screenWidth(),
+                                                  child: PageView.builder(
+                                                    controller: controller,
+                                                    physics:
+                                                        BouncingScrollPhysics(),
+                                                    onPageChanged:
+                                                        (int index) {},
+                                                    itemCount: data.data![index]
+                                                        .images.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final images = data
+                                                          .data![index]
+                                                          .images[index];
+                                                      setState(() {
+                                                        print(images);
+                                                      });
+
+                                                      return Container(
+                                                        decoration:
+                                                            BoxDecoration(),
+                                                        child:
+                                                            CachedNetworkImage(
+                                                          imageUrl: images,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                data.data![index].images
+                                                            .length >
+                                                        1
+                                                    ? Positioned.fill(
+                                                        bottom: 8.0,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .bottomCenter,
+                                                          child:
+                                                              SmoothPageIndicator(
+                                                            controller:
+                                                                controller,
+                                                            count: data
+                                                                .data![index]
+                                                                .images
+                                                                .length,
+                                                            effect:
+                                                                ScrollingDotsEffect(
+                                                              activeStrokeWidth:
+                                                                  2.6,
+                                                              activeDotScale:
+                                                                  1.3,
+                                                              maxVisibleDots: 5,
+                                                              radius: 8,
+                                                              spacing: 10,
+                                                              activeDotColor:
+                                                                  ProbitasColor
+                                                                      .ProbitasSecondary,
+                                                              dotColor:
+                                                                  ProbitasColor
+                                                                      .ProbitasTextPrimary,
+                                                              dotHeight: 12,
+                                                              dotWidth: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink(),
+                                                Divider(),
+                                              ],
+                                            )
+                                          : SizedBox.shrink(),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.0),
+                                        child: ReadMoreText(
+                                          "${data.data![index].text}",
+                                          style: Config.b3(context)
+                                              .copyWith(fontSize: 14.0),
+                                          textAlign: TextAlign.right,
+                                          trimLines: 3,
+                                          delimiter: "...",
+                                          colorClickableText: isDarkMode
+                                              ? ProbitasColor
+                                                  .ProbitasTextPrimary
+                                              : ProbitasColor.ProbitasPrimary,
+                                          trimMode: TrimMode.Line,
+                                          trimCollapsedText: 'Read More',
+                                          trimExpandedText: 'Close',
+                                          lessStyle: Config.b2(context)
+                                              .copyWith(
+                                                  color: isDarkMode
+                                                      ? ProbitasColor
+                                                          .ProbitasTextPrimary
+                                                      : ProbitasColor
+                                                          .ProbitasSecondary,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 14.0),
+                                          moreStyle:
+                                              Config.b2(context).copyWith(
                                             color: isDarkMode
                                                 ? ProbitasColor
                                                     .ProbitasTextPrimary
-                                                : ProbitasColor.ProbitasPrimary,
-                                          ),
-                                          onSelected: (selectedValue) {
-                                            print(selectedValue);
-                                          },
-                                          itemBuilder: (BuildContext ctx) => [
-                                            PopupMenuItem(
-                                                child: Text('Delete'),
-                                                value: '1'),
-                                          ],
-                                        ),
-                                        YMargin(2.0),
-                                        Text(
-                                          "Level 200",
-                                          style: Config.b2(context).copyWith(
-                                            color: isDarkMode
-                                                ? ProbitasColor
-                                                        .ProbitasTextPrimary
-                                                    .withOpacity(0.5)
                                                 : ProbitasColor
-                                                    .ProbitasTextSecondary,
-                                            fontSize: 14.0,
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Divider(
-                                color: isDarkMode
-                                    ? ProbitasColor.ProbitasTextPrimary
-                                        .withOpacity(0.5)
-                                    : ProbitasColor.ProbitasTextSecondary,
-                              ),
-                              index % 3 == 0
-                                  ? Stack(
-                                      children: [
-                                        Container(
-                                          height: 160,
-                                          width: context.screenWidth(),
-                                          child: PageView.builder(
-                                            controller: controller,
-                                            physics: BouncingScrollPhysics(),
-                                            onPageChanged: (int index) {
-                                              setState(() {
-                                                currentIndex = index;
-                                                print(currentIndex);
-                                              });
-                                            },
-                                            itemCount: 3,
-                                            itemBuilder: (context, index) {
-                                              return Container(
-                                                decoration: BoxDecoration(),
-                                                child: Image(
-                                                  image: AssetImage(
-                                                    ImagesAsset.post_default,
-                                                  ),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        Positioned.fill(
-                                          bottom: 8.0,
-                                          child: Align(
-                                            alignment: Alignment.bottomCenter,
-                                            child: SmoothPageIndicator(
-                                              controller: controller,
-                                              count: currentIndex + 1,
-                                              effect: ScrollingDotsEffect(
-                                                activeStrokeWidth: 2.6,
-                                                activeDotScale: 1.3,
-                                                maxVisibleDots: 5,
-                                                radius: 8,
-                                                spacing: 10,
-                                                activeDotColor: ProbitasColor
                                                     .ProbitasSecondary,
-                                                dotColor: ProbitasColor
-                                                    .ProbitasTextPrimary,
-                                                dotHeight: 12,
-                                                dotWidth: 12,
-                                              ),
-                                            ),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Divider(),
-                                      ],
-                                    )
-                                  : SizedBox.shrink(),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10.0),
-                                child: ReadMoreText(
-                                  "In Flutter, the overflow property of the Text, RichText, and DefaultTextStyle widgets specifies how overflowed content that is not displayed should be signaled to the user. It can be clipped, display an ellipsis (three dots), fade, or overflowing outside its parent widget.",
-                                  style: Config.b3(context)
-                                      .copyWith(fontSize: 14.0),
-                                  trimLines: 3,
-                                  delimiter: "...",
-                                  colorClickableText: isDarkMode
-                                      ? ProbitasColor.ProbitasTextPrimary
-                                      : ProbitasColor.ProbitasPrimary,
-                                  trimMode: TrimMode.Line,
-                                  trimCollapsedText: 'Read More',
-                                  trimExpandedText: 'Close',
-                                  lessStyle: Config.b2(context).copyWith(
-                                      color: isDarkMode
-                                          ? ProbitasColor.ProbitasTextPrimary
-                                          : ProbitasColor.ProbitasSecondary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14.0),
-                                  moreStyle: Config.b2(context).copyWith(
-                                    color: isDarkMode
-                                        ? ProbitasColor.ProbitasTextPrimary
-                                        : ProbitasColor.ProbitasSecondary,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              YMargin(2.0),
-                              Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 10),
-                                child: Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                            onTap: () {},
-                                            child: index % 3 == 0
-                                                ? SvgPicture.asset(
-                                                    ImagesAsset.liked,
-                                                    height: 18,
-                                                    width: 18)
-                                                : SvgPicture.asset(
-                                                    ImagesAsset.notliked,
-                                                    height: 18,
-                                                    width: 18,
+                                      ),
+                                      YMargin(2.0),
+                                      Container(
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                        child: Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                InkWell(
+                                                    onTap: () {},
+                                                    child: index % 3 == 0
+                                                        ? SvgPicture.asset(
+                                                            ImagesAsset.liked,
+                                                            height: 18,
+                                                            width: 18)
+                                                        : SvgPicture.asset(
+                                                            ImagesAsset
+                                                                .notliked,
+                                                            height: 18,
+                                                            width: 18,
+                                                            color: isDarkMode
+                                                                ? ProbitasColor
+                                                                    .ProbitasTextPrimary
+                                                                : ProbitasColor
+                                                                    .ProbitasTextSecondary,
+                                                          )),
+                                                XMargin(4),
+                                                Text(
+                                                  "${data.data![index].likes!.length}",
+                                                  style: Config.b3(context)
+                                                      .copyWith(
                                                     color: isDarkMode
                                                         ? ProbitasColor
                                                             .ProbitasTextPrimary
                                                         : ProbitasColor
                                                             .ProbitasTextSecondary,
-                                                  )),
-                                        XMargin(4),
-                                        Text(
-                                          "2",
-                                          style: Config.b3(context).copyWith(
-                                            color: isDarkMode
-                                                ? ProbitasColor
-                                                    .ProbitasTextPrimary
-                                                : ProbitasColor
-                                                    .ProbitasTextSecondary,
-                                          ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            XMargin(20),
+                                            Row(
+                                              children: [
+                                                InkWell(
+                                                    onTap: () {},
+                                                    child: SvgPicture.asset(
+                                                      ImagesAsset.chat,
+                                                      height: 18,
+                                                      width: 18,
+                                                      color: isDarkMode
+                                                          ? ProbitasColor
+                                                              .ProbitasTextPrimary
+                                                          : ProbitasColor
+                                                              .ProbitasPrimary,
+                                                    )),
+                                                XMargin(4),
+                                                Text(
+                                                  "${data.data![index].comments!.length}",
+                                                  style: Config.b3(context).copyWith(
+                                                      color: isDarkMode
+                                                          ? ProbitasColor
+                                                              .ProbitasTextPrimary
+                                                          : ProbitasColor
+                                                              .ProbitasTextSecondary),
+                                                ),
+                                              ],
+                                            ),
+                                            Spacer(),
+                                            IconButton(
+                                              onPressed: () {
+                                                Share.share(
+                                                    "${data.data![index].text}");
+                                              },
+                                              tooltip: "Share",
+                                              icon: SvgPicture.asset(
+                                                  ImagesAsset.share,
+                                                  color: isDarkMode
+                                                      ? ProbitasColor
+                                                          .ProbitasTextPrimary
+                                                      : ProbitasColor
+                                                          .ProbitasPrimary,
+                                                  height: 18,
+                                                  width: 18),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    XMargin(20),
-                                    Row(
-                                      children: [
-                                        InkWell(
-                                            onTap: () {},
-                                            child: SvgPicture.asset(
-                                              ImagesAsset.chat,
-                                              height: 18,
-                                              width: 18,
-                                              color: isDarkMode
-                                                  ? ProbitasColor
-                                                      .ProbitasTextPrimary
-                                                  : ProbitasColor
-                                                      .ProbitasPrimary,
-                                            )),
-                                        XMargin(4),
-                                        Text(
-                                          "20",
-                                          style: Config.b3(context).copyWith(
-                                              color: isDarkMode
-                                                  ? ProbitasColor
-                                                      .ProbitasTextPrimary
-                                                  : ProbitasColor
-                                                      .ProbitasTextSecondary),
-                                        ),
-                                      ],
-                                    ),
-                                    Spacer(),
-                                    IconButton(
-                                      onPressed: () {
-                                        Share.share('Great Post');
-                                      },
-                                      tooltip: "Share",
-                                      icon: SvgPicture.asset(ImagesAsset.share,
-                                          color: isDarkMode
-                                              ? ProbitasColor
-                                                  .ProbitasTextPrimary
-                                              : ProbitasColor.ProbitasPrimary,
-                                          height: 18,
-                                          width: 18),
-                                    ),
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              )
-                            ],
+                              );
+                            },
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                      error: (err, str) =>
+                          ListView(children: [Center(child: Text("err"))]),
+                      loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          )),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

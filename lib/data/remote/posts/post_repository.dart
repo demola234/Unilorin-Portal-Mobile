@@ -2,11 +2,16 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:probitas_app/features/news/data/model/news_response.dart';
+import 'package:probitas_app/features/posts/data/model/all_posts.dart';
+import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
 
 abstract class PostRepository {
   Future createPost(String token, {String? text, List<File>? images});
+  Future<PostResponse> getAllPosts(String token);
+  Future likeOrUnlikePost(String token, String postId);
+  Future<SinglePostResponse> getSinglePost(String token, String postId);
 }
 
 class PostRepositoryImpl extends BaseApi implements PostRepository {
@@ -21,14 +26,54 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
         List<MultipartFile> multiPart = [];
         for (var img in images) {
           multiPart.add(await MultipartFile.fromFile(img.path,
-              contentType: MediaType.parse("image/jpeg"),
               filename:
                   "post_image${DateTime.now().millisecondsSinceEpoch}.${img.path.split(".").last}"));
         }
-        data['images'] = multiPart;
+        data['image'] = multiPart;
+        return post("posts",
+            headers: getHeader(token), formData: FormData.fromMap(data));
       }
-      return post("posts",
-          headers: getHeader(token), formData: FormData.fromMap(data));
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<PostResponse> getAllPosts(String token) async {
+    try {
+      var data = await get("posts", headers: getHeader(token));
+      final s = PostResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<SinglePostResponse> getSinglePost(String token, String postId) async {
+    try {
+      var data = await get("posts/$postId", headers: getHeader(token));
+      final s = SinglePostResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future likeOrUnlikePost(String token, String postId) async {
+    try {
+      var data = await get("posts/$postId/like", headers: getHeader(token));
+      return data;
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

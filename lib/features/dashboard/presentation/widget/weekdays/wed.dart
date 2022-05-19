@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import '../../controller/dashboard_controller.dart';
 import '../empty_state/empty_state.dart';
@@ -11,12 +10,12 @@ class Wednesday extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final vaule = ref.watch(getSchedulesProvider);
+    final value = ref.watch(getSchedulesProvider);
 
     return Column(
       children: [
         Expanded(
-            child: vaule.when(
+            child: value.when(
           data: (data) => Container(
             child: data.data!.schedules![0].weekdays![0].contains("Wednesday")
                 ? ListView.builder(

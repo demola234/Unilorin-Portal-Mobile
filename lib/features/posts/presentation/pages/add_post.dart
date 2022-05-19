@@ -158,6 +158,7 @@ class _AddPostState extends ConsumerState<AddPost> {
       ),
       floatingActionButton: InkWell(
         onTap: () {
+          print(images);
           ref
               .watch(postNotifierProvider.notifier)
               .createPost(postText.text, images);
@@ -197,6 +198,7 @@ class _AddPostState extends ConsumerState<AddPost> {
     if (res != null) {
       setState(() {
         images.addAll(res.map((e) => File(e.path)));
+        print(images);
       });
     } else if (res == null) {
       Toasts.showErrorToast("No Image Selected");

@@ -1,9 +1,14 @@
 import 'dart:io';
 import 'package:probitas_app/data/remote/posts/post_repository.dart';
+import 'package:probitas_app/features/posts/data/model/all_posts.dart';
+import '../../../features/posts/data/model/single_post.dart';
 import '../../local/cache.dart';
 
 abstract class PostService {
   Future createPost({String? text, List<File>? images});
+  Future<PostResponse> getPosts();
+  Future likeOrUnlikePost(String postId);
+  Future<SinglePostResponse> getSinglePost(String postId);
 }
 
 class PostServiceImpl extends PostService {
@@ -15,5 +20,22 @@ class PostServiceImpl extends PostService {
   Future createPost({String? text, List<File>? images}) async {
     return postRepository.createPost(await cache.getToken(),
         text: text, images: images);
+  }
+
+  @override
+  Future<PostResponse> getPosts() async {
+    return postRepository.getAllPosts(
+      await cache.getToken(),
+    );
+  }
+
+  @override
+  Future<SinglePostResponse> getSinglePost(String postId) async {
+    return postRepository.getSinglePost(await cache.getToken(), postId);
+  }
+
+  @override
+  Future likeOrUnlikePost(String postId) async {
+    return postRepository.getSinglePost(await cache.getToken(), postId);
   }
 }

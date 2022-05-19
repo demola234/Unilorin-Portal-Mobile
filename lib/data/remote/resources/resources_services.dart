@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:probitas_app/data/remote/posts/post_repository.dart';
 import 'package:probitas_app/data/remote/resources/resources_repository.dart';
 import '../../local/cache.dart';
 
