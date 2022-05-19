@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:probitas_app/features/news/data/model/news_response.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import '../../../core/error/exceptions.dart';
@@ -72,7 +70,7 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
   @override
   Future likeOrUnlikePost(String token, String postId) async {
     try {
-      var data = await get("posts/$postId/like", headers: getHeader(token));
+      var data = await post("posts/$postId/like", headers: getHeader(token));
       return data;
     } catch (err) {
       if (err is RequestException) {

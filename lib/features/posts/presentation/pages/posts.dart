@@ -17,6 +17,7 @@ import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../controller/post_controller.dart';
+import '../provider/post_provider.dart';
 
 class PostFeeds extends ConsumerStatefulWidget {
   const PostFeeds({Key? key}) : super(key: key);
@@ -103,8 +104,9 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                               return GestureDetector(
                                 onTap: () {
                                   print(data.data![index].images.length);
-                                  NavigationService()
-                                      .navigateToScreen(PostOverView());
+                                  NavigationService().navigateToScreen(
+                                      PostOverView(
+                                          singlePostId: data.data![index].id!));
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(vertical: 15),
@@ -254,19 +256,14 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                                         .images.length,
                                                     itemBuilder:
                                                         (context, index) {
-                                                      final images = data
-                                                          .data![index]
-                                                          .images[index];
-                                                      setState(() {
-                                                        print(images);
-                                                      });
-
                                                       return Container(
                                                         decoration:
                                                             BoxDecoration(),
                                                         child:
                                                             CachedNetworkImage(
-                                                          imageUrl: images,
+                                                          imageUrl: data
+                                                              .data![index]
+                                                              .images[index],
                                                           fit: BoxFit.cover,
                                                         ),
                                                       );
@@ -362,8 +359,24 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                             Row(
                                               children: [
                                                 InkWell(
-                                                    onTap: () {},
-                                                    child: index % 3 == 0
+                                                    onTap: () {
+                                                      ref
+                                                          .watch(
+                                                              postNotifierProvider
+                                                                  .notifier)
+                                                          .likedOrUnlike(
+                                                              data.data![index]
+                                                                  .id!,
+                                                              true);
+                                                      ref.refresh(
+                                                          getPostsProvider);
+                                                    },
+                                                    child: data
+                                                            .data![index].likes!
+                                                            .contains(data
+                                                                .data![index]
+                                                                .user!
+                                                                .id)
                                                         ? SvgPicture.asset(
                                                             ImagesAsset.liked,
                                                             height: 18,

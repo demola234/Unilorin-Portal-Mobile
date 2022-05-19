@@ -36,6 +36,6 @@ class PostServiceImpl extends PostService {
 
   @override
   Future likeOrUnlikePost(String postId) async {
-    return postRepository.getSinglePost(await cache.getToken(), postId);
+    return postRepository.likeOrUnlikePost(await cache.getToken(), postId);
   }
 }

@@ -29,7 +29,7 @@ class PostNotifier extends StateNotifier {
     }
   }
 
-  Future<void> likedOrUnliked(String postId) async {
+  Future<void> likedOrUnlike(String postId, bool isLiked) async {
     try {
       await postService.likeOrUnlikePost(postId);
       Toasts.showSuccessToast("You have successfully liked the post");
