@@ -23,6 +23,7 @@ class PostOverView extends ConsumerStatefulWidget {
 class _PostOverViewState extends ConsumerState<PostOverView> {
   int currentIndex = 0;
   late PageController controller;
+  TextEditingController commentsController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -271,6 +272,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                           ),
                           YMargin(15),
                           ProbitasTextFormField(
+                            controller: commentsController,
                             hintText: "Write a comment",
                           ),
                           YMargin(20),
@@ -412,7 +414,14 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                 loading: () => Center(child: CircularProgressIndicator()),
               )),
       floatingActionButton: InkWell(
-        onTap: () {},
+        onTap: () {
+          ref
+              .watch(postNotifierProvider.notifier)
+              .createComments(widget.singlePostId, commentsController.text);
+          setState(() {
+            commentsController.clear();
+          });
+        },
         child: Container(
           height: 70,
           width: 220,

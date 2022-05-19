@@ -10,6 +10,7 @@ abstract class PostRepository {
   Future<PostResponse> getAllPosts(String token);
   Future likeOrUnlikePost(String token, String postId);
   Future<SinglePostResponse> getSinglePost(String token, String postId);
+  Future createComments(String token, String postId, String? text);
 }
 
 class PostRepositoryImpl extends BaseApi implements PostRepository {
@@ -71,6 +72,22 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
   Future likeOrUnlikePost(String token, String postId) async {
     try {
       var data = await post("posts/$postId/like", headers: getHeader(token));
+      return data;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future createComments(String token, String postId, String? text) async {
+    try {
+      var data =
+          await post("posts/$postId/comment", headers: getHeader(token), data: {
+        "text": text,
+      });
       return data;
     } catch (err) {
       if (err is RequestException) {

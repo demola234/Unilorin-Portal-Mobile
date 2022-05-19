@@ -38,6 +38,16 @@ class PostNotifier extends StateNotifier {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
   }
+
+  Future<void> createComments(String postId, String text) async {
+    try {
+      await postService.createComments(postId, text);
+      Toasts.showSuccessToast("Your comment has successfully been created!");
+      print(loading);
+    } catch (e) {
+      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    }
+  }
 }
 
 final getPostsProvider = FutureProvider<PostResponse>((ref) async {

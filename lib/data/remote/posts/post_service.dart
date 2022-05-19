@@ -9,6 +9,7 @@ abstract class PostService {
   Future<PostResponse> getPosts();
   Future likeOrUnlikePost(String postId);
   Future<SinglePostResponse> getSinglePost(String postId);
+  Future createComments(String postId, String text);
 }
 
 class PostServiceImpl extends PostService {
@@ -37,5 +38,10 @@ class PostServiceImpl extends PostService {
   @override
   Future likeOrUnlikePost(String postId) async {
     return postRepository.likeOrUnlikePost(await cache.getToken(), postId);
+  }
+
+  @override
+  Future createComments(String postId, String text) async {
+    return postRepository.createComments(await cache.getToken(), postId, text);
   }
 }
