@@ -51,6 +51,7 @@ class DashBoardNotifier extends StateNotifier {
         weekdays: weekdays,
       );
       NavigationService().goBack();
+
       Toasts.showSuccessToast("Post Have been uploaded successfully");
       print(loading);
     } catch (e) {
@@ -58,7 +59,6 @@ class DashBoardNotifier extends StateNotifier {
     }
   }
 }
-
 
 final getSchedulesProvider = FutureProvider<SchedulesResponse>((ref) async {
   final profile = await dashboardService.fetchSchedules();

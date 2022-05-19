@@ -18,19 +18,26 @@ class Monday extends ConsumerWidget {
         Expanded(
             child: value.when(
           data: (data) => Container(
-            child: data.data!.schedules![0].weekdays![0].contains("Mons")
+            child: data.data!.schedules!
+                    .any((element) => element.weekdays!.contains("Monday"))
                 ? ListView.builder(
                     itemCount: data.data!.schedules!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      return ScheduleTile(
-                        courseCode: data.data!.schedules![index].courseCode!,
-                        courseTitle: data.data!.schedules![index].courseTitle!,
-                        venue: data.data!.schedules![index].venue!,
-                        startTime: data.data!.schedules![index].startTime!,
-                        endTime: data.data!.schedules![index].endTime!,
-                      );
+                      return data.data!.schedules![index].weekdays!
+                              .contains("Monday")
+                          ? ScheduleTile(
+                              courseCode:
+                                  data.data!.schedules![index].courseCode!,
+                              courseTitle:
+                                  data.data!.schedules![index].courseTitle!,
+                              venue: data.data!.schedules![index].venue!,
+                              startTime:
+                                  data.data!.schedules![index].startTime!,
+                              endTime: data.data!.schedules![index].endTime!,
+                            )
+                          : SizedBox.shrink();
                     })
                 : Column(
                     children: [

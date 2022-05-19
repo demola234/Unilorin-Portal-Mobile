@@ -7,6 +7,7 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../controller/dashboard_controller.dart';
 import '../provider/dashboard_provider.dart';
 
 class ManageSchedule extends ConsumerStatefulWidget {
@@ -222,7 +223,9 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
             YMargin(15),
             InkWell(
               onTap: () {
+
                ref.watch(dashboardNotifierProvider.notifier).createSchedule(courseCode.text, courseTitle.text, courseVenue.text, remindMe, startText.toString(), endText.toString(), note.text);
+               ref.refresh(getSchedulesProvider);
               },
               child: Container(
                 height: 70,

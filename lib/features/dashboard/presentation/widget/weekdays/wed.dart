@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import '../../controller/dashboard_controller.dart';
 import '../empty_state/empty_state.dart';
@@ -17,19 +18,26 @@ class Wednesday extends ConsumerWidget {
         Expanded(
             child: value.when(
           data: (data) => Container(
-            child: data.data!.schedules![0].weekdays![0].contains("Wednesday")
+            child: data.data!.schedules!
+                    .any((element) => element.weekdays!.contains("Wednesday"))
                 ? ListView.builder(
                     itemCount: data.data!.schedules!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      return ScheduleTile(
-                        courseCode: data.data!.schedules![index].courseCode!,
-                        courseTitle: data.data!.schedules![index].courseTitle!,
-                        venue: data.data!.schedules![index].venue!,
-                        startTime: data.data!.schedules![index].startTime!,
-                        endTime: data.data!.schedules![index].endTime!,
-                      );
+                      return data.data!.schedules![index].weekdays!
+                              .contains("Wednesday")
+                          ? ScheduleTile(
+                              courseCode:
+                                  data.data!.schedules![index].courseCode!,
+                              courseTitle:
+                                  data.data!.schedules![index].courseTitle!,
+                              venue: data.data!.schedules![index].venue!,
+                              startTime:
+                                  data.data!.schedules![index].startTime!,
+                              endTime: data.data!.schedules![index].endTime!,
+                            )
+                          : SizedBox.shrink();
                     })
                 : Column(
                     children: [

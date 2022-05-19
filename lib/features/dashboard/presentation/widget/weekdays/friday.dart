@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../controller/dashboard_controller.dart';
 import '../empty_state/empty_state.dart';
 import '../schedule_tile.dart/schedule_tile.dart';
 
 class Friday extends ConsumerWidget {
   Friday({Key? key}) : super(key: key);
+  RefreshController controller = RefreshController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,34 +20,42 @@ class Friday extends ConsumerWidget {
         Expanded(
             child: value.when(
           data: (data) => Container(
-            child: data.data!.schedules![0].weekdays![0].contains("Friday")
+            child: data.data!.schedules!
+                    .any((element) => element.weekdays!.contains("Friday"))
                 ? ListView.builder(
                     itemCount: data.data!.schedules!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      return ScheduleTile(
-                        courseCode: data.data!.schedules![index].courseCode!,
-                        courseTitle: data.data!.schedules![index].courseTitle!,
-                        venue: data.data!.schedules![index].venue!,
-                        startTime: data.data!.schedules![index].startTime!,
-                        endTime: data.data!.schedules![index].endTime!,
-                      );
+                      return data.data!.schedules![index].weekdays!
+                              .contains("Friday")
+                          ? ScheduleTile(
+                              courseCode:
+                                  data.data!.schedules![index].courseCode!,
+                              courseTitle:
+                                  data.data!.schedules![index].courseTitle!,
+                              venue: data.data!.schedules![index].venue!,
+                              startTime:
+                                  data.data!.schedules![index].startTime!,
+                              endTime: data.data!.schedules![index].endTime!,
+                            )
+                          : SizedBox.shrink();
                     })
-                : Column(
-                    children: [
-                      SingleChildScrollView(
-                        child: Container(
-                          height: 400,
-                          child: ListView.builder(
-                              itemCount: 1,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return EmptyState();
-                              }),
-                        ),
-                      )
-                    ],
+                : SmartRefresher(
+                    controller: controller,
+                    enablePullDown: true,
+                    onRefresh: () {
+                      ref.refresh(getSchedulesProvider);
+                    },
+                    child: Container(
+                      height: 400,
+                      child: ListView.builder(
+                          itemCount: 1,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return EmptyState();
+                          }),
+                    ),
                   ),
           ),
           error: (err, str) => EmptyState(),

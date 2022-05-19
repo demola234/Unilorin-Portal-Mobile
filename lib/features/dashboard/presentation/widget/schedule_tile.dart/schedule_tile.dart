@@ -39,7 +39,7 @@ class ScheduleTile extends StatelessWidget {
         );
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5.0),
+        margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
         height: 140,
         width: context.screenWidth(),
         decoration: BoxDecoration(
@@ -89,25 +89,13 @@ class ScheduleTile extends StatelessWidget {
                           fontSize: 12,
                         ),
                       ),
-                      Text(venue,
-                          textAlign: TextAlign.right,
-                          style: Config.b2(context).copyWith(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        "Time",
-                        style: Config.b2(context).copyWith(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text("Venue",
+                      Text(venue,
+                          textAlign: TextAlign.right,
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,

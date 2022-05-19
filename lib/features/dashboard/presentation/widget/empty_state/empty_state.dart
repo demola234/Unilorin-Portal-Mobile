@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class EmptyState extends StatelessWidget {
-  const EmptyState({Key? key}) : super(key: key);
+  EmptyState({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
