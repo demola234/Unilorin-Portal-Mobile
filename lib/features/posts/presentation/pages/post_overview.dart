@@ -211,8 +211,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                                     ref.refresh(getSinglePostProvider(
                                         widget.singlePostId));
                                   },
-                                  child: data.data!.post!.likes!
-                                          .contains(data.data!.post!.user!.id)
+                                  child: data.data!.post!.isUserLiked!
                                       ? SvgPicture.asset(ImagesAsset.liked,
                                           height: 18, width: 18)
                                       : SvgPicture.asset(
@@ -227,7 +226,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                                         )),
                               XMargin(4),
                               Text(
-                                "${data.data!.post!.likes!.length}",
+                                "${data.data!.post!.likeCount}",
                                 style: Config.b3(context).copyWith(
                                   color: isDarkMode
                                       ? ProbitasColor.ProbitasTextPrimary
@@ -276,132 +275,175 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                             hintText: "Write a comment",
                           ),
                           YMargin(20),
-                          Container(
-                            width: context.screenWidth(),
-                            child: ListView.builder(
-                              itemCount: 10,
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  width: context.screenWidth(),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      border: Border.all(
-                                        color:
-                                            ProbitasColor.ProbitasTextPrimary,
-                                      )),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 15),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 60,
-                                              height: 60,
+                          ref
+                              .watch(getSinglePostCommentsProvider(
+                                  widget.singlePostId))
+                              .when(
+                                  data: (data) => Container(
+                                        width: context.screenWidth(),
+                                        child: ListView.builder(
+                                          itemCount: data.data!.length,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  vertical: 10),
+                                              width: context.screenWidth(),
                                               decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(
-                                                              15.0))),
-                                              child: Image(
-                                                image: AssetImage(
-                                                    ImagesAsset.default_image),
-                                              ),
-                                            ),
-                                            XMargin(5),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  child: Text(
-                                                    "Femi Ademola",
-                                                    style: Config.b2(context).copyWith(
-                                                        color: isDarkMode
-                                                            ? ProbitasColor
-                                                                .ProbitasTextPrimary
-                                                            : ProbitasColor
-                                                                .ProbitasPrimary),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    softWrap: false,
-                                                    textAlign:
-                                                        TextAlign.justify,
+                                                    Radius.circular(10),
                                                   ),
+                                                  border: Border.all(
+                                                    color: ProbitasColor
+                                                        .ProbitasTextPrimary,
+                                                  )),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20.0,
+                                                        vertical: 15),
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Container(
+                                                          width: 60,
+                                                          height: 60,
+                                                          decoration: BoxDecoration(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          15.0))),
+                                                          child: Image(
+                                                            image: AssetImage(
+                                                                ImagesAsset
+                                                                    .default_image),
+                                                          ),
+                                                        ),
+                                                        XMargin(5),
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                              child: Text(
+                                                                data
+                                                                    .data![
+                                                                        index]
+                                                                    .user!
+                                                                    .fullName!,
+                                                                style: Config.b2(context).copyWith(
+                                                                    color: isDarkMode
+                                                                        ? ProbitasColor
+                                                                            .ProbitasTextPrimary
+                                                                        : ProbitasColor
+                                                                            .ProbitasPrimary),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                maxLines: 1,
+                                                                softWrap: false,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .justify,
+                                                              ),
+                                                            ),
+                                                            YMargin(2.0),
+                                                            Text(
+                                                                data
+                                                                    .data![
+                                                                        index]
+                                                                    .user!
+                                                                    .department!,
+                                                                style: Config.b2(
+                                                                        context)
+                                                                    .copyWith(
+                                                                  color: isDarkMode
+                                                                      ? ProbitasColor
+                                                                              .ProbitasTextPrimary
+                                                                          .withOpacity(
+                                                                              0.5)
+                                                                      : ProbitasColor
+                                                                          .ProbitasTextSecondary,
+                                                                )),
+                                                          ],
+                                                        ),
+                                                        Spacer(),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 15),
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .end,
+                                                            children: [
+                                                              Text(
+                                                                  data
+                                                                      .data![
+                                                                          index]
+                                                                      .user!
+                                                                      .level!,
+                                                                  style: Config.b2(context).copyWith(
+                                                                      color: isDarkMode
+                                                                          ? ProbitasColor.ProbitasTextPrimary.withOpacity(
+                                                                              0.5)
+                                                                          : ProbitasColor
+                                                                              .ProbitasTextSecondary,
+                                                                      fontSize:
+                                                                          14.0)),
+                                                              YMargin(2.0),
+                                                              Text(
+                                                                  "Today, 02:34 PM",
+                                                                  style: Config.b2(
+                                                                          context)
+                                                                      .copyWith(
+                                                                          color: ProbitasColor
+                                                                              .ProbitasPrimary,
+                                                                          fontSize:
+                                                                              14.0))
+                                                            ],
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Divider(),
+                                                    Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20,
+                                                              vertical: 10.0),
+                                                      child: SelectableText(
+                                                        data.data![index].text!,
+                                                        style:
+                                                            Config.b3(context)
+                                                                .copyWith(
+                                                                    fontSize:
+                                                                        14.0),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                YMargin(2.0),
-                                                Text("Microbiology",
-                                                    style: Config.b2(context)
-                                                        .copyWith(
-                                                      color: isDarkMode
-                                                          ? ProbitasColor
-                                                                  .ProbitasTextPrimary
-                                                              .withOpacity(0.5)
-                                                          : ProbitasColor
-                                                              .ProbitasTextSecondary,
-                                                    )),
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 15),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
-                                                children: [
-                                                  Text("Level 200",
-                                                      style: Config.b2(context).copyWith(
-                                                          color: isDarkMode
-                                                              ? ProbitasColor
-                                                                      .ProbitasTextPrimary
-                                                                  .withOpacity(
-                                                                      0.5)
-                                                              : ProbitasColor
-                                                                  .ProbitasTextSecondary,
-                                                          fontSize: 14.0)),
-                                                  YMargin(2.0),
-                                                  Text("Today, 02:34 PM",
-                                                      style: Config.b2(context)
-                                                          .copyWith(
-                                                              color: ProbitasColor
-                                                                  .ProbitasPrimary,
-                                                              fontSize: 14.0))
-                                                ],
                                               ),
-                                            )
-                                          ],
+                                            );
+                                          },
                                         ),
-                                        Divider(),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10.0),
-                                          child: SelectableText(
-                                            "In Flutter, the overflosssssw property of the Text, RichText, and DefaultTextStyle widgets specifies how ",
-                                            style: Config.b3(context)
-                                                .copyWith(fontSize: 14.0),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
+                                      ),
+                                  error: (err, _) => Text(err.toString()),
+                                  loading: () => CircularProgressIndicator())
                         ],
                       ),
                     ),
@@ -418,6 +460,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
           ref
               .watch(postNotifierProvider.notifier)
               .createComments(widget.singlePostId, commentsController.text);
+          ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
           setState(() {
             commentsController.clear();
           });

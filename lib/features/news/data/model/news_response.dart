@@ -11,7 +11,7 @@ class NewsResponse {
 
   bool? success;
   String? message;
-  List<Datum>? data;
+  List<News>? data;
   int? count;
   Pagination? pagination;
 
@@ -21,14 +21,14 @@ class NewsResponse {
   factory NewsResponse.fromJson(Map<String, dynamic> json) => NewsResponse(
         success: json["success"],
         message: json["message"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<News>.from(json["data"].map((x) => News.fromJson(x))),
         count: json["count"],
         pagination: Pagination.fromJson(json["pagination"]),
       );
 }
 
-class Datum {
-  Datum({
+class News {
+  News({
     this.link,
     this.image,
     this.title,
@@ -42,9 +42,9 @@ class Datum {
   String? excerpt;
   DateTime? date;
 
-  factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+  factory News.fromRawJson(String str) => News.fromJson(json.decode(str));
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory News.fromJson(Map<String, dynamic> json) => News(
         link: json["link"],
         image: json["image"],
         title: json["title"],

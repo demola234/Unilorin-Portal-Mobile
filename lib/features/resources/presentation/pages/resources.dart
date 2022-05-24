@@ -1,27 +1,30 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/resources/data/model/resource_response.dart';
 // ignore: unused_import
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../controller/resource_controller.dart';
 import 'add_resources.dart';
 
-class Resources extends StatefulWidget {
+class Resources extends ConsumerStatefulWidget {
   const Resources({Key? key}) : super(key: key);
 
   @override
-  State<Resources> createState() => _ResourcesState();
+  ConsumerState<Resources> createState() => _ResourcesState();
 }
 
-class _ResourcesState extends State<Resources> {
+class _ResourcesState extends ConsumerState<Resources> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -88,12 +91,18 @@ class _ResourcesState extends State<Resources> {
               child: Container(
                   height: context.screenHeight(),
                   width: context.screenWidth(),
-                  child: ListView.builder(
-                      itemCount: 3,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ResourceTile();
-                      })))
+                  child: ref.watch(getResourcesNotifier).when(
+                      data: (data) => ListView.builder(
+                          itemCount: data.data!.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            final response = data.data![index];
+                            return ResourceTile(response: response);
+                          }),
+                      error: (err, _) => Text(err.toString()),
+                      loading: () => Center(
+                            child: CircularProgressIndicator(),
+                          )))),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -111,7 +120,9 @@ class _ResourcesState extends State<Resources> {
 }
 
 class ResourceTile extends StatefulWidget {
+  Datum? response;
   ResourceTile({
+    required this.response,
     Key? key,
   }) : super(key: key);
 
@@ -125,8 +136,7 @@ class _ResourceTileState extends State<ResourceTile> {
   late String progress;
   // ignore: unused_field
   String? _fileFullPath;
-  String url =
-      "http://docs.google.com/viewer?url=http://www.pdf995.com/samples/pdf.pdf";
+
   @override
   void initState() {
     dio = Dio();
@@ -137,7 +147,7 @@ class _ResourceTileState extends State<ResourceTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _downloadSaveFileToStorage(url, "document.pdf");
+        _downloadSaveFileToStorage(widget.response!.file!, "document.pdf");
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
@@ -164,7 +174,7 @@ class _ResourceTileState extends State<ResourceTile> {
                 children: [
                   YMargin(20.0),
                   Text(
-                    "LIS121",
+                    widget.response!.courseCode!,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -172,7 +182,7 @@ class _ResourceTileState extends State<ResourceTile> {
                   ),
                   YMargin(2.0),
                   Text(
-                    "Library and Information Techniques",
+                    widget.response!.courseTitle!,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -183,7 +193,7 @@ class _ResourceTileState extends State<ResourceTile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("By Stephen Peter",
+                      Text(widget.response!.topic!,
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,

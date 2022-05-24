@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:probitas_app/data/remote/posts/post_repository.dart';
+import 'package:probitas_app/features/posts/data/model/all_comments.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import '../../../features/posts/data/model/single_post.dart';
 import '../../local/cache.dart';
@@ -10,6 +11,7 @@ abstract class PostService {
   Future likeOrUnlikePost(String postId);
   Future<SinglePostResponse> getSinglePost(String postId);
   Future createComments(String postId, String text);
+  Future<SingleCommentResponse> getPostsComments(String postId);
 }
 
 class PostServiceImpl extends PostService {
@@ -43,5 +45,10 @@ class PostServiceImpl extends PostService {
   @override
   Future createComments(String postId, String text) async {
     return postRepository.createComments(await cache.getToken(), postId, text);
+  }
+
+  @override
+  Future<SingleCommentResponse> getPostsComments(String postId) async {
+    return postRepository.getPostsComments(await cache.getToken(), postId);
   }
 }

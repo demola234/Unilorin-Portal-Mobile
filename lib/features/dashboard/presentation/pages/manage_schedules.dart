@@ -20,7 +20,7 @@ class ManageSchedule extends ConsumerStatefulWidget {
 class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   TextEditingController courseCode = TextEditingController();
   TextEditingController courseTitle = TextEditingController();
-  TextEditingController courseVenue= TextEditingController();
+  TextEditingController courseVenue = TextEditingController();
   TextEditingController note = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
@@ -30,7 +30,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   // String?
   var remindMe;
 
-@override
+  @override
   void dispose() {
     super.dispose();
     courseCode.dispose();
@@ -120,7 +120,6 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                
                   Text(
                     "Date",
                     style: Config.b2(context).copyWith(
@@ -223,9 +222,15 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
             YMargin(15),
             InkWell(
               onTap: () {
-
-               ref.watch(dashboardNotifierProvider.notifier).createSchedule(courseCode.text, courseTitle.text, courseVenue.text, remindMe, startText.toString(), endText.toString(), note.text);
-               ref.refresh(getSchedulesProvider);
+                ref.watch(dashboardNotifierProvider.notifier).createSchedule(
+                    courseCode.text,
+                    courseTitle.text,
+                    courseVenue.text,
+                    remindMe,
+                    startText.toString(),
+                    endText.toString(),
+                    note.text);
+                ref.refresh(getSchedulesProvider);
               },
               child: Container(
                 height: 70,
@@ -251,26 +256,26 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
 
   startTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
-      initialTime: TimeOfDay.now(),
-      context: context,
-       builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: ProbitasColor.ProbitasSecondary,
-                      onPrimary: ProbitasColor.ProbitasTextPrimary,
-                      onSurface: ProbitasColor.ProbitasSecondary,
-                    ),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        primary: ProbitasColor.ProbitasSecondary,
-                      ),
-                    ),
-                  ),
-                  child: child!,
-                )}
-    );
- 
+        initialTime: TimeOfDay.now(),
+        context: context,
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: ProbitasColor.ProbitasSecondary,
+                onPrimary: ProbitasColor.ProbitasTextPrimary,
+                onSurface: ProbitasColor.ProbitasSecondary,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  primary: ProbitasColor.ProbitasSecondary,
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        });
+
     if (pickedTime != null) {
       print(pickedTime.format(context));
       DateTime parsedTime =
@@ -291,27 +296,25 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
 
   endTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
-      
-      initialTime: TimeOfDay.now(),
-      context: context,
-      builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: ProbitasColor.ProbitasSecondary,
-                      onPrimary: ProbitasColor.ProbitasTextPrimary,
-                      onSurface: ProbitasColor.ProbitasSecondary,
-                    ),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        primary: ProbitasColor.ProbitasSecondary,
-                      ),
-                    ),
-                  ),
-                  child: child!,
-                )}
-    );
-
+        initialTime: TimeOfDay.now(),
+        context: context,
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: ColorScheme.light(
+                primary: ProbitasColor.ProbitasSecondary,
+                onPrimary: ProbitasColor.ProbitasTextPrimary,
+                onSurface: ProbitasColor.ProbitasSecondary,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  primary: ProbitasColor.ProbitasSecondary,
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        });
 
     if (pickedTime != null) {
       print(pickedTime.format(context));

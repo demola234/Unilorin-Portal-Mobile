@@ -6,6 +6,7 @@ import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../data/remote/resources/resources_services.dart';
 import '../../../../injection_container.dart';
+import '../../data/model/resource_response.dart';
 
 class ResourceNotifier extends StateNotifier {
   var resourceRepository = getIt<ResourcesService>();
@@ -32,3 +33,10 @@ class ResourceNotifier extends StateNotifier {
     }
   }
 }
+
+var resourceRepository = getIt<ResourcesService>();
+final getResourcesNotifier = FutureProvider<ResourceResponse>((ref) async {
+  final resourceResponse = await resourceRepository.getResources();
+
+  return resourceResponse;
+});

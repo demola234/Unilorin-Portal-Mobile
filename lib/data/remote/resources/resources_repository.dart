@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
+import '../../../features/resources/data/model/resource_response.dart';
 
 abstract class ResourceRepository {
   createResource(String token,
@@ -9,6 +10,8 @@ abstract class ResourceRepository {
       String? courseTitle,
       String? topic,
       required File file});
+
+  Future<ResourceResponse> getResources(String token);
 }
 
 class ResourceRepositoryRepositoryImpl extends BaseApi
@@ -37,6 +40,20 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
         throw CustomException(err.message);
       }
       print(err);
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<ResourceResponse> getResources(String token) async {
+    var data = await get("resources", headers: getHeader(token));
+    try {
+      final s = ResourceResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
       throw CustomException("Something went wrong");
     }
   }
