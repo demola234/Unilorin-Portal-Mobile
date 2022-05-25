@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../../data/local/cache.dart';
+import '../../features/authentication/presentation/pages/authentication/authentication.dart';
 import '../constants/constants.dart';
+import '../utils/navigation_service.dart';
 
- class BaseApi {
+class BaseApi {
   // var token = getIt<CacheImpl>();
   late Dio dio;
 
@@ -119,6 +125,11 @@ import '../constants/constants.dart';
       var req = await future;
 
       var data = req.data;
+      if (req.statusCode == HttpStatus.unauthorized || req.statusCode == HttpStatus.serviceUnavailable)  {
+        QueuedInterceptor();
+        Cache.get().clear();
+        NavigationService().replaceScreen(Authentication());
+      }
 
       if ("${req.statusCode}".startsWith('2') ||
           (data["success"] != null && data["success"])) {
@@ -127,11 +138,9 @@ import '../constants/constants.dart';
         }
         return data as Map<String, dynamic>;
       }
-
       if (data['error'] != null) {
         throw Exception(data["error"]);
       }
-
       throw Exception(data["message"]);
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectTimeout ||

@@ -20,7 +20,9 @@ abstract class DashboardRepository {
 class DashboardRepositoryImpl extends BaseApi implements DashboardRepository {
   @override
   Future<UserResponses> fetchUser(String token) async {
+      
     try {
+      
       var data = await get("auth/me", headers: getHeader(token));
       final s = UserResponses.fromJson(data);
       return s;
