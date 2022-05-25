@@ -132,14 +132,14 @@ class BaseApi {
           return <String, dynamic>{"data": data};
         }
         return data as Map<String, dynamic>;
-      } else if (req.statusCode == HttpStatus.unauthorized) {
+      }
+      if (data['error'] != null || req.statusCode == HttpStatus.unauthorized) {
         QueuedInterceptor();
         NavigationService().replaceScreen(Authentication());
-        return await Cache.get().clear();
-      }
-      if (data['error'] != null) {
+        Cache.get().clear();
         throw Exception(data["error"]);
       }
+
       throw Exception(data["message"]);
     } on DioError catch (e) {
       if (e.type == DioErrorType.connectTimeout ||

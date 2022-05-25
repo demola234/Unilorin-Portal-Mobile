@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:probitas_app/core/constants/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class NewsOverview extends StatefulWidget {
   String url;
+
   NewsOverview({Key? key, required this.url}) : super(key: key);
 
   @override
@@ -11,6 +13,7 @@ class NewsOverview extends StatefulWidget {
 }
 
 class _NewsOverviewState extends State<NewsOverview> {
+  bool isLoading = true;
   WebViewController? webViewController;
   @override
   Widget build(BuildContext context) {
@@ -20,33 +23,39 @@ class _NewsOverviewState extends State<NewsOverview> {
           preferredSize: Size.fromHeight(70.0),
           child: CustomNavBar(title: "News"),
         ),
-        body: WebView(
-          initialUrl: widget.url,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            webViewController = webViewController;
-          },
-          
-          onProgress: (int progress) {
-            print("WebView is loading (progress : $progress%)");
-          },
-          onPageStarted: (String url) {
-            print('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            print('Page finished loading: $url');
+        body: Stack(
+          children: [
+            WebView(
+              initialUrl: widget.url,
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                webViewController = webViewController;
+              },
+              onPageFinished: (String url) {
+                setState(() {
+                  isLoading = false;
+                });
 
-            // Removes header and footer from page
-            webViewController!
-                .runJavascriptReturningResult("javascript:(function() { " +
-                    "var footer = document.getElementsByTagName('footer-widget')[0];" +
-                    "footer.parentNode.removeChild(head);" +
-                    "var footer = document.getElementsByTagName('footer')[0];" +
-                    "footer.parentNode.removeChild(footer);" +
-                    "})()")
-                .then((value) => debugPrint('Page finished loading Javascript'))
-                .catchError((onError) => debugPrint('$onError'));
-          },
+                // Removes header and footer from page
+                webViewController!
+                    .runJavascriptReturningResult("javascript:(function() { " +
+                        "var footer = document.getElementsByTagName('footer-widget')[0];" +
+                        "footer.parentNode.removeChild(head);" +
+                        "var footer = document.getElementsByTagName('footer')[0];" +
+                        "footer.parentNode.removeChild(footer);" +
+                        "})()")
+                    .then((value) =>
+                        debugPrint('Page finished loading Javascript'))
+                    .catchError((onError) => debugPrint('$onError'));
+              },
+            ),
+            isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                        color: ProbitasColor.ProbitasSecondary),
+                  )
+                : Stack(),
+          ],
         ));
   }
 }
