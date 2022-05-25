@@ -125,11 +125,6 @@ class BaseApi {
       var req = await future;
 
       var data = req.data;
-      if (req.statusCode == HttpStatus.unauthorized || req.statusCode == HttpStatus.serviceUnavailable)  {
-        QueuedInterceptor();
-        Cache.get().clear();
-        NavigationService().replaceScreen(Authentication());
-      }
 
       if ("${req.statusCode}".startsWith('2') ||
           (data["success"] != null && data["success"])) {
@@ -137,6 +132,10 @@ class BaseApi {
           return <String, dynamic>{"data": data};
         }
         return data as Map<String, dynamic>;
+      } else if (req.statusCode == HttpStatus.unauthorized) {
+        QueuedInterceptor();
+        NavigationService().replaceScreen(Authentication());
+        return await Cache.get().clear();
       }
       if (data['error'] != null) {
         throw Exception(data["error"]);

@@ -29,7 +29,6 @@ class _DashboardState extends ConsumerState<Dashboard>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
 
-
   late TabController _controller;
 
   @override
@@ -94,7 +93,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                     children: [
                       Consumer(
                         builder: ((context, watch, child) {
-                          final response = watch.read(getUsersProvider);
+                          final response = watch.watch(getUsersProvider);
                           return response.when(
                               data: (response) => Text(
                                     "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}👋🏾",
@@ -115,7 +114,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                       YMargin(5.0),
                       Consumer(
                         builder: ((context, watch, child) {
-                          final response = watch.read(getUsersProvider);
+                          final response = watch.watch(getUsersProvider);
                           return response.when(
                             data: (response) => Text(
                               "You are in the ${response.data!.user!.semester!.type} Semester",

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
@@ -13,7 +16,7 @@ import '../controller/news_controller.dart';
 import '../provider/news_provider.dart';
 import 'news_overview.dart';
 
-class Messages extends ConsumerWidget {
+class Messages extends HookWidget {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
       GlobalKey<LiquidPullToRefreshState>();
@@ -23,9 +26,9 @@ class Messages extends ConsumerWidget {
   Future<void> _handleRefresh() async {}
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final paginationState = ref.watch(newsNotifierProvider.notifier).state;
-    final paginationController = ref.watch(newsNotifierProvider.notifier);
+  Widget build(
+    BuildContext context,
+  ) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         key: _key,
@@ -40,164 +43,192 @@ class Messages extends ConsumerWidget {
         drawer: ProbitasDrawer(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              YMargin(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Consumer(
+            builder: (context, ref, child) {
+              final newsNotifier = ref.watch(newsNotifierProvider);
+              return Column(
                 children: [
-                  Text(
-                    "News",
-                    style: Config.h3(context).copyWith(
-                      color: isDarkMode
-                          ? ProbitasColor.ProbitasTextPrimary
-                          : ProbitasColor.ProbitasPrimary,
-                      fontSize: 18,
-                    ),
+                  YMargin(10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "News",
+                        style: Config.h3(context).copyWith(
+                          color: isDarkMode
+                              ? ProbitasColor.ProbitasTextPrimary
+                              : ProbitasColor.ProbitasPrimary,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Expanded(
-                  child: LiquidPullToRefresh(
-                key: _refreshIndicatorKey,
-                onRefresh: () async {
-                  return await ref.refresh(newsNotifierProvider);
-                },
-                color: Color(0xFF045257),
-                backgroundColor: ProbitasColor.ProbitasTextPrimary,
-                animSpeedFactor: 5,
-                showChildOpacityTransition: true,
-                child: SmartRefresher(
-                    controller: refreshController,
-                    enablePullDown: false,
-                    enablePullUp: true,
-                    onRefresh: () async {
-                      return ref.refresh(newsNotifierProvider);
-                    },
+                  Expanded(
+                      child: LiquidPullToRefresh(
+                    key: _refreshIndicatorKey,
+                    color: ProbitasColor.ProbitasSecondary,
+                    backgroundColor: ProbitasColor.ProbitasTextPrimary,
+                    animSpeedFactor: 5,
+                    showChildOpacityTransition: true,
+                    onRefresh: () =>
+                        ref.watch(newsNotifierProvider.notifier).getMoreNews(),
                     child: Container(
                       width: context.screenWidth(),
                       child: Builder(builder: (context) {
-                        if (paginationState.error.isNotEmpty) {
-                          return Center(
-                            child: ListView(children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Center(child: Text("err")),
-                                ],
-                              )
-                            ]),
-                          );
-                        } else if (paginationState.news.isEmpty) {
-                          Center(
-                            child: CircularProgressIndicator(
-                                color: ProbitasColor.ProbitasSecondary),
-                          );
-                        }
-                        return ListView.builder(
-                            controller: scrollController,
-                            itemCount: paginationState.news.length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              paginationController.handleScrollWithIndex(index);
-                              return GestureDetector(
-                                onTap: () {
-                                  NavigationService().navigateToScreen(
-                                      NewsOverview(
-                                          url: paginationState
-                                              .news[index].link!));
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 15),
-                                  width: context.screenWidth(),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ),
-                                    border: Border.all(
-                                      color: isDarkMode
-                                          ? ProbitasColor.ProbitasTextPrimary
-                                          : ProbitasColor.ProbitasSecondary,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0, vertical: 10),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                                height: 40,
-                                                width: 40,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Image(
-                                                  fit: BoxFit.contain,
-                                                  image: AssetImage(
-                                                      ImagesAsset.news_default),
-                                                )),
-                                            XMargin(10.0),
-                                            Flexible(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    paginationState
-                                                        .news[index].title!,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: Config.b3(context),
-                                                  ),
-                                                  Text(
-                                                    timeago.format(
-                                                        DateTime.parse(
-                                                            paginationState
-                                                                .news[index]
-                                                                .date!
-                                                                .toString())),
-                                                    style: Config.b3(context)
-                                                        .copyWith(
-                                                      color: isDarkMode
-                                                          ? ProbitasColor
-                                                              .ProbitasTextPrimary
-                                                          : ProbitasColor
-                                                              .ProbitasSecondary,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Divider(),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 15.0, vertical: 10),
-                                          child: Text(
-                                            "${paginationState.news[index].excerpt} Read more",
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Config.b3(context),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                        if (newsNotifier.viewState.isLoading) {
+                          return const Center(
+                              child: CircularProgressIndicator(
+                            color: ProbitasColor.ProbitasSecondary,
+                          ));
+                        } else {
+                          if (newsNotifier.news!.isNotEmpty) {
+                            return NewsList(
+                                controller: refreshController,
+                                newsNotifier: newsNotifier,
+                                isDarkMode: isDarkMode);
+                          } else {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "No More News",
+                                  style: Config.b3(context),
                                 ),
-                              );
-                            });
+                              ],
+                            );
+                          }
+                        }
                       }),
-                    )),
-              )),
-            ],
+                    ),
+                  )),
+                ],
+              );
+            },
           ),
         ));
+  }
+}
+
+class NewsList extends HookConsumerWidget {
+  const NewsList({
+    Key? key,
+    required this.newsNotifier,
+    required this.isDarkMode,
+    required this.controller,
+  }) : super(key: key);
+
+  final NewsState newsNotifier;
+  final bool isDarkMode;
+  final RefreshController controller;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final scrollController = useScrollController();
+    useEffect(() {
+      void scrollListener() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          ref.read(newsNotifierProvider.notifier).getMoreNews();
+        }
+      }
+
+      scrollController.addListener(scrollListener);
+
+      return () => scrollController.removeListener(scrollListener);
+    }, [scrollController]);
+
+    return SmartRefresher(
+      controller: controller,
+      enablePullUp: true,
+      enablePullDown: false,
+      onRefresh: () => ref.read(newsNotifierProvider.notifier).getNews(),
+      child: ListView.builder(
+          controller: scrollController,
+          itemCount: newsNotifier.news!.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (index == newsNotifier.news!.length - 1 &&
+                newsNotifier.moreDataAvailable) {}
+
+            return GestureDetector(
+              onTap: () {
+                NavigationService().navigateToScreen(
+                    NewsOverview(url: newsNotifier.news![index].link!));
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 15),
+                width: context.screenWidth(),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                  border: Border.all(
+                    color: isDarkMode
+                        ? ProbitasColor.ProbitasTextPrimary
+                        : ProbitasColor.ProbitasSecondary,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14.0, vertical: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image(
+                                fit: BoxFit.contain,
+                                image: AssetImage(ImagesAsset.news_default),
+                              )),
+                          XMargin(10.0),
+                          Flexible(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  newsNotifier.news![index].title!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Config.b3(context),
+                                ),
+                                Text(
+                                  timeago.format(DateTime.parse(newsNotifier
+                                      .news![index].date!
+                                      .toString())),
+                                  style: Config.b3(context).copyWith(
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasSecondary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 10),
+                        child: Text(
+                          "${newsNotifier.news![index].excerpt} Read more",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Config.b3(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+    );
   }
 }
