@@ -1,10 +1,15 @@
 import 'dart:io';
 import 'package:probitas_app/data/remote/resources/resources_repository.dart';
+import '../../../features/resources/data/model/resource_response.dart';
 import '../../local/cache.dart';
 
 abstract class ResourcesService {
-   createResource(
-      {String? courseCode, String? courseTitle, String? topic, required File file});
+  createResource(
+      {String? courseCode,
+      String? courseTitle,
+      String? topic,
+      required File file});
+  Future<ResourceResponse> getResources();
 }
 
 class ResourcesServiceImpl extends ResourcesService {
@@ -13,7 +18,7 @@ class ResourcesServiceImpl extends ResourcesService {
   ResourcesServiceImpl({required this.resourceRepository, required this.cache});
 
   @override
-   createResource(
+  createResource(
       {String? courseCode,
       String? courseTitle,
       String? topic,
@@ -25,5 +30,10 @@ class ResourcesServiceImpl extends ResourcesService {
       topic: topic,
       file: file,
     );
+  }
+
+  @override
+  Future<ResourceResponse> getResources() async {
+    return resourceRepository.getResources(await cache.getToken());
   }
 }

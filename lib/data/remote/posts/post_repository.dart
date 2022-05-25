@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:probitas_app/features/posts/data/model/all_comments.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import '../../../core/error/exceptions.dart';
@@ -11,6 +12,7 @@ abstract class PostRepository {
   Future likeOrUnlikePost(String token, String postId);
   Future<SinglePostResponse> getSinglePost(String token, String postId);
   Future createComments(String token, String postId, String? text);
+  Future<SingleCommentResponse> getPostsComments(String token, String postId);
 }
 
 class PostRepositoryImpl extends BaseApi implements PostRepository {
@@ -89,6 +91,21 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
         "text": text,
       });
       return data;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<SingleCommentResponse> getPostsComments(
+      String token, String postId) async {
+    try {
+      var data = await get("posts/$postId/comments", headers: getHeader(token));
+      final s = SingleCommentResponse.fromJson(data);
+      return s;
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

@@ -9,6 +9,7 @@ import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../data/remote/posts/post_service.dart';
 import '../../../../injection_container.dart';
+import '../../data/model/all_comments.dart';
 
 class PostNotifier extends StateNotifier {
   var postService = getIt<PostService>();
@@ -59,6 +60,14 @@ final getPostsProvider = FutureProvider<PostResponse>((ref) async {
 final getSinglePostProvider =
     FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
   final getSinglePost = await postService.getSinglePost(postId);
+
+  return getSinglePost;
+});
+
+
+final getSinglePostCommentsProvider =
+    FutureProvider.family<SingleCommentResponse, String>((ref, postId) async {
+  final getSinglePost = await postService.getPostsComments(postId);
 
   return getSinglePost;
 });

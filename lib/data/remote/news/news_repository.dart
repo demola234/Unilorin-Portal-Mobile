@@ -3,22 +3,26 @@ import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
 
 abstract class NewsRepository {
-  Future<NewsResponse> fetchNews(String token, String source, int page);
+  Future<List<News>> fetchNews(String token, String source, int page);
 }
 
 class NewsRepositoryImpl extends BaseApi implements NewsRepository {
   @override
-  Future<NewsResponse> fetchNews(String token, String source, int page) async {
+  Future<List<News>> fetchNews(String token, String source,
+      [int page = 1, int pageSize = 18]) async {
     try {
+      final offSet = (page + 1) * pageSize;
+
       var data = await get("news", headers: getHeader(token), query: {
         "source": source,
         "page": page,
       });
+      final result = List<Map<String, dynamic>>.from(data['data']);
+      List<News> news = result
+          .map((newsData) => News.fromJson(newsData))
+          .toList(growable: false);
 
-      final s = NewsResponse.fromJson(data);
-
-      return s;
-    
+      return news;
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

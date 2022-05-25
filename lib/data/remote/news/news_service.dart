@@ -4,7 +4,7 @@ import 'package:probitas_app/features/news/data/model/news_response.dart';
 import '../../local/cache.dart';
 
 abstract class NewsService {
-  Future<NewsResponse> fetchUsers(String source, int page);
+  Future<List<News>> fetchNews(String source, int page);
 }
 
 class NewsServiceImpl extends NewsService {
@@ -13,7 +13,7 @@ class NewsServiceImpl extends NewsService {
   NewsServiceImpl({required this.newsRepository, required this.cache});
 
   @override
-  Future<NewsResponse> fetchUsers(String source, int page) async {
+  Future<List<News>> fetchNews(String source, int page) async {
     return newsRepository.fetchNews(await cache.getToken(), source, page);
   }
 }
