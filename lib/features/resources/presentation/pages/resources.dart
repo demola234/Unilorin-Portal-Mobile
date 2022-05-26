@@ -8,6 +8,8 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/features/resources/data/model/resource_response.dart';
+import 'package:probitas_app/features/resources/presentation/pages/download_screen.dart';
+import 'package:probitas_app/features/resources/presentation/pages/pdf_viewer.dart';
 // ignore: unused_import
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
@@ -25,6 +27,14 @@ class Resources extends ConsumerStatefulWidget {
 }
 
 class _ResourcesState extends ConsumerState<Resources> {
+  TextEditingController searchController = TextEditingController();
+  final List<Color> colors = <Color>[
+    Colors.red,
+    Colors.blue,
+    Colors.green,
+    Colors.yellow,
+    Colors.orange
+  ];
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -60,49 +70,37 @@ class _ResourcesState extends ConsumerState<Resources> {
             children: [
               Flexible(
                 child: ProbitasTextFormField(
+                  controller: searchController,
+                  onChanged: (v) {
+                    setState(() {
+                      v = searchController.text;
+                    });
+                  },
                   prefixIcon: Icon(Icons.search),
                   hintText: "Search for Pdf, Past Questions, etc...",
                 ),
               ),
-              XMargin(5.0),
-              PopupMenuButton(
-                  child: Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: ProbitasColor.ProbitasSecondary,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(ImagesAsset.filter),
-                    ),
-                  ),
-                  onSelected: (selectedValue) {
-                    print(selectedValue);
-                  },
-                  itemBuilder: (BuildContext ctx) => [
-                        PopupMenuItem(child: Text('Sort'), value: '1'),
-                      ]),
             ],
           ),
           YMargin(15),
-          Expanded(
-              child: Container(
-                  height: context.screenHeight(),
-                  width: context.screenWidth(),
-                  child: ref.watch(getResourcesNotifier).when(
-                      data: (data) => ListView.builder(
-                          itemCount: data.data!.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            final response = data.data![index];
-                            return ResourceTile(response: response);
-                          }),
-                      error: (err, _) => Text(err.toString()),
-                      loading: () => Center(
-                            child: CircularProgressIndicator(),
-                          )))),
+          searchController.text.isEmpty
+              ? Expanded(
+                  child: Container(
+                      height: context.screenHeight(),
+                      width: context.screenWidth(),
+                      child: ref.watch(getResourcesNotifier).when(
+                          data: (data) => ListView.builder(
+                              itemCount: data.data!.length,
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final response = data.data![index];
+                                return ResourceTile(response: response);
+                              }),
+                          error: (err, _) => Text(err.toString()),
+                          loading: () => Center(
+                                child: CircularProgressIndicator(),
+                              ))))
+              : Container(),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -121,6 +119,7 @@ class _ResourcesState extends ConsumerState<Resources> {
 
 class ResourceTile extends StatefulWidget {
   Datum? response;
+
   ResourceTile({
     required this.response,
     Key? key,
@@ -147,39 +146,164 @@ class _ResourceTileState extends State<ResourceTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _downloadSaveFileToStorage(widget.response!.file!, "document.pdf");
+        showModalBottomSheet<Null>(
+          context: context,
+          builder: (BuildContext context) {
+            return Container(
+              decoration: BoxDecoration(
+                  // borderRadius: _borderRadius,
+                  ),
+              height: context.screenHeight() / 3,
+              child: Column(
+                children: [
+                  YMargin(10),
+                  Container(
+                      height: 6,
+                      width: context.screenWidth() / 3.5,
+                      decoration: BoxDecoration(
+                          color: ProbitasColor.ProbitasTextPrimary.withOpacity(
+                              0.7),
+                          borderRadius: BorderRadius.circular(5.0))),
+                  YMargin(30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 70.0,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              color: ProbitasColor.ProbitasSecondary,
+                              borderRadius: BorderRadius.circular(5.0)),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                widget.response!.courseCode!,
+                                style: Config.b2(context).copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                widget.response!.file!
+                                    .split(".")
+                                    .last
+                                    .toUpperCase(),
+                                style: Config.b2(context).copyWith(
+                                  color: ProbitasColor.ProbitasTextPrimary,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        XMargin(15),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            YMargin(2.0),
+                            Text(
+                              widget.response!.courseTitle!,
+                              style: Config.b2(context).copyWith(
+                                color: ProbitasColor.ProbitasPrimary,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                    "By ${widget.response!.user!.fullName!.split(" ")[0]} ${widget.response!.user!.fullName!.split(" ")[1]}",
+                                    style: Config.b2(context).copyWith(
+                                      color: ProbitasColor.ProbitasPrimary,
+                                      fontSize: 12,
+                                    )),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  isScrollControlled: false,
+                                  isDismissible: false,
+                                  context: context,
+                                  builder: (context) => DownloadScreen(
+                                        url: widget.response!.file!,
+                                      ));
+                            },
+                            icon: SvgPicture.asset(ImagesAsset.download)),
+                      ],
+                    ),
+                  ),
+                  YMargin(30),
+                  widget.response!.file!.split(".").last.toLowerCase() == "pdf"
+                      ? ProbitasButton(
+                          onTap: () {
+                            NavigationService().navigateToScreen(PDFViewer(
+                              path: widget.response!.file!,
+                            ));
+                          },
+                          text: "View Material")
+                      : SizedBox.shrink()
+                ],
+              ),
+            );
+          },
+        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         height: 120,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-            color: ProbitasColor.ProbitasTextSecondary,
-            borderRadius: BorderRadius.circular(12.0)),
+          color: ProbitasColor.ProbitasSecondary,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 6.0,
+                width: 70.0,
                 height: 100,
                 decoration: BoxDecoration(
                     color: ProbitasColor.ProbitasTextPrimary,
-                    borderRadius: BorderRadius.circular(12.0)),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      widget.response!.courseCode!,
+                      style: Config.b2(context).copyWith(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      widget.response!.file!.split(".").last.toUpperCase(),
+                      style: Config.b2(context).copyWith(
+                        color: ProbitasColor.ProbitasPrimary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               XMargin(15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  YMargin(20.0),
-                  Text(
-                    widget.response!.courseCode!,
-                    style: Config.b2(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
                   YMargin(2.0),
                   Text(
                     widget.response!.courseTitle!,
@@ -193,7 +317,8 @@ class _ResourceTileState extends State<ResourceTile> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(widget.response!.topic!,
+                      Text(
+                          "By ${widget.response!.user!.fullName!.split(" ")[0]} ${widget.response!.user!.fullName!.split(" ")[1]}",
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,

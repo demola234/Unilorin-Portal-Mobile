@@ -34,6 +34,10 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>*your app name* would like to save photos from the app to your gallery</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>*your app name* would like to access your photo gallery for uploading images to the app</string>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

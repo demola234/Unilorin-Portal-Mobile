@@ -11,6 +11,7 @@ import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../posts/presentation/pages/posts.dart';
+import '../controller/resource_controller.dart';
 import '../provider/resources_provider.dart';
 
 class AddResources extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class _AddResourcesState extends ConsumerState<AddResources> {
   bool _multiPick = true;
   String? selectedFile = "";
   String? fileType = "";
+
 
   @override
   Widget build(BuildContext context) {
@@ -210,6 +212,7 @@ class _AddResourcesState extends ConsumerState<AddResources> {
       await ref
           .watch(resourceNotifierProvider.notifier)
           .createResource(courseCode.text, courseTitle.text, topic.text, file!);
+      ref.refresh(getResourcesNotifier);
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }

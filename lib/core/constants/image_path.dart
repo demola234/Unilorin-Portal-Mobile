@@ -28,6 +28,7 @@ class ImagesAsset {
   static String filter = 'assets/icons/Filter.svg';
   static String file = 'assets/icons/file.svg';
   static String calculator = 'assets/icons/calculator.svg';
+  static String download = 'assets/icons/send-square.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';
