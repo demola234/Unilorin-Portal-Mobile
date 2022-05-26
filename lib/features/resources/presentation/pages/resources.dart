@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:probitas_app/features/resources/data/model/resource_response.dart';
 import 'package:probitas_app/features/resources/presentation/pages/download_screen.dart';
 import 'package:probitas_app/features/resources/presentation/pages/pdf_viewer.dart';
@@ -28,13 +29,7 @@ class Resources extends ConsumerStatefulWidget {
 
 class _ResourcesState extends ConsumerState<Resources> {
   TextEditingController searchController = TextEditingController();
-  final List<Color> colors = <Color>[
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange
-  ];
+
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -96,9 +91,19 @@ class _ResourcesState extends ConsumerState<Resources> {
                                 final response = data.data![index];
                                 return ResourceTile(response: response);
                               }),
-                          error: (err, _) => Text(err.toString()),
+                          error: (err, _) => Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Align(
+                                      alignment: Alignment.center,
+                                      child:
+                                          Center(child: Text(err.toString()))),
+                                ],
+                              ),
                           loading: () => Center(
-                                child: CircularProgressIndicator(),
+                                child: CircularProgressIndicator(
+                                    color: ProbitasColor.ProbitasSecondary),
                               ))))
               : Expanded(
                   child: Container(
@@ -115,9 +120,22 @@ class _ResourcesState extends ConsumerState<Resources> {
                                     final response = data.data![index];
                                     return ResourceTile(response: response);
                                   }),
-                              error: (err, _) => Text(err.toString()),
+                              error: (err, _) => Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.center,
+                                          child: Center(
+                                              child: EmptyState(
+                                            text: "No Resource Found",
+                                          ))),
+                                    ],
+                                  ),
                               loading: () => Center(
-                                    child: CircularProgressIndicator(),
+                                    child: CircularProgressIndicator(
+                                        color: ProbitasColor.ProbitasSecondary),
                                   )))),
         ]),
       ),
@@ -162,6 +180,7 @@ class _ResourceTileState extends State<ResourceTile> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet<Null>(
@@ -227,7 +246,7 @@ class _ResourceTileState extends State<ResourceTile> {
                             Text(
                               widget.response!.courseTitle!,
                               style: Config.b2(context).copyWith(
-                                color: ProbitasColor.ProbitasPrimary,
+                                // color: ProbitasColor.ProbitasPrimary,
                                 fontSize: 12,
                               ),
                             ),
@@ -239,7 +258,7 @@ class _ResourceTileState extends State<ResourceTile> {
                                 Text(
                                     "By ${widget.response!.user!.fullName!.split(" ")[0]} ${widget.response!.user!.fullName!.split(" ")[1]}",
                                     style: Config.b2(context).copyWith(
-                                      color: ProbitasColor.ProbitasPrimary,
+                                      // color: ProbitasColor.ProbitasPrimary,
                                       fontSize: 12,
                                     )),
                               ],
@@ -248,16 +267,20 @@ class _ResourceTileState extends State<ResourceTile> {
                         ),
                         Spacer(),
                         IconButton(
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  isScrollControlled: false,
-                                  isDismissible: false,
-                                  context: context,
-                                  builder: (context) => DownloadScreen(
-                                        url: widget.response!.file!,
-                                      ));
-                            },
-                            icon: SvgPicture.asset(ImagesAsset.download)),
+                          onPressed: () {
+                            showModalBottomSheet(
+                                isScrollControlled: false,
+                                isDismissible: false,
+                                context: context,
+                                builder: (context) => DownloadScreen(
+                                      url: widget.response!.file!,
+                                    ));
+                          },
+                          icon: SvgPicture.asset(ImagesAsset.download,
+                              color: isDarkMode
+                                  ? ProbitasColor.ProbitasTextSecondary
+                                  : ProbitasColor.ProbitasPrimary),
+                        )
                       ],
                     ),
                   ),

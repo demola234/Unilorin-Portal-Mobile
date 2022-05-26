@@ -20,7 +20,7 @@ class _PDFViewerState extends State<PDFViewer> {
         preferredSize: Size.fromHeight(70.0),
         child: CustomNavBar(title: "PDF Viewer"),
       ),
-      body: PDF().fromUrl(
+      body: PDF().cachedFromUrl(
         widget.path,
         placeholder: (double progress) => Center(child: Text('$progress %')),
         errorWidget: (dynamic error) => Center(child: Text(error.toString())),

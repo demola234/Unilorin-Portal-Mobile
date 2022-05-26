@@ -5,8 +5,9 @@ import 'package:probitas_app/core/utils/config.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class EmptyState extends StatelessWidget {
-  EmptyState({Key? key}) : super(key: key);
+  String text;
 
+  EmptyState({Key? key, this.text = "No Schedule Available"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class EmptyState extends StatelessWidget {
             repeat: true,
           ),
           Text(
-            "No Schedule Available",
+            text,
             style: Config.b2(context),
           )
         ],
