@@ -6,6 +6,7 @@ import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:probitas_app/core/constants/colors.dart';
+import 'package:probitas_app/core/utils/config.dart';
 
 class DownloadScreen extends StatefulWidget {
   final String url;
@@ -96,17 +97,15 @@ class _DownloadScreenState extends State<DownloadScreen> {
         center: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Downloading...'),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              '$downloadProgress %',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text('Downloading...',
+                style: Config.b2(context).copyWith(
+                  color: Colors.white,
+                )),
+            YMargin(5),
+            Text('$downloadProgress %',
+                style: Config.h3(context).copyWith(
+                  color: Colors.white,
+                )),
           ],
         ),
       ),
