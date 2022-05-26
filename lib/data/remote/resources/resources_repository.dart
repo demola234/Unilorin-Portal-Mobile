@@ -12,6 +12,10 @@ abstract class ResourceRepository {
       required File file});
 
   Future<ResourceResponse> getResources(String token);
+  Future<ResourceResponse> searchResources(
+    String token,
+    String search,
+  );
 }
 
 class ResourceRepositoryRepositoryImpl extends BaseApi
@@ -30,7 +34,8 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
     print(data);
     try {
       data["file"] = await MultipartFile.fromFile(file.path,
-          filename: "resource${file.path.split(".").last}");
+          filename:
+              "resource${file.path.split(".").last}.${file.path.split(".").last}");
 
       final v = await post("resources",
           headers: getHeader(token), formData: FormData.fromMap(data));
@@ -47,6 +52,22 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
   @override
   Future<ResourceResponse> getResources(String token) async {
     var data = await get("resources", headers: getHeader(token));
+    try {
+      final s = ResourceResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<ResourceResponse> searchResources(String token, String search) async {
+    var data = await get("resources/search", headers: getHeader(token), query: {
+      "s": search,
+    });
     try {
       final s = ResourceResponse.fromJson(data);
       return s;

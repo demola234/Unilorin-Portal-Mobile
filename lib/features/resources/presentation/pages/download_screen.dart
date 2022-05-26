@@ -8,6 +8,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
+import '../../../../core/error/toasts.dart';
+
 class DownloadScreen extends StatefulWidget {
   final String url;
 
@@ -55,26 +57,39 @@ class _DownloadScreenState extends State<DownloadScreen> {
         await file.delete();
         await file.create();
       }
-      await dio.download(
-        link,
-        path,
-        options: Options(
-          followRedirects: true,
-          headers: {HttpHeaders.acceptEncodingHeader: "*"},
-        ),
-        deleteOnError: true,
-        onReceiveProgress: (received, total) async {
-          if (total != -1) {
-            setState(() {
-              downloadedBytes = received;
-              totalBytes = total;
-              downloadProgress = (received / total * 100).toStringAsFixed(0);
-            });
-          } else {
-            Navigator.pop(context, false);
-          }
-        },
-      );
+      await dio
+          .download(
+            link,
+            path,
+            options: Options(
+              followRedirects: true,
+              headers: {HttpHeaders.acceptEncodingHeader: "*"},
+            ),
+            deleteOnError: true,
+            onReceiveProgress: (received, total) async {
+              if (total != -1) {
+                setState(() {
+                  downloadedBytes = received;
+                  totalBytes = total;
+                  downloadProgress =
+                      (received / total * 100).toStringAsFixed(0);
+                });
+              } else {
+                Navigator.pop(context, false);
+              }
+            },
+          )
+          .catchError(
+            (e) => {
+              Navigator.pop(context),
+              Toasts.showErrorToast("An Error Occured!")
+            },
+          )
+          .then((value) async {
+            var downloadSize = formatBytes(totalBytes, 1);
+            Toasts.showSuccessToast("Download Successful");
+            Navigator.pop(context);
+          });
     } else {
       permissionStatus = await Permission.storage.request();
     }
@@ -99,12 +114,12 @@ class _DownloadScreenState extends State<DownloadScreen> {
           children: <Widget>[
             Text('Downloading...',
                 style: Config.b2(context).copyWith(
-                  color: Colors.white,
+                  color: ProbitasColor.ProbitasTextPrimary,
                 )),
             YMargin(5),
             Text('$downloadProgress %',
                 style: Config.h3(context).copyWith(
-                  color: Colors.white,
+                  color: ProbitasColor.ProbitasTextPrimary,
                 )),
           ],
         ),

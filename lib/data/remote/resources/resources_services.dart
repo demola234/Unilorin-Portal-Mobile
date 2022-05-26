@@ -10,6 +10,9 @@ abstract class ResourcesService {
       String? topic,
       required File file});
   Future<ResourceResponse> getResources();
+  Future<ResourceResponse> searchResources(
+    String search,
+  );
 }
 
 class ResourcesServiceImpl extends ResourcesService {
@@ -35,5 +38,10 @@ class ResourcesServiceImpl extends ResourcesService {
   @override
   Future<ResourceResponse> getResources() async {
     return resourceRepository.getResources(await cache.getToken());
+  }
+
+  @override
+  Future<ResourceResponse> searchResources(String search) async {
+    return resourceRepository.searchResources(await cache.getToken(), search);
   }
 }

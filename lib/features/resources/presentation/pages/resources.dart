@@ -100,7 +100,25 @@ class _ResourcesState extends ConsumerState<Resources> {
                           loading: () => Center(
                                 child: CircularProgressIndicator(),
                               ))))
-              : Container(),
+              : Expanded(
+                  child: Container(
+                      height: context.screenHeight(),
+                      width: context.screenWidth(),
+                      child: ref
+                          .watch(getResourcesSearchedNotifier(
+                              searchController.text))
+                          .when(
+                              data: (data) => ListView.builder(
+                                  itemCount: data.data!.length,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    final response = data.data![index];
+                                    return ResourceTile(response: response);
+                                  }),
+                              error: (err, _) => Text(err.toString()),
+                              loading: () => Center(
+                                    child: CircularProgressIndicator(),
+                                  )))),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -174,7 +192,7 @@ class _ResourceTileState extends State<ResourceTile> {
                           width: 70.0,
                           height: 100,
                           decoration: BoxDecoration(
-                              color: ProbitasColor.ProbitasSecondary,
+                              color: ProbitasColor.ProbitasTextSecondary,
                               borderRadius: BorderRadius.circular(5.0)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -264,7 +282,7 @@ class _ResourceTileState extends State<ResourceTile> {
         height: 120,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-          color: ProbitasColor.ProbitasSecondary,
+          color: ProbitasColor.ProbitasTextSecondary,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Padding(
