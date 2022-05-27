@@ -33,10 +33,41 @@ class _DownloadScreenState extends State<DownloadScreen> {
     return (((bytes / pow(k, i)).toStringAsFixed(dm)) + ' ' + sizes[i]);
   }
 
-  void downloadBook(String link) async {
-    PermissionStatus permissionStatus = await Permission.storage.request();
+  Future<bool> _requestPermission(Permission permission) async {
+    final status = await permission.request();
+    if (status != PermissionStatus.granted) {
+      Toasts.showErrorToast('Permission not granted');
+      return false;
+    }
+    return true;
+  }
 
-    if (permissionStatus.isGranted) {
+  Future<bool> _hasAcceptedPermissions() async {
+    if (Platform.isAndroid) {
+      if (await _requestPermission(Permission.storage) &&
+          // access media location needed for android 10/Q
+          await _requestPermission(Permission.accessMediaLocation) &&
+          // manage external storage needed for android 11/R
+          await _requestPermission(Permission.manageExternalStorage)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    if (Platform.isIOS) {
+      if (await _requestPermission(Permission.photos)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      // not android or ios
+      return false;
+    }
+  }
+
+  void downloadBook(String link) async {
+    if (await _hasAcceptedPermissions()) {
       Directory? appDirectory = Platform.isAndroid
           ? await getExternalStorageDirectory()
           : await getApplicationSupportDirectory();
@@ -92,8 +123,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
             Toasts.showSuccessToast("Download Successful");
             Navigator.pop(context);
           });
-    } else {
-      permissionStatus = await Permission.storage.request();
     }
   }
 
