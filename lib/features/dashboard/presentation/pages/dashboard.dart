@@ -10,6 +10,7 @@ import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedu
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/greetings.dart';
+import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../core/utils/shimmer_loading.dart';
 import '../widget/weekdays/friday.dart';
@@ -74,11 +75,17 @@ class _DashboardState extends ConsumerState<Dashboard>
                       width: 60,
                       height: 60,
                       child: value.when(
-                          data: (data) => ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: CachedNetworkImage(
-                                  fit: BoxFit.fitWidth,
-                                  imageUrl: data.data!.user!.avatar!,
+                          data: (data) => GestureDetector(
+                                onTap: () {
+                                  ImageViewUtils.showImagePreview(
+                                      context, [data.data!.user!.avatar!]);
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fitWidth,
+                                    imageUrl: data.data!.user!.avatar!,
+                                  ),
                                 ),
                               ),
                           error: (err, str) => Text("error"),

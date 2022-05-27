@@ -234,7 +234,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                                 InkWell(
                                     onTap: () {
                                       ref
-                                          .watch(postNotifierProvider.notifier)
+                                          .watch(postsNotifierProvider.notifier)
                                           .likedOrUnlike(
                                               data.data!.post!.id!, true);
                                       ref.refresh(getSinglePostProvider(
@@ -545,7 +545,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
       floatingActionButton: InkWell(
         onTap: () {
           ref
-              .watch(postNotifierProvider.notifier)
+              .watch(postsNotifierProvider.notifier)
               .createComments(widget.singlePostId, commentsController.text);
           ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
           setState(() {

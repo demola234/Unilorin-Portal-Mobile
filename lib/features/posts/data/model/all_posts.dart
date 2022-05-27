@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final postResponse = postResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 class PostResponse {
@@ -15,7 +11,7 @@ class PostResponse {
 
     bool? success;
     String? message;
-    List<Datum>? data;
+    List<PostList>? data;
     int? count;
     Pagination? pagination;
 
@@ -25,15 +21,15 @@ class PostResponse {
     factory PostResponse.fromJson(Map<String, dynamic> json) => PostResponse(
         success: json["success"] == null ? null : json["success"],
         message: json["message"] == null ? null : json["message"],
-        data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: json["data"] == null ? null : List<PostList>.from(json["data"].map((x) => PostList.fromJson(x))),
         count: json["count"] == null ? null : json["count"],
         pagination: json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]),
     );
 
 }
 
-class Datum {
-    Datum({
+class PostList {
+    PostList({
         this.id,
         this.user,
         this.text,
@@ -53,10 +49,10 @@ class Datum {
     int? likeCount;
     bool? isUserLiked;
 
-    factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+    factory PostList.fromRawJson(String str) => PostList.fromJson(json.decode(str));
 
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory PostList.fromJson(Map<String, dynamic> json) => PostList(
         id: json["_id"] == null ? null : json["_id"],
         user: json["user"] == null ? null : User.fromJson(json["user"]),
         text: json["text"] == null ? null : json["text"],

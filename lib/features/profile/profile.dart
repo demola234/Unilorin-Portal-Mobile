@@ -5,6 +5,7 @@ import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import '../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../core/utils/image_viewer.dart';
 import '../../core/utils/shimmer_loading.dart';
 
 class Profile extends ConsumerWidget {
@@ -41,11 +42,17 @@ class Profile extends ConsumerWidget {
                           width: 60,
                           height: 60,
                           child: value.when(
-                              data: (data) => ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.fitWidth,
-                                      imageUrl: data.data!.user!.avatar!,
+                              data: (data) => GestureDetector(
+                                    onTap: () {
+                                      ImageViewUtils.showImagePreview(
+                                          context, [data.data!.user!.avatar!]);
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.fitWidth,
+                                        imageUrl: data.data!.user!.avatar!,
+                                      ),
                                     ),
                                   ),
                               error: (err, str) => Text("error"),

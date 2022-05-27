@@ -11,7 +11,6 @@ class NewsRepositoryImpl extends BaseApi implements NewsRepository {
   Future<List<News>> fetchNews(String token, String source,
       [int page = 1, int pageSize = 18]) async {
     try {
-      final offSet = (page + 1) * pageSize;
 
       var data = await get("news", headers: getHeader(token), query: {
         "source": source,

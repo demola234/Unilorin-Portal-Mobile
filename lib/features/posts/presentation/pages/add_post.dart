@@ -178,7 +178,7 @@ class _AddPostState extends ConsumerState<AddPost> {
         onTap: () {
           print(images);
           ref
-              .watch(postNotifierProvider.notifier)
+              .watch(postsNotifierProvider.notifier)
               .createPost(postText.text, images);
         },
         child: Container(

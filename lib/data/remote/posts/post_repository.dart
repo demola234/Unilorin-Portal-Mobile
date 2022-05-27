@@ -8,7 +8,7 @@ import '../../../core/network/base_api.dart';
 
 abstract class PostRepository {
   Future createPost(String token, {String? text, List<File>? images});
-  Future<PostResponse> getAllPosts(String token);
+  Future<List<PostList>> getAllPosts(String token, int page);
   Future likeOrUnlikePost(String token, String postId);
   Future<SinglePostResponse> getSinglePost(String token, String postId);
   Future createComments(String token, String postId, String? text);
@@ -30,7 +30,7 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
               filename:
                   "post_image${DateTime.now().millisecondsSinceEpoch}.${img.path.split(".").last}"));
         }
-        data['images'] = multiPart;
+        data['image'] = multiPart;
         return post("posts",
             headers: getHeader(token), formData: FormData.fromMap(data));
       }
@@ -43,11 +43,18 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
   }
 
   @override
-  Future<PostResponse> getAllPosts(String token) async {
+  Future<List<PostList>> getAllPosts(String token, [int page = 1]) async {
     try {
-      var data = await get("posts", headers: getHeader(token));
-      final s = PostResponse.fromJson(data);
-      return s;
+      var data = await get(
+        "posts",
+        headers: getHeader(token),
+        query: {"page": page},
+      );
+      final result = List<Map<String, dynamic>>.from(data['data']);
+      List<PostList> posts = result
+          .map((postData) => PostList.fromJson(postData))
+          .toList(growable: false);
+      return posts;
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

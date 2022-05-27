@@ -7,15 +7,31 @@ import 'package:probitas_app/features/posts/presentation/provider/post_provider.
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../../core/utils/states.dart';
 import '../../../../data/remote/posts/post_service.dart';
 import '../../../../injection_container.dart';
 import '../../data/model/all_comments.dart';
 
-class PostNotifier extends StateNotifier {
-  var postService = getIt<PostService>();
-  var cache = getIt<Cache>();
-  bool? loading;
-  PostNotifier(this.postService, loading) : super(loading);
+final getSinglePostProvider =
+    FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
+  final getSinglePost = await postService.getSinglePost(postId);
+
+  return getSinglePost;
+});
+
+final getSinglePostCommentsProvider =
+    FutureProvider.family<SingleCommentResponse, String>((ref, postId) async {
+  final getSinglePost = await postService.getPostsComments(postId);
+
+  return getSinglePost;
+});
+
+class PostsNotifier extends StateNotifier<PostsState> {
+  PostsNotifier(this._read) : super(PostsState.initial()) {
+    getPosts();
+  }
+  final postService = getIt<PostService>();
+  final Reader _read;
 
   Future<void> createPost(String text, List<File>? images) async {
     loading = true;
@@ -49,25 +65,81 @@ class PostNotifier extends StateNotifier {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     }
   }
+
+  Future<void> getPosts() async {
+    try {
+      state = state.copyWith(
+        viewState: ViewState.loading,
+        currentPage: 1,
+      );
+
+      final posts = await postService.getPosts(state.currentPage);
+      state = state.copyWith(
+        posts: posts,
+        currentPage: state.currentPage,
+        viewState: ViewState.idle,
+      );
+
+      if (state.posts!.length < state.pageSize) {
+        state = state.copyWith(moreDataAvailable: false);
+      }
+    } on CustomException {
+      state = state.copyWith(viewState: ViewState.error);
+    }
+  }
+
+  Future<void> getMorePosts() async {
+    try {
+      final posts = await postService.getPosts(state.currentPage + 1);
+
+      if (posts.isEmpty) {
+        state = state.copyWith(moreDataAvailable: false);
+      }
+
+      state = state.copyWith(
+        posts: [...state.posts!, ...posts],
+        viewState: ViewState.idle,
+        currentPage: state.currentPage,
+      );
+    } on CustomException {
+      state = state.copyWith(viewState: ViewState.error);
+    }
+  }
 }
 
-final getPostsProvider = FutureProvider<PostResponse>((ref) async {
-  final getAllPosts = await postService.getPosts();
+class PostsState {
+  final ViewState viewState;
+  final List<PostList>? posts;
+  final int currentPage;
+  final bool moreDataAvailable;
 
-  return getAllPosts;
-});
+  const PostsState._({
+    this.posts,
+    required this.viewState,
+    required this.currentPage,
+    required this.moreDataAvailable,
+  });
 
-final getSinglePostProvider =
-    FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
-  final getSinglePost = await postService.getSinglePost(postId);
+  factory PostsState.initial() => const PostsState._(
+        currentPage: 1,
+        moreDataAvailable: true,
+        viewState: ViewState.idle,
+      );
 
-  return getSinglePost;
-});
+  final int pageSize = 25;
 
-
-final getSinglePostCommentsProvider =
-    FutureProvider.family<SingleCommentResponse, String>((ref, postId) async {
-  final getSinglePost = await postService.getPostsComments(postId);
-
-  return getSinglePost;
-});
+  PostsState copyWith({
+    List<PostList>? posts,
+    int? currentPage,
+    bool? moreDataAvailable,
+    String? searchQuery,
+    ViewState? viewState,
+  }) {
+    return PostsState._(
+      posts: posts ?? this.posts,
+      currentPage: currentPage ?? this.currentPage,
+      moreDataAvailable: moreDataAvailable ?? this.moreDataAvailable,
+      viewState: viewState ?? this.viewState,
+    );
+  }
+}

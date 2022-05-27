@@ -12,6 +12,7 @@ import 'package:probitas_app/features/settings/settings.dart';
 import '../../../data/local/cache.dart';
 import '../../../features/result/presentation/controller/local_auth.dart';
 import '../config.dart';
+import '../image_viewer.dart';
 
 class ProbitasDrawer extends StatelessWidget {
   const ProbitasDrawer({
@@ -46,11 +47,18 @@ class ProbitasDrawer extends StatelessWidget {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                             child: ref.read(getUsersProvider).when(
-                                data: (data) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      child: CachedNetworkImage(
-                                        fit: BoxFit.cover,
-                                        imageUrl: data.data!.user!.avatar!,
+                                data: (data) => GestureDetector(
+                                      onTap: () {
+                                        ImageViewUtils.showImagePreview(context,
+                                            [data.data!.user!.avatar!]);
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: data.data!.user!.avatar!,
+                                        ),
                                       ),
                                     ),
                                 error: (err, str) => Text("error"),

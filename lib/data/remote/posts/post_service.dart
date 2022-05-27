@@ -7,7 +7,7 @@ import '../../local/cache.dart';
 
 abstract class PostService {
   Future createPost({String? text, List<File>? images});
-  Future<PostResponse> getPosts();
+  Future<List<PostList>> getPosts(int? page);
   Future likeOrUnlikePost(String postId);
   Future<SinglePostResponse> getSinglePost(String postId);
   Future createComments(String postId, String text);
@@ -26,10 +26,8 @@ class PostServiceImpl extends PostService {
   }
 
   @override
-  Future<PostResponse> getPosts() async {
-    return postRepository.getAllPosts(
-      await cache.getToken(),
-    );
+  Future<List<PostList>> getPosts(int? page) async {
+    return postRepository.getAllPosts(await cache.getToken(), page!);
   }
 
   @override

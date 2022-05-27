@@ -8,5 +8,7 @@ import '../../../authentication/data/infrastructure/authentication_state.dart';
 var postService = getIt<PostService>();
 late bool loading;
 
-final postNotifierProvider = StateNotifierProvider(
-    (ref) => PostNotifier(postService, AuthenticationLoading));
+
+final postsNotifierProvider = StateNotifierProvider<PostsNotifier, PostsState>(
+  (ref) => PostsNotifier(ref.read),
+);
