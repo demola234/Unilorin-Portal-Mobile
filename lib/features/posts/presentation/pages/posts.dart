@@ -255,13 +255,14 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                                 onPageChanged: (int index) {},
                                                 itemCount: data.data![index]
                                                     .images!.length,
-                                                itemBuilder: (context, index) {
+                                                itemBuilder:
+                                                    (context, imageIndex) {
                                                   return Container(
                                                     decoration: BoxDecoration(),
                                                     child: CachedNetworkImage(
                                                       imageUrl: data
                                                           .data![index]
-                                                          .images![index],
+                                                          .images![imageIndex],
                                                       fit: BoxFit.cover,
                                                     ),
                                                   );
