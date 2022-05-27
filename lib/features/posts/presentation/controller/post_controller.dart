@@ -86,6 +86,7 @@ class PostsNotifier extends StateNotifier<PostsState> {
     } on CustomException {
       state = state.copyWith(viewState: ViewState.error);
     }
+    
   }
 
   Future<void> getMorePosts() async {
