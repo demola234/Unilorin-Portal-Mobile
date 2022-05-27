@@ -1,29 +1,30 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/authentication/data/model/user_request.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../../core/utils/states.dart';
 import '../../../../data/remote/authentication/authentication_service.dart';
 import '../../../../injection_container.dart';
 
-class LoginNotifier extends StateNotifier {
+class LoginNotifier extends StateNotifier<LoginState> {
   var authService = getIt<AuthenticationService>();
   var cache = getIt<Cache>();
-  bool? loading;
-  LoginNotifier(this.authService, loading) : super(loading);
+  LoginNotifier(this._read) : super(LoginState.initial());
+
+  final Reader _read;
 
   Future<void> login(String matricNumber, String password) async {
-    loading = true;
+    state = state.copyWith(viewState: ViewState.loading);
     try {
       await authService.login(matricNumber, password);
       NavigationService().replaceScreen(NavController());
-      loading = false;
-      print(loading);
     } catch (e) {
-      loading = false;
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -31,4 +32,22 @@ class LoginNotifier extends StateNotifier {
     var usr = await cache.getUser();
     return usr;
   }
+}
+
+class LoginState {
+  final ViewState viewState;
+  final bool passwordVisible;
+
+  const LoginState._({required this.viewState, required this.passwordVisible});
+
+  factory LoginState.initial() => const LoginState._(
+        viewState: ViewState.idle,
+        passwordVisible: false,
+      );
+
+  LoginState copyWith({ViewState? viewState, bool? passwordVisible}) =>
+      LoginState._(
+        viewState: viewState ?? this.viewState,
+        passwordVisible: passwordVisible ?? this.passwordVisible,
+      );
 }

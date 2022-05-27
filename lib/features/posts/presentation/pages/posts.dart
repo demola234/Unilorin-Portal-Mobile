@@ -79,9 +79,10 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                     ),
                   ),
                   ProbitasSmallButton(
-                      title: "Add Post",
-                      onTap: () =>
-                          NavigationService().navigateToScreen(AddPost()))
+                    title: "Add Post",
+                    onTap: () =>
+                        NavigationService().navigateToScreen(AddPost()),
+                  ),
                 ],
               ),
               YMargin(10),
@@ -90,8 +91,9 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                   width: context.screenWidth(),
                   child: LiquidPullToRefresh(
                       key: _refreshIndicatorKey,
-                      onRefresh: () =>
-                          ref.watch(postsNotifierProvider.notifier).getPosts(),
+                      onRefresh: () => ref
+                          .refresh(postsNotifierProvider.notifier)
+                          .getPosts(),
                       color: ProbitasColor.ProbitasSecondary,
                       backgroundColor: ProbitasColor.ProbitasTextPrimary,
                       animSpeedFactor: 5,
@@ -135,7 +137,7 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "No More News",
+                                    "Posts Not Available",
                                     style: Config.b3(context),
                                   ),
                                 ],
@@ -205,6 +207,7 @@ class PostsList extends HookConsumerWidget {
   final PostsState postsNotifier;
   final bool isDarkMode;
   final RefreshController controller;
+
   var pageController = PageController();
 
   @override
@@ -427,7 +430,7 @@ class PostsList extends HookConsumerWidget {
                       child: ReadMoreText(
                         "${postsNotifier.posts![index].text}",
                         style: Config.b3(context).copyWith(fontSize: 14.0),
-                        textAlign: TextAlign.right,
+                        textAlign: TextAlign.left,
                         trimLines: 3,
                         delimiter: "...",
                         colorClickableText: isDarkMode

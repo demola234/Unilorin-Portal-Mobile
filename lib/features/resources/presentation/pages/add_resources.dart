@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/error/toasts.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/utils/allowed_extension.dart';
@@ -30,9 +31,9 @@ class _AddResourcesState extends ConsumerState<AddResources> {
   String? selectedFile = "";
   String? fileType = "";
 
-
   @override
   Widget build(BuildContext context) {
+    final resourcesState = ref.watch(resourcesNotifierProvider);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -166,23 +167,10 @@ class _AddResourcesState extends ConsumerState<AddResources> {
                 ))
             : SizedBox.shrink()
       ])),
-      floatingActionButton: InkWell(
+      floatingActionButton: ProbitasButton(
         onTap: acceptedInputs,
-        child: Container(
-          height: 70,
-          width: 220,
-          decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasSecondary,
-              borderRadius: BorderRadius.all(Radius.circular(15.0))),
-          child: Center(
-            child: Text(
-              "Add Material",
-              style: Config.b2(context).copyWith(
-                color: ProbitasColor.ProbitasTextPrimary,
-              ),
-            ),
-          ),
-        ),
+        text: "Add Material",
+        showLoading: resourcesState.viewState.isLoading,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -210,7 +198,7 @@ class _AddResourcesState extends ConsumerState<AddResources> {
         return;
       }
       await ref
-          .watch(resourceNotifierProvider.notifier)
+          .watch(resourcesNotifierProvider.notifier)
           .createResource(courseCode.text, courseTitle.text, topic.text, file!);
       ref.refresh(getResourcesNotifier);
     } catch (e) {

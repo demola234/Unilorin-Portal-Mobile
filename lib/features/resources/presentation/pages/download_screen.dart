@@ -55,7 +55,8 @@ class _DownloadScreenState extends State<DownloadScreen> {
       }
     }
     if (Platform.isIOS) {
-      if (await _requestPermission(Permission.photos)) {
+      if (await _requestPermission(Permission.storage) ||
+          await _requestPermission(Permission.mediaLibrary)) {
         return true;
       } else {
         return false;
@@ -70,7 +71,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
     if (await _hasAcceptedPermissions()) {
       Directory? appDirectory = Platform.isAndroid
           ? await getExternalStorageDirectory()
-          : await getApplicationSupportDirectory();
+          : await getApplicationDocumentsDirectory();
       if (Platform.isAndroid) {
         Directory(appDirectory!.path.split('Android')[0] + 'Probitas')
             .createSync();
@@ -80,7 +81,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
           ? appDirectory!.path +
               '/Probitas.${widget.url.toString().split(".").last}'
           : appDirectory!.path.split('Android')[0] +
-              '/Probitas.${widget.url.toString().split(".").last}';
+              'Probitas.${widget.url.toString().split(".").last}';
       print('path is $path');
       File file = File(path);
       if (!await file.exists()) {

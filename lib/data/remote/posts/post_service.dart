@@ -6,7 +6,7 @@ import '../../../features/posts/data/model/single_post.dart';
 import '../../local/cache.dart';
 
 abstract class PostService {
-  Future createPost({String? text, List<File>? images});
+  Future createPost({required String text, List<File>? images});
   Future<List<PostList>> getPosts(int? page);
   Future likeOrUnlikePost(String postId);
   Future<SinglePostResponse> getSinglePost(String postId);
@@ -20,7 +20,7 @@ class PostServiceImpl extends PostService {
   PostServiceImpl({required this.postRepository, required this.cache});
 
   @override
-  Future createPost({String? text, List<File>? images}) async {
+  Future createPost({required String text, List<File>? images}) async {
     return postRepository.createPost(await cache.getToken(),
         text: text, images: images);
   }

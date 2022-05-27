@@ -17,25 +17,6 @@ class ResourceNotifier extends StateNotifier {
   var cache = getIt<Cache>();
   bool? loading;
   ResourceNotifier(this.resourceRepository, loading) : super(loading);
-
-  createResource(
-      String? courseCode, String? courseTitle, String? topic, File file) async {
-    loading = true;
-    print(file);
-    try {
-      await resourceRepository.createResource(
-          courseCode: courseCode,
-          courseTitle: courseTitle,
-          topic: topic,
-          file: file);
-
-      NavigationService().goBack();
-      Toasts.showSuccessToast("Resource Have been uploaded successfully");
-      print(loading);
-    } catch (e) {
-      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
-    }
-  }
 }
 
 var resourceRepository = getIt<ResourcesService>();
@@ -53,8 +34,8 @@ final getResourcesSearchedNotifier =
   return resourceSearchResponse;
 });
 
-class NewResourceNotifier extends StateNotifier<ResourceState> {
-  NewResourceNotifier(this._read) : super(ResourceState.initial()) {
+class ResourcesNotifier extends StateNotifier<ResourceState> {
+  ResourcesNotifier(this._read) : super(ResourceState.initial()) {
     getResource();
   }
   var resourceRepository = getIt<ResourcesService>();
@@ -83,7 +64,7 @@ class NewResourceNotifier extends StateNotifier<ResourceState> {
     }
   }
 
-  Future<void> getMoreNews() async {
+  Future<void> getMoreResources() async {
     try {
       final resource = await resourceRepository.getResources();
 
@@ -98,6 +79,26 @@ class NewResourceNotifier extends StateNotifier<ResourceState> {
       );
     } on CustomException {
       state = state.copyWith(viewState: ViewState.error);
+    }
+  }
+
+  createResource(
+      String? courseCode, String? courseTitle, String? topic, File file) async {
+    state = state.copyWith(viewState: ViewState.loading);
+    print(file);
+    try {
+      await resourceRepository.createResource(
+          courseCode: courseCode,
+          courseTitle: courseTitle,
+          topic: topic,
+          file: file);
+
+      NavigationService().goBack();
+      Toasts.showSuccessToast("Resource Have been uploaded successfully");
+    } catch (e) {
+      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }

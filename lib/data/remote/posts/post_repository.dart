@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:probitas_app/features/posts/data/model/all_comments.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
@@ -7,7 +8,7 @@ import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
 
 abstract class PostRepository {
-  Future createPost(String token, {String? text, List<File>? images});
+  Future createPost(String token, {required String text, List<File>? images});
   Future<List<PostList>> getAllPosts(String token, int page);
   Future likeOrUnlikePost(String token, String postId);
   Future<SinglePostResponse> getSinglePost(String token, String postId);
@@ -17,7 +18,8 @@ abstract class PostRepository {
 
 class PostRepositoryImpl extends BaseApi implements PostRepository {
   @override
-  Future createPost(String token, {String? text, List<File>? images}) async {
+  Future createPost(String token,
+      {required String text, List<File>? images}) async {
     var data = <String, dynamic>{};
     try {
       if (text != null) {
@@ -25,10 +27,11 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
       }
       if (images != null && images.isNotEmpty) {
         List<MultipartFile> multiPart = [];
-        for (var img in images) {
-          multiPart.add(await MultipartFile.fromFile(img.path,
+        for (var image in images) {
+          multiPart.add(await MultipartFile.fromFile(image.path,
+              contentType: MediaType.parse("image/jpeg"),
               filename:
-                  "post_image${DateTime.now().millisecondsSinceEpoch}.${img.path.split(".").last}"));
+                  "post_image${DateTime.now().millisecondsSinceEpoch}.${image.path.split(".").last}"));
         }
         data['image'] = multiPart;
         return post("posts",

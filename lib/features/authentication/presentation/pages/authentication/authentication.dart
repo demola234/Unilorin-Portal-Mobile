@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/components.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import '../../../../../core/constants/image_path.dart';
 import '../../provider/authentication_provider.dart';
 
-class Authentication extends StatefulWidget {
+class Authentication extends StatefulHookConsumerWidget {
   @override
-  State<Authentication> createState() => _AuthenticationState();
+  ConsumerState<Authentication> createState() => _AuthenticationState();
 }
 
-class _AuthenticationState extends State<Authentication> {
+class _AuthenticationState extends ConsumerState<Authentication> {
   TextEditingController matricNumber = TextEditingController();
   TextEditingController password = TextEditingController();
   bool visible = false;
 
   @override
   Widget build(BuildContext context) {
+    final loginState = ref.watch(authenticationNotifierProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         body: Stack(children: [
@@ -106,9 +108,7 @@ class _AuthenticationState extends State<Authentication> {
 
                   return ProbitasButton(
                       text: "Login",
-                      showLoading: watch
-                          .watch(authenticationNotifierProvider.notifier)
-                          .loading,
+                      showLoading: loginState.viewState.isLoading,
                       onTap: () async {
                         await state.login(matricNumber.text, password.text);
                       });

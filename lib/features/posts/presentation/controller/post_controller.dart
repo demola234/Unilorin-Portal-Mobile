@@ -34,15 +34,17 @@ class PostsNotifier extends StateNotifier<PostsState> {
   final Reader _read;
 
   Future<void> createPost(String text, List<File>? images) async {
-    loading = true;
+    state = state.copyWith(viewState: ViewState.loading);
     try {
-      await postService.createPost(text: text, images: images);
+      await postService.createPost(text: text.trim(), images: images);
       print(images);
       NavigationService().goBack();
+
       Toasts.showSuccessToast("Post Have been uploaded successfully");
-      print(loading);
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -86,7 +88,6 @@ class PostsNotifier extends StateNotifier<PostsState> {
     } on CustomException {
       state = state.copyWith(viewState: ViewState.error);
     }
-    
   }
 
   Future<void> getMorePosts() async {
@@ -100,7 +101,7 @@ class PostsNotifier extends StateNotifier<PostsState> {
       state = state.copyWith(
         posts: [...state.posts!, ...posts],
         viewState: ViewState.idle,
-        currentPage: state.currentPage,
+        currentPage: state.currentPage + 1,
       );
     } on CustomException {
       state = state.copyWith(viewState: ViewState.error);

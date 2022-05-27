@@ -9,3 +9,7 @@ late bool loading;
 
 final resourceNotifierProvider = StateNotifierProvider(
     (ref) => ResourceNotifier(resourceService, AuthenticationLoading));
+
+final resourcesNotifierProvider = StateNotifierProvider<ResourcesNotifier, ResourceState>(
+  (ref) => ResourcesNotifier(ref.read),
+);
