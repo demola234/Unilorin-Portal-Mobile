@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 // ignore: unused_import
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:probitas_app/features/posts/presentation/pages/add_post.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import 'package:readmore/readmore.dart';
@@ -15,6 +16,7 @@ import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../controller/post_controller.dart';
 import '../provider/post_provider.dart';
@@ -127,22 +129,33 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                             vertical: 20.0, horizontal: 20.0),
                                         child: Row(
                                           children: [
-                                            Container(
-                                              width: 60,
-                                              height: 60,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15.0),
+                                            GestureDetector(
+                                              onTap: () {
+                                                ImageViewUtils.showImagePreview(
+                                                    context, [
+                                                  data.data![index].user!
+                                                      .avatar!
+                                                ]);
+                                              },
+                                              child: Container(
+                                                width: 60,
+                                                height: 60,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(15.0),
+                                                  ),
                                                 ),
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(15.0),
-                                                ),
-                                                child: CachedNetworkImage(
-                                                  fit: BoxFit.fitWidth,
-                                                  imageUrl: data.data![index]
-                                                      .user!.avatar!,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(15.0),
+                                                  ),
+                                                  child: CachedNetworkImage(
+                                                    fit: BoxFit.fitWidth,
+                                                    imageUrl: data.data![index]
+                                                        .user!.avatar!,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -242,110 +255,129 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                                 .ProbitasTextSecondary,
                                       ),
                                       data.data![index].images!.isNotEmpty
-                                          ?
-                                          // ? Stack(
-                                          //     children: [
-                                          Container(
-                                              height: 220,
-                                              width: context.screenWidth(),
-                                              child: PageView.builder(
-                                                controller: controller,
-                                                physics:
-                                                    BouncingScrollPhysics(),
-                                                onPageChanged: (int index) {},
-                                                itemCount: data.data![index]
-                                                    .images!.length,
-                                                itemBuilder: (context, index) {
-                                                  return Container(
-                                                    decoration: BoxDecoration(),
-                                                    child: CachedNetworkImage(
-                                                      imageUrl: data
+                                          ? Stack(
+                                              children: [
+                                                Container(
+                                                    height: 220,
+                                                    width:
+                                                        context.screenWidth(),
+                                                    child: PageView.builder(
+                                                      controller: controller,
+                                                      physics:
+                                                          BouncingScrollPhysics(),
+                                                      onPageChanged:
+                                                          (int index) {},
+                                                      itemCount: data
                                                           .data![index]
-                                                          .images![index],
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-
-                                              // data.data![index].images!
-                                              //             .length >
-                                              //         1
-                                              //     ? Positioned.fill(
-                                              //         bottom: 8.0,
-                                              //         child: Align(
-                                              //           alignment: Alignment
-                                              //               .bottomCenter,
-                                              //           child:
-                                              //               SmoothPageIndicator(
-                                              //             controller:
-                                              //                 controller,
-                                              //             count: data
-                                              //                 .data![index]
-                                              //                 .images!
-                                              //                 .length,
-                                              //             effect:
-                                              //                 ScrollingDotsEffect(
-                                              //               activeStrokeWidth:
-                                              //                   2.6,
-                                              //               activeDotScale:
-                                              //                   1.3,
-                                              //               maxVisibleDots: 5,
-                                              //               radius: 8,
-                                              //               spacing: 10,
-                                              //               activeDotColor:
-                                              //                   ProbitasColor
-                                              //                       .ProbitasSecondary,
-                                              //               dotColor:
-                                              //                   ProbitasColor
-                                              //                       .ProbitasTextPrimary,
-                                              //               dotHeight: 12,
-                                              //               dotWidth: 12,
-                                              //             ),
-                                              //           ),
-                                              //         ),
-                                              //       )
-                                              //     : SizedBox.shrink(),
-                                              //   Divider(),
-                                              // ],
-                                              //   )
+                                                          .images!
+                                                          .length,
+                                                      itemBuilder: (context,
+                                                          imageIndex) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            ImageViewUtils
+                                                                .showImagePreview(
+                                                                    context, [
+                                                              data.data![index]
+                                                                      .images![
+                                                                  imageIndex]
+                                                            ]);
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(),
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: data
+                                                                      .data![index]
+                                                                      .images![
+                                                                  imageIndex],
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    )),
+                                                data.data![index].images!
+                                                            .length >
+                                                        1
+                                                    ? Positioned.fill(
+                                                        bottom: 8.0,
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .bottomCenter,
+                                                          child:
+                                                              SmoothPageIndicator(
+                                                            controller:
+                                                                controller,
+                                                            count: data
+                                                                .data![index]
+                                                                .images!
+                                                                .length,
+                                                            effect:
+                                                                ScrollingDotsEffect(
+                                                              activeStrokeWidth:
+                                                                  2.6,
+                                                              activeDotScale:
+                                                                  1.3,
+                                                              maxVisibleDots: 5,
+                                                              radius: 8,
+                                                              spacing: 10,
+                                                              activeDotColor:
+                                                                  ProbitasColor
+                                                                      .ProbitasSecondary,
+                                                              dotColor:
+                                                                  ProbitasColor
+                                                                      .ProbitasTextPrimary,
+                                                              dotHeight: 12,
+                                                              dotWidth: 12,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : SizedBox.shrink(),
+                                                Divider(),
+                                              ],
                                             )
                                           : SizedBox.shrink(),
                                       Container(
                                         padding: EdgeInsets.symmetric(
-                                            vertical: 10.0),
-                                        child: ReadMoreText(
-                                          "${data.data![index].text}",
-                                          style: Config.b3(context)
-                                              .copyWith(fontSize: 14.0),
-                                          textAlign: TextAlign.right,
-                                          trimLines: 3,
-                                          delimiter: "...",
-                                          colorClickableText: isDarkMode
-                                              ? ProbitasColor
-                                                  .ProbitasTextPrimary
-                                              : ProbitasColor.ProbitasPrimary,
-                                          trimMode: TrimMode.Line,
-                                          trimCollapsedText: 'Read More',
-                                          trimExpandedText: 'Close',
-                                          lessStyle: Config.b2(context)
-                                              .copyWith(
-                                                  color: isDarkMode
-                                                      ? ProbitasColor
-                                                          .ProbitasTextPrimary
-                                                      : ProbitasColor
-                                                          .ProbitasSecondary,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14.0),
-                                          moreStyle:
-                                              Config.b2(context).copyWith(
-                                            color: isDarkMode
+                                            vertical: 10.0, horizontal: 20),
+                                        child: Align(
+                                          alignment: Alignment.topLeft,
+                                          child: ReadMoreText(
+                                            "${data.data![index].text}",
+                                            style: Config.b3(context)
+                                                .copyWith(fontSize: 14.0),
+                                            textAlign: TextAlign.right,
+                                            trimLines: 3,
+                                            delimiter: "...",
+                                            colorClickableText: isDarkMode
                                                 ? ProbitasColor
                                                     .ProbitasTextPrimary
-                                                : ProbitasColor
-                                                    .ProbitasSecondary,
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold,
+                                                : ProbitasColor.ProbitasPrimary,
+                                            trimMode: TrimMode.Line,
+                                            trimCollapsedText: 'Read More',
+                                            trimExpandedText: 'Close',
+                                            lessStyle: Config.b2(context)
+                                                .copyWith(
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                            .ProbitasTextPrimary
+                                                        : ProbitasColor
+                                                            .ProbitasSecondary,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14.0),
+                                            moreStyle:
+                                                Config.b2(context).copyWith(
+                                              color: isDarkMode
+                                                  ? ProbitasColor
+                                                      .ProbitasTextPrimary
+                                                  : ProbitasColor
+                                                      .ProbitasSecondary,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -454,10 +486,23 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                               );
                             },
                           ),
-                      error: (err, str) =>
-                          ListView(children: [Center(child: Text("err"))]),
+                      error: (err, str) => Center(
+                            child: ListView(shrinkWrap: true, children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  EmptyState(
+                                    text: "An Error Occurred",
+                                  ),
+                                ],
+                              )
+                            ]),
+                          ),
                       loading: () => Center(
-                            child: CircularProgressIndicator(),
+                            child: CircularProgressIndicator(
+                              color: ProbitasColor.ProbitasSecondary,
+                            ),
                           )),
                 ),
               ),

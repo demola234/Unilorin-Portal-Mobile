@@ -59,6 +59,7 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
       if (err is RequestException) {
         throw CustomException(err.message);
       }
+
       throw CustomException("Something went wrong");
     }
   }

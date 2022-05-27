@@ -6,6 +6,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/core/utils/states.dart';
+import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
@@ -22,8 +23,6 @@ class Messages extends HookWidget {
       GlobalKey<LiquidPullToRefreshState>();
   final scrollController = ScrollController();
   final refreshController = RefreshController();
-
-  Future<void> _handleRefresh() async {}
 
   @override
   Widget build(
@@ -80,6 +79,26 @@ class Messages extends HookWidget {
                               child: CircularProgressIndicator(
                             color: ProbitasColor.ProbitasSecondary,
                           ));
+                        } else if (newsNotifier.viewState.isError) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ListView(
+                                shrinkWrap: true,
+                                children: [
+                                  Center(
+                                    child: Column(
+                                      children: [
+                                        EmptyState(
+                                          text: "Something went wrong!",
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          );
                         } else {
                           if (newsNotifier.news!.isNotEmpty) {
                             return NewsList(

@@ -125,6 +125,11 @@ class BaseApi {
       var req = await future;
 
       var data = req.data;
+      if (req.statusCode == HttpStatus.unauthorized || data["error"] != null) {
+        QueuedInterceptor();
+        NavigationService().replaceScreen(Authentication());
+        Cache.get().clear();
+      }
 
       if ("${req.statusCode}".startsWith('2') ||
           (data["success"] != null && data["success"])) {
@@ -133,15 +138,17 @@ class BaseApi {
         }
         return data as Map<String, dynamic>;
       }
-      if (data['error'] != null || req.statusCode == HttpStatus.unauthorized) {
-        QueuedInterceptor();
-        NavigationService().replaceScreen(Authentication());
-        Cache.get().clear();
+      if (data['error'] != null) {
         throw Exception(data["error"]);
       }
 
       throw Exception(data["message"]);
     } on DioError catch (e) {
+      if (e.response!.statusCode == HttpStatus.unauthorized) {
+        QueuedInterceptor();
+        NavigationService().replaceScreen(Authentication());
+        Cache.get().clear();
+      }
       if (e.type == DioErrorType.connectTimeout ||
           e.type == DioErrorType.other) {
         throw RequestException("Connection  Timeout Exception");

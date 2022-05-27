@@ -97,8 +97,10 @@ class _ResourcesState extends ConsumerState<Resources> {
                                 children: [
                                   Align(
                                       alignment: Alignment.center,
-                                      child:
-                                          Center(child: Text(err.toString()))),
+                                      child: Center(
+                                          child: EmptyState(
+                                        text: "An Error Occurred",
+                                      ))),
                                 ],
                               ),
                           loading: () => Center(

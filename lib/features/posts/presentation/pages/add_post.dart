@@ -41,6 +41,7 @@ class _AddPostState extends ConsumerState<AddPost> {
                   height: 50,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15.0))),
+                      //TODO:::CHANGE THIS
                   child: Image(
                     image: AssetImage(ImagesAsset.default_image),
                   ),
