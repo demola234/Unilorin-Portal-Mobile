@@ -104,6 +104,10 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                                   YMargin(2.0),
                                   Text(
                                     data.data!.post!.user!.department!,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    textAlign: TextAlign.justify,
                                     style: Config.b2(context).copyWith(
                                       color: isDarkMode
                                           ? ProbitasColor.ProbitasTextPrimary

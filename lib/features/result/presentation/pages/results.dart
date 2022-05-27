@@ -220,9 +220,14 @@ class _ResultsState extends ConsumerState<Results> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        YMargin(100),
                         Align(
                             alignment: Alignment.center,
-                            child: CircularProgressIndicator()),
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: ProbitasColor.ProbitasSecondary,
+                              ),
+                            )),
                       ],
                     ))
             : SizedBox.fromSize()

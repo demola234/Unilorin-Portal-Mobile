@@ -1,13 +1,16 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../../../core/utils/image_viewer.dart';
 import '../provider/post_provider.dart';
 
 class AddPost extends ConsumerStatefulWidget {
@@ -22,6 +25,7 @@ class _AddPostState extends ConsumerState<AddPost> {
 
   @override
   Widget build(BuildContext context) {
+    var image = ref.watch(getUsersProvider).value!.data!.user!.avatar;
     // ignore: unused_local_variable
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
@@ -36,14 +40,27 @@ class _AddPostState extends ConsumerState<AddPost> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                      //TODO:::CHANGE THIS
-                  child: Image(
-                    image: AssetImage(ImagesAsset.default_image),
+                GestureDetector(
+                  onTap: () {
+                    ImageViewUtils.showImagePreview(context, [image!]);
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        imageUrl: image!,
+                      ),
+                    ),
                   ),
                 ),
                 XMargin(10.0),

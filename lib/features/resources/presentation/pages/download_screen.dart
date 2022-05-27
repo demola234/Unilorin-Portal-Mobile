@@ -46,9 +46,10 @@ class _DownloadScreenState extends State<DownloadScreen> {
       }
 
       String path = Platform.isIOS
-          ? appDirectory!.path + '/${widget.url.toString().split(".").last}'
+          ? appDirectory!.path +
+              '/Probitas.${widget.url.toString().split(".").last}'
           : appDirectory!.path.split('Android')[0] +
-              'Probitas/${widget.url.toString().split(".").last}';
+              '/Probitas.${widget.url.toString().split(".").last}';
       print('path is $path');
       File file = File(path);
       if (!await file.exists()) {
@@ -80,9 +81,10 @@ class _DownloadScreenState extends State<DownloadScreen> {
             },
           )
           .catchError(
+            // ignore: invalid_return_type_for_catch_error
             (e) => {
-              Navigator.pop(context),
-              Toasts.showErrorToast("An Error Occured!")
+              Toasts.showErrorToast("An Error Occurred!"),
+              Navigator.pop(context, true),
             },
           )
           .then((value) async {

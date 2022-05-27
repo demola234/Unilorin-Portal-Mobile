@@ -327,14 +327,14 @@ class _ResourceTileState extends State<ResourceTile> {
                     Text(
                       widget.response!.courseCode!,
                       style: Config.b2(context).copyWith(
-                          color: Colors.black,
+                          color: ProbitasColor.ProbitasSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold),
                     ),
                     Text(
                       widget.response!.file!.split(".").last.toUpperCase(),
                       style: Config.b2(context).copyWith(
-                        color: ProbitasColor.ProbitasPrimary,
+                        color: ProbitasColor.ProbitasSecondary,
                         fontSize: 11,
                         fontWeight: FontWeight.normal,
                       ),

@@ -170,8 +170,7 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                                   Container(
                                                     width: 400,
                                                     child: Text(
-                                                      data.data![index].user!
-                                                          .fullName!,
+                                                    "${data.data![index].user!.fullName!.split(" ")[1]} ${data.data![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${data.data![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
                                                       style: Config.b2(context).copyWith(
                                                           color: isDarkMode
                                                               ? ProbitasColor
