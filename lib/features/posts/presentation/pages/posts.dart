@@ -374,7 +374,6 @@ class PostsList extends HookConsumerWidget {
                                 child: PageView.builder(
                                   controller: pageController,
                                   physics: BouncingScrollPhysics(),
-                                  onPageChanged: (int index) {},
                                   itemCount: postsNotifier
                                       .posts![index].images!.length,
                                   itemBuilder: (context, imageIndex) {

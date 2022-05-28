@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
-import '../../core/constants/colors.dart';
-import '../../../../core/utils/customs/custom_nav_bar.dart';
-import '../../core/utils/image_viewer.dart';
-import '../../core/utils/shimmer_loading.dart';
+import '../../../core/constants/colors.dart';
+import '../../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../../core/utils/image_viewer.dart';
+import '../../../core/utils/shimmer_loading.dart';
 
 class Profile extends ConsumerWidget {
   Profile({Key? key});

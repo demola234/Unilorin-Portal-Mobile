@@ -551,6 +551,8 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
           setState(() {
             commentsController.clear();
           });
+          Future.delayed(Duration(seconds: 10));
+          ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
         },
         child: Container(
           height: 70,

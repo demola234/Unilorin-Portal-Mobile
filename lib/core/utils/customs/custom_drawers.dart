@@ -6,9 +6,10 @@ import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/core/utils/shimmer_loading.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/authentication/authentication.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
-import 'package:probitas_app/features/profile/profile.dart';
+import 'package:probitas_app/features/locations/presentation/pages/location_screen.dart';
+import 'package:probitas_app/features/profile/presentation/profile.dart';
 import 'package:probitas_app/features/result/presentation/pages/results.dart';
-import 'package:probitas_app/features/settings/settings.dart';
+import 'package:probitas_app/features/settings/presentation/pages/settings.dart';
 import '../../../data/local/cache.dart';
 import '../../../features/result/presentation/controller/local_auth.dart';
 import '../config.dart';
@@ -111,10 +112,10 @@ class ProbitasDrawer extends StatelessWidget {
                         }
                       }),
                   DrawerListTile(
-                    title: 'Locate Theaters',
+                    title: 'Locate Places',
                     onPressed: () {
                       NavigationService().goBack();
-                      // NavigationService().navigateToScreen(Profile());
+                      NavigationService().navigateToScreen(Locations());
                     },
                   ),
                   DrawerListTile(
@@ -146,11 +147,11 @@ class ProbitasDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ).ripple(() {
-                Cache.get().clear();
-                NavigationService().replaceScreen(Authentication());
-              }),
+                ).ripple(() {
+                  Cache.get().clear();
+                  NavigationService().replaceScreen(Authentication());
+                }),
+              ),
               YMargin(50),
             ],
           ),

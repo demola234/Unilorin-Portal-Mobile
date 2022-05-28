@@ -181,10 +181,11 @@ class _AddPostState extends ConsumerState<AddPost> {
         text: "Add Post",
         onTap: () {
           print(images);
+          // print(postText.text);
           ref
               .watch(postsNotifierProvider.notifier)
               .createPost(postText.text, images);
-          // ref.watch(postsNotifierProvider.notifier).getPosts();
+          ref.watch(postsNotifierProvider.notifier).getPosts();
         },
         showLoading: postState.viewState.isLoading,
       ),

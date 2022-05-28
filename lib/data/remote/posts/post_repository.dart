@@ -23,6 +23,7 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
     var data = <String, dynamic>{};
     try {
       if (text != null) {
+        print(text);
         data['text'] = text;
       }
       if (images != null && images.isNotEmpty) {
@@ -34,9 +35,9 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
                   "post_image${DateTime.now().millisecondsSinceEpoch}.${image.path.split(".").last}"));
         }
         data['image'] = multiPart;
-        return post("posts",
-            headers: getHeader(token), formData: FormData.fromMap(data));
       }
+      return post("posts",
+          headers: getHeader(token), formData: FormData.fromMap(data));
     } catch (err) {
       if (err is RequestException) {
         throw CustomException(err.message);

@@ -38,6 +38,7 @@ class PostsNotifier extends StateNotifier<PostsState> {
     try {
       await postService.createPost(text: text.trim(), images: images);
       print(images);
+      print(text);
       NavigationService().goBack();
 
       Toasts.showSuccessToast("Post Have been uploaded successfully");
