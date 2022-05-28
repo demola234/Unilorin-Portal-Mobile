@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
+import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 
 class Notifications extends StatefulWidget {
@@ -15,6 +16,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     bool notifications = false;
     return Scaffold(
       appBar: PreferredSize(
@@ -25,14 +27,21 @@ class _NotificationsState extends State<Notifications> {
         children: [
           YMargin(20),
           SwitchListTile(
-            title: const Text('Notifications'),
+            title: Text('Notifications',
+                style: Config.b1(context).copyWith(
+                    color: isDarkMode
+                        ? ProbitasColor.ProbitasTextPrimary
+                        : ProbitasColor.ProbitasSecondary)),
             value: notifications,
             onChanged: (bool value) {
               setState(() {
                 notifications = value;
               });
             },
-            secondary: SvgPicture.asset(ImagesAsset.notifications),
+            secondary: SvgPicture.asset(ImagesAsset.notifications,
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasSecondary),
           )
         ],
       ),

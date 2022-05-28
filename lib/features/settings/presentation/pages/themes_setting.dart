@@ -15,6 +15,7 @@ class _ThemeModeState extends State<ThemesMode> {
   String? theme = "system";
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(70.0),
@@ -26,7 +27,9 @@ class _ThemeModeState extends State<ThemesMode> {
             ListTile(
               title: Text("System Preferences"),
               leading: Radio(
-                  activeColor: ProbitasColor.ProbitasSecondary,
+                  activeColor: isDarkMode
+                      ? ProbitasColor.ProbitasTextPrimary
+                      : ProbitasColor.ProbitasSecondary,
                   value: "system",
                   groupValue: theme,
                   onChanged: (value) {
