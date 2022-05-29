@@ -15,6 +15,7 @@ abstract class DashboardRepository {
       String? endTime,
       String? note});
   Future<SchedulesResponse> fetchSchedules(String token);
+  Future deleteSchedules(String token, String scheduleId);
 }
 
 class DashboardRepositoryImpl extends BaseApi implements DashboardRepository {
@@ -65,6 +66,20 @@ class DashboardRepositoryImpl extends BaseApi implements DashboardRepository {
   Future<SchedulesResponse> fetchSchedules(String token) async {
     try {
       var data = await get("users/userId/schedule", headers: getHeader(token));
+      final s = SchedulesResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future deleteSchedules(String token, String scheduleId)async {
+        try {
+      var data = await delete("schedules/$scheduleId", headers: getHeader(token));
       final s = SchedulesResponse.fromJson(data);
       return s;
     } catch (err) {

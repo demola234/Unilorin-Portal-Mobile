@@ -28,11 +28,13 @@ class Tuesday extends ConsumerWidget {
                       return data.data!.schedules![index].weekdays!
                               .contains("Tuesday")
                           ? ScheduleTile(
+                            courseId: data.data!.schedules![index].id!,
                               courseCode:
                                   data.data!.schedules![index].courseCode!,
                               courseTitle:
                                   data.data!.schedules![index].courseTitle!,
                               venue: data.data!.schedules![index].venue!,
+                              courseNote: data.data!.schedules![index].note!,
                               startTime:
                                   data.data!.schedules![index].startTime!,
                               endTime: data.data!.schedules![index].endTime!,

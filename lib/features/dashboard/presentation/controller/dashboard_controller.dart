@@ -65,3 +65,9 @@ final getSchedulesProvider = FutureProvider<SchedulesResponse>((ref) async {
   print(profile.data!.schedules);
   return profile;
 });
+
+final deleteSchedulesProvider =
+    FutureProvider.family((ref, String scheduleId) async {
+  final delete = await dashboardService.deleteSchedules(scheduleId);
+  return delete;
+});

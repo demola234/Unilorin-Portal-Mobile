@@ -230,7 +230,9 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
                     startText.toString(),
                     endText.toString(),
                     note.text);
-                ref.refresh(getSchedulesProvider);
+                Future.delayed(const Duration(seconds: 1), () {
+                  ref.refresh(getSchedulesProvider);
+                });
               },
               child: Container(
                 height: 70,

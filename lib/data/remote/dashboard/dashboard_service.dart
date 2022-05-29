@@ -14,6 +14,7 @@ abstract class DashBoardService {
       String? endTime,
       String? note});
   Future<SchedulesResponse> fetchSchedules();
+  Future deleteSchedules(String scheduleId);
 }
 
 class DashBoardServiceImpl extends DashBoardService {
@@ -52,5 +53,11 @@ class DashBoardServiceImpl extends DashBoardService {
   @override
   Future<SchedulesResponse> fetchSchedules() async {
     return dashboardRepository.fetchSchedules(await cache.getToken());
+  }
+
+  @override
+  Future deleteSchedules(String scheduleId) async {
+    return dashboardRepository.deleteSchedules(
+        await cache.getToken(), scheduleId);
   }
 }
