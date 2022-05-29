@@ -8,10 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
-import 'package:probitas_app/features/authentication/presentation/pages/authentication/logger_screen.dart';
-import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
 import 'core/utils/navigation_service.dart';
 import 'data/local/cache.dart';
+import 'features/authentication/presentation/pages/authentication/initail.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -62,20 +61,7 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: ProbitasColor.ProbitasPrimary,
           )),
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<bool>(
-          future: Cache.get().isFirstLoad(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data! == true) {
-                Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(OnBoarding()));
-              } else {
-                Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(LoggerScreen()));
-              }
-            }
-            return Scaffold();
-          }),
+      home: InitialScreen(),
     ));
   }
 }

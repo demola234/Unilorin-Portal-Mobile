@@ -47,6 +47,7 @@ dependencies:
   share_plus: ^4.0.1
   shimmer: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
+  flutter_launcher_icons: ^0.9.0
   timeago: ^3.2.2
   webview_flutter: ^3.0.4
 
@@ -65,12 +66,18 @@ flutter_native_splash:
   ios: true
   fullscreen: true
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
+
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
     - assets/jsons/
     - assets/icons/
+
   # example:
   # fonts:
   #   - family: Schyler

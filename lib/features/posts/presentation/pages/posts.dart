@@ -37,6 +37,7 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
       GlobalKey<LiquidPullToRefreshState>();
   final scrollController = ScrollController();
   final refreshController = RefreshController();
+  int currentIndex = 0;
 
   var controller = PageController();
   @override
@@ -196,7 +197,7 @@ class ProbitasSmallButton extends StatelessWidget {
   }
 }
 
-class PostsList extends HookConsumerWidget {
+class PostsList extends StatefulHookConsumerWidget {
   PostsList({
     Key? key,
     required this.postsNotifier,
@@ -208,10 +209,16 @@ class PostsList extends HookConsumerWidget {
   final bool isDarkMode;
   final RefreshController controller;
 
+  @override
+  ConsumerState<PostsList> createState() => _PostsListState();
+}
+
+class _PostsListState extends ConsumerState<PostsList> {
   var pageController = PageController();
+  int currentIndex = 0;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final scrollController = useScrollController();
@@ -229,7 +236,7 @@ class PostsList extends HookConsumerWidget {
     }, [scrollController]);
 
     return SmartRefresher(
-      controller: controller,
+      controller: widget.controller,
       enablePullUp: true,
       enablePullDown: false,
       onRefresh: () {
@@ -237,16 +244,16 @@ class PostsList extends HookConsumerWidget {
       },
       child: ListView.builder(
         controller: scrollController,
-        itemCount: postsNotifier.posts!.length,
+        itemCount: widget.postsNotifier.posts!.length,
         shrinkWrap: true,
         itemBuilder: (context, index) {
-          if (index == postsNotifier.posts!.length - 1 &&
-              postsNotifier.moreDataAvailable) {}
+          if (index == widget.postsNotifier.posts!.length - 1 &&
+              widget.postsNotifier.moreDataAvailable) {}
           return GestureDetector(
             onTap: () {
-              print(postsNotifier.posts![index].images!.length);
-              NavigationService().navigateToScreen(
-                  PostOverView(singlePostId: postsNotifier.posts![index].id!));
+              print(widget.postsNotifier.posts![index].images!.length);
+              NavigationService().navigateToScreen(PostOverView(
+                  singlePostId: widget.postsNotifier.posts![index].id!));
             },
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 15),
@@ -268,8 +275,9 @@ class PostsList extends HookConsumerWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            ImageViewUtils.showImagePreview(context,
-                                [postsNotifier.posts![index].user!.avatar!]);
+                            ImageViewUtils.showImagePreview(context, [
+                              widget.postsNotifier.posts![index].user!.avatar!
+                            ]);
                           },
                           child: Container(
                             width: 60,
@@ -285,8 +293,8 @@ class PostsList extends HookConsumerWidget {
                               ),
                               child: CachedNetworkImage(
                                 fit: BoxFit.fitWidth,
-                                imageUrl:
-                                    postsNotifier.posts![index].user!.avatar!,
+                                imageUrl: widget
+                                    .postsNotifier.posts![index].user!.avatar!,
                               ),
                             ),
                           ),
@@ -300,7 +308,7 @@ class PostsList extends HookConsumerWidget {
                               Container(
                                 width: 400,
                                 child: Text(
-                                  "${postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
+                                  "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
                                   style: Config.b2(context).copyWith(
                                       color: isDarkMode
                                           ? ProbitasColor.ProbitasTextPrimary
@@ -313,7 +321,8 @@ class PostsList extends HookConsumerWidget {
                               ),
                               YMargin(2.0),
                               Text(
-                                postsNotifier.posts![index].user!.department!
+                                widget.postsNotifier.posts![index].user!
+                                    .department!
                                     .toString(),
                                 style: Config.b2(context).copyWith(
                                   color: isDarkMode
@@ -346,7 +355,7 @@ class PostsList extends HookConsumerWidget {
                             ),
                             YMargin(2.0),
                             Text(
-                              "${postsNotifier.posts![index].user!.level!} Level",
+                              "${widget.postsNotifier.posts![index].user!.level!} Level",
                               style: Config.b2(context).copyWith(
                                 color: isDarkMode
                                     ? ProbitasColor.ProbitasTextPrimary
@@ -365,7 +374,7 @@ class PostsList extends HookConsumerWidget {
                         ? ProbitasColor.ProbitasTextPrimary.withOpacity(0.5)
                         : ProbitasColor.ProbitasTextSecondary,
                   ),
-                  postsNotifier.posts![index].images!.isNotEmpty
+                  widget.postsNotifier.posts![index].images!.isNotEmpty
                       ? Stack(
                           children: [
                             Container(
@@ -374,21 +383,28 @@ class PostsList extends HookConsumerWidget {
                                 child: PageView.builder(
                                   controller: pageController,
                                   physics: BouncingScrollPhysics(),
-                                  itemCount: postsNotifier
-                                      .posts![index].images!.length,
+                                  onPageChanged: (int index) {
+                                    setState(() {
+                                      currentIndex = index;
+                                    });
+                                  },
+                                  itemCount: widget.postsNotifier.posts![index]
+                                      .images!.length,
                                   itemBuilder: (context, imageIndex) {
                                     return GestureDetector(
                                       onTap: () {
                                         ImageViewUtils.showImagePreview(
                                             context, [
-                                          postsNotifier
-                                              .posts![index].images![imageIndex]
+                                          widget.postsNotifier.posts![index]
+                                              .images![imageIndex]
                                         ]);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(),
                                         child: CachedNetworkImage(
-                                          imageUrl: postsNotifier.posts![index]
+                                          imageUrl: widget
+                                              .postsNotifier
+                                              .posts![index]
                                               .images![imageIndex],
                                           fit: BoxFit.cover,
                                         ),
@@ -396,14 +412,15 @@ class PostsList extends HookConsumerWidget {
                                     );
                                   },
                                 )),
-                            postsNotifier.posts![index].images!.length > 1
+                            widget.postsNotifier.posts![index].images!.length >
+                                    1
                                 ? Positioned.fill(
                                     bottom: 8.0,
                                     child: Align(
                                       alignment: Alignment.bottomCenter,
                                       child: SmoothPageIndicator(
                                         controller: pageController,
-                                        count: postsNotifier
+                                        count: widget.postsNotifier
                                             .posts![index].images!.length,
                                         effect: JumpingDotEffect(
                                           activeDotColor:
@@ -427,7 +444,7 @@ class PostsList extends HookConsumerWidget {
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: ReadMoreText(
-                        "${postsNotifier.posts![index].text}",
+                        "${widget.postsNotifier.posts![index].text}",
                         style: Config.b3(context).copyWith(fontSize: 14.0),
                         textAlign: TextAlign.left,
                         trimLines: 3,
@@ -466,14 +483,16 @@ class PostsList extends HookConsumerWidget {
                                   ref
                                       .watch(postsNotifierProvider.notifier)
                                       .likedOrUnlike(
-                                          postsNotifier.posts![index].id!,
+                                          widget
+                                              .postsNotifier.posts![index].id!,
                                           true);
 
                                   ref
                                       .refresh(postsNotifierProvider.notifier)
                                       .getPosts();
                                 },
-                                child: postsNotifier.posts![index].isUserLiked!
+                                child: widget.postsNotifier.posts![index]
+                                        .isUserLiked!
                                     ? SvgPicture.asset(ImagesAsset.liked,
                                         height: 18, width: 18)
                                     : SvgPicture.asset(
@@ -487,7 +506,7 @@ class PostsList extends HookConsumerWidget {
                                       )),
                             XMargin(4),
                             Text(
-                              "${postsNotifier.posts![index].likeCount}",
+                              "${widget.postsNotifier.posts![index].likeCount}",
                               style: Config.b3(context).copyWith(
                                 color: isDarkMode
                                     ? ProbitasColor.ProbitasTextPrimary
@@ -511,7 +530,7 @@ class PostsList extends HookConsumerWidget {
                                 )),
                             XMargin(4),
                             Text(
-                              "${postsNotifier.posts![index].commentCount}",
+                              "${widget.postsNotifier.posts![index].commentCount}",
                               style: Config.b3(context).copyWith(
                                   color: isDarkMode
                                       ? ProbitasColor.ProbitasTextPrimary
@@ -522,7 +541,8 @@ class PostsList extends HookConsumerWidget {
                         Spacer(),
                         IconButton(
                           onPressed: () {
-                            Share.share("${postsNotifier.posts![index].text}");
+                            Share.share(
+                                "${widget.postsNotifier.posts![index].text}");
                           },
                           tooltip: "Share",
                           icon: SvgPicture.asset(ImagesAsset.share,

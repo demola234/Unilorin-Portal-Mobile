@@ -13,7 +13,7 @@
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
 		<key>CFBundleName</key>
-		<string>probitas_app</string>
+		<string>Probitas</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>
@@ -35,9 +35,9 @@
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
 		<key>NSPhotoLibraryAddUsageDescription</key>
-		<string>*your app name* would like to save photos from the app to your gallery</string>
+		<string>Probitas would like to save photos from the app to your gallery</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>*your app name* would like to access your photo gallery for uploading images to the app</string>
+		<string>Probitas would like to access your photo gallery for uploading images to the app</string>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>
