@@ -71,27 +71,34 @@ class _NewsState extends ConsumerState<News> {
                           fontSize: 18,
                         ),
                       ),
-                      SizedBox(
-                        width: 150,
-                        height: 60,
-                        child: ProbitasDropDown(
-                          hintText: "Unilorin SU",
-                          items: [
-                            "Unilorin SU",
-                            "Team Plato",
-                            "Team Babs",
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              source = value!;
-                            });
-                            ref
-                                .read(newsNotifierProvider.notifier)
-                                .getNewsForSource(
-                                    source.toLowerCase().replaceAll(" ", ""));
-                          },
-                          value: source,
-                        ),
+                      PopupMenuButton(
+                        // child: Text(""),
+
+                        onSelected: (value) {
+                          setState(() {
+                            source = value.toString();
+                          });
+                          ref
+                              .read(newsNotifierProvider.notifier)
+                              .getNewsForSource(value
+                                  .toString()
+                                  .toLowerCase()
+                                  .replaceAll(" ", ""));
+                        },
+                        itemBuilder: (cxt) => [
+                          PopupMenuItem(
+                            child: Text("Unilorin Su"),
+                            value: "Unilorin Su",
+                          ),
+                          PopupMenuItem(
+                            child: Text("Team Babs"),
+                            value: "Team Babs",
+                          ),
+                          PopupMenuItem(
+                            child: Text("Team Plato"),
+                            value: "Team Plato",
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -283,11 +290,13 @@ class NewsList extends HookConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 10),
-                        child: Text(
-                          "${newsNotifier.news![index].excerpt} Read more",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Config.b3(context),
+                        child: Container(
+                          child: Text(
+                            "${newsNotifier.news![index].excerpt} Read more",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Config.b3(context),
+                          ),
                         ),
                       ),
                     ],
