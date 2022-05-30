@@ -254,9 +254,12 @@ class NewsList extends HookConsumerWidget {
                                     fit: BoxFit.contain,
                                     image: AssetImage(ImagesAsset.news_default),
                                   )
-                                : CachedNetworkImage(
-                                    fit: BoxFit.contain,
-                                    imageUrl: newsNotifier.news![index].image!,
+                                : ClipOval(
+                                    child: CachedNetworkImage(
+                                      fit: BoxFit.cover,
+                                      imageUrl:
+                                          newsNotifier.news![index].image!,
+                                    ),
                                   ),
                           ),
                           XMargin(10.0),
