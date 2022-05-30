@@ -40,13 +40,7 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
   final scrollController = ScrollController();
   final refreshController = RefreshController();
   int currentIndex = 0;
-
-  var controller = PageController();
-  @override
-  void initState() {
-    super.initState();
-    controller = PageController();
-  }
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -216,8 +210,8 @@ class PostsList extends StatefulHookConsumerWidget {
 }
 
 class _PostsListState extends ConsumerState<PostsList> {
-  var pageController = PageController();
   int currentIndex = 0;
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -377,68 +371,7 @@ class _PostsListState extends ConsumerState<PostsList> {
                         : ProbitasColor.ProbitasTextSecondary,
                   ),
                   widget.postsNotifier.posts![index].images!.isNotEmpty
-                      ? Stack(
-                          children: [
-                            Container(
-                                height: 220,
-                                width: context.screenWidth(),
-                                child: PageView.builder(
-                                  controller: pageController,
-                                  physics: BouncingScrollPhysics(),
-                                  onPageChanged: (int index) {
-                                    setState(() {
-                                      currentIndex = index;
-                                    });
-                                  },
-                                  itemCount: widget.postsNotifier.posts![index]
-                                      .images!.length,
-                                  itemBuilder: (context, imageIndex) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        ImageViewUtils.showImagePreview(
-                                            context, [
-                                          widget.postsNotifier.posts![index]
-                                              .images![imageIndex]
-                                        ]);
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(),
-                                        child: CachedNetworkImage(
-                                          imageUrl: widget
-                                              .postsNotifier
-                                              .posts![index]
-                                              .images![imageIndex],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )),
-                            widget.postsNotifier.posts![index].images!.length >
-                                    1
-                                ? Positioned.fill(
-                                    bottom: 8.0,
-                                    child: Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: SmoothPageIndicator(
-                                        controller: pageController,
-                                        count: widget.postsNotifier
-                                            .posts![index].images!.length,
-                                        effect: JumpingDotEffect(
-                                          activeDotColor:
-                                              ProbitasColor.ProbitasSecondary,
-                                          dotHeight: 10,
-                                          dotWidth: 10,
-                                          jumpScale: .7,
-                                          verticalOffset: 15,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
-                            Divider(),
-                          ],
-                        )
+                      ? PostListImage(posts: widget.postsNotifier.posts![index],)
                       : SizedBox.shrink(),
                   Container(
                     padding:
@@ -597,5 +530,69 @@ class _UserLikesState extends ConsumerState<UserLikes> {
         Toasts.showErrorToast("Error liking post, try again");
       }
     });
+  }
+}
+
+class PostListImage extends StatefulWidget {
+  PostList posts;
+  PostListImage({required this.posts,  Key? key}) : super(key: key);
+
+  @override
+  State<PostListImage> createState() => _PostListItemState();
+}
+
+class _PostListItemState extends State<PostListImage> {
+  final pageController = PageController();
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+            height: 220,
+            width: context.screenWidth(),
+            child: PageView.builder(
+              controller: pageController,
+              physics: BouncingScrollPhysics(),
+              itemCount: widget.posts.images!.length,
+              itemBuilder: (context, imageIndex) {
+                return GestureDetector(
+                  onTap: () {
+                    ImageViewUtils.showImagePreview(context, [
+                      widget.posts.images![imageIndex]
+                    ]);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(),
+                    child: CachedNetworkImage(
+                      imageUrl: widget
+                          .posts.images![imageIndex],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            )),
+        widget.posts.images!.length > 1
+            ? Positioned.fill(
+                bottom: 8.0,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SmoothPageIndicator(
+                    controller: pageController,
+                    count: widget.posts.images!.length,
+                    effect: JumpingDotEffect(
+                      activeDotColor: ProbitasColor.ProbitasSecondary,
+                      dotHeight: 10,
+                      dotWidth: 10,
+                      jumpScale: .7,
+                      verticalOffset: 15,
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox.shrink(),
+        Divider(),
+      ],
+    );
   }
 }

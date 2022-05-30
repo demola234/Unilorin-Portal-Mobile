@@ -6,6 +6,7 @@ import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import 'package:probitas_app/features/posts/presentation/controller/post_controller.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/error/toasts.dart';
@@ -25,7 +26,7 @@ class PostOverView extends ConsumerStatefulWidget {
 
 class _PostOverViewState extends ConsumerState<PostOverView> {
   int currentIndex = 0;
-  PageController? controller;
+  late PageController controller;
   TextEditingController commentsController = TextEditingController();
 
   @override
@@ -36,7 +37,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
 
   @override
   void dispose() {
-    controller!.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -187,29 +188,27 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                                     },
                                   ),
                                 ),
-                                // Positioned.fill(
-                                //   bottom: 8.0,
-                                //   child: Align(
-                                //     alignment: Alignment.bottomCenter,
-                                //     child: SmoothPageIndicator(
-                                //       controller: controller,
-                                //       count: currentIndex,
-                                //       effect: ScrollingDotsEffect(
-                                //         activeStrokeWidth: 2.6,
-                                //         activeDotScale: 1.3,
-                                //         maxVisibleDots: 5,
-                                //         radius: 8,
-                                //         spacing: 10,
-                                //         activeDotColor:
-                                //             ProbitasColor.ProbitasSecondary,
-                                //         dotColor:
-                                //             ProbitasColor.ProbitasTextPrimary,
-                                //         dotHeight: 12,
-                                //         dotWidth: 12,
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
+                                data.data!.post!.images!.length > 1
+                                    ? Positioned.fill(
+                                        bottom: 8.0,
+                                        child: Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: SmoothPageIndicator(
+                                            controller: controller,
+                                            count:
+                                                data.data!.post!.images!.length,
+                                            effect: JumpingDotEffect(
+                                              activeDotColor: ProbitasColor
+                                                  .ProbitasSecondary,
+                                              dotHeight: 10,
+                                              dotWidth: 10,
+                                              jumpScale: .7,
+                                              verticalOffset: 15,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox.shrink(),
                                 Divider(),
                               ],
                             )
