@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
-
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
@@ -32,7 +31,7 @@ class _PDFViewerState extends State<PDFViewer> {
         placeholder: (double progress) => Center(
             child: Container(
           height: 150,
-          width: context.screenWidth() / 3,
+          width: 150,
           child: LiquidCircularProgressIndicator(
             value: progress / 100,
             valueColor: AlwaysStoppedAnimation(isDarkMode

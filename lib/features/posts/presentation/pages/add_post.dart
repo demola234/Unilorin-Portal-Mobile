@@ -185,7 +185,7 @@ class _AddPostState extends ConsumerState<AddPost> {
           ref
               .watch(postsNotifierProvider.notifier)
               .createPost(postText.text, images);
-          ref.watch(postsNotifierProvider.notifier).getPosts();
+          ref.refresh(postsNotifierProvider.notifier).getPosts();
         },
         showLoading: postState.viewState.isLoading,
       ),
