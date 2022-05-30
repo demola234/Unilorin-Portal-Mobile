@@ -13,14 +13,15 @@ class NewsNotifier extends StateNotifier<NewsState> {
   final newsService = getIt<NewsService>();
   final Reader _read;
 
-  Future<void> getNews() async {
+  Future<void> getNews([String? source]) async {
     try {
       state = state.copyWith(
         viewState: ViewState.loading,
         currentPage: state.currentPage,
       );
 
-      final news = await newsService.fetchNews("unilorinsu", state.currentPage);
+      final news = await newsService.fetchNews(
+          source ?? "unilorinsu", state.currentPage);
       state = state.copyWith(
         news: news,
         currentPage: state.currentPage,
@@ -35,10 +36,9 @@ class NewsNotifier extends StateNotifier<NewsState> {
     }
   }
 
-  Future<void> getMoreNews() async {
+  Future<void> getMoreNews(String source) async {
     try {
-      final news =
-          await newsService.fetchNews("unilorinsu", state.currentPage + 1);
+      final news = await newsService.fetchNews(source, state.currentPage + 1);
 
       if (news.isEmpty) {
         state = state.copyWith(moreDataAvailable: false);
@@ -53,22 +53,47 @@ class NewsNotifier extends StateNotifier<NewsState> {
       state = state.copyWith(viewState: ViewState.error);
     }
   }
+
+  Future<void> getNewsForSource(String source) async {
+    try {
+      state = state.copyWith(
+        viewState: ViewState.loading,
+        currentPage: state.currentPage,
+      );
+
+      final news = await newsService.fetchNews(source, state.currentPage);
+      state = state.copyWith(
+        news: news,
+        currentPage: state.currentPage,
+        viewState: ViewState.idle,
+      );
+
+      if (state.news!.length < state.pageSize) {
+        state = state.copyWith(moreDataAvailable: false);
+      }
+    } on CustomException {
+      state = state.copyWith(viewState: ViewState.error);
+    }
+  }
 }
 
 class NewsState {
   final ViewState viewState;
   final List<News>? news;
+  final String source;
   final int currentPage;
   final bool moreDataAvailable;
 
   const NewsState._({
     this.news,
+    required this.source,
     required this.viewState,
     required this.currentPage,
     required this.moreDataAvailable,
   });
 
   factory NewsState.initial() => const NewsState._(
+        source: 'unilorinsu',
         currentPage: 1,
         moreDataAvailable: true,
         viewState: ViewState.idle,
@@ -85,6 +110,7 @@ class NewsState {
   }) {
     return NewsState._(
       news: news ?? this.news,
+      source: source,
       currentPage: currentPage ?? this.currentPage,
       moreDataAvailable: moreDataAvailable ?? this.moreDataAvailable,
       viewState: viewState ?? this.viewState,

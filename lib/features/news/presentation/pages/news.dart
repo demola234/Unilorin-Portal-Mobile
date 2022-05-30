@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
+import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/core/utils/states.dart';
 import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
@@ -17,12 +19,21 @@ import '../controller/news_controller.dart';
 import '../provider/news_provider.dart';
 import 'news_overview.dart';
 
-class Messages extends HookWidget {
+class News extends ConsumerStatefulWidget {
+  News({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<News> createState() => _NewsState();
+}
+
+class _NewsState extends ConsumerState<News> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
       GlobalKey<LiquidPullToRefreshState>();
   final scrollController = ScrollController();
   final refreshController = RefreshController();
+
+  var source = "Unilorin SU";
 
   @override
   Widget build(
@@ -60,6 +71,35 @@ class Messages extends HookWidget {
                           fontSize: 18,
                         ),
                       ),
+                      PopupMenuButton(
+                        // child: Text(""),
+
+                        onSelected: (value) {
+                          setState(() {
+                            source = value.toString();
+                          });
+                          ref
+                              .read(newsNotifierProvider.notifier)
+                              .getNewsForSource(value
+                                  .toString()
+                                  .toLowerCase()
+                                  .replaceAll(" ", ""));
+                        },
+                        itemBuilder: (cxt) => [
+                          PopupMenuItem(
+                            child: Text("Unilorin Su"),
+                            value: "Unilorin Su",
+                          ),
+                          PopupMenuItem(
+                            child: Text("Team Babs"),
+                            value: "Team Babs",
+                          ),
+                          PopupMenuItem(
+                            child: Text("Team Plato"),
+                            value: "Team Plato",
+                          ),
+                        ],
+                      )
                     ],
                   ),
                   Expanded(
@@ -69,8 +109,9 @@ class Messages extends HookWidget {
                     backgroundColor: ProbitasColor.ProbitasTextPrimary,
                     animSpeedFactor: 5,
                     showChildOpacityTransition: true,
-                    onRefresh: () =>
-                        ref.watch(newsNotifierProvider.notifier).getMoreNews(),
+                    onRefresh: () => ref
+                        .watch(newsNotifierProvider.notifier)
+                        .getMoreNews(source.toLowerCase().replaceAll(" ", "")),
                     child: Container(
                       width: context.screenWidth(),
                       child: Builder(builder: (context) {
@@ -102,9 +143,11 @@ class Messages extends HookWidget {
                         } else {
                           if (newsNotifier.news!.isNotEmpty) {
                             return NewsList(
-                                controller: refreshController,
-                                newsNotifier: newsNotifier,
-                                isDarkMode: isDarkMode);
+                              controller: refreshController,
+                              newsNotifier: newsNotifier,
+                              source: source,
+                              isDarkMode: isDarkMode,
+                            );
                           } else {
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -129,16 +172,18 @@ class Messages extends HookWidget {
 }
 
 class NewsList extends HookConsumerWidget {
-  const NewsList({
-    Key? key,
-    required this.newsNotifier,
-    required this.isDarkMode,
-    required this.controller,
-  }) : super(key: key);
+  const NewsList(
+      {Key? key,
+      required this.newsNotifier,
+      required this.isDarkMode,
+      required this.controller,
+      required this.source})
+      : super(key: key);
 
   final NewsState newsNotifier;
   final bool isDarkMode;
   final RefreshController controller;
+  final String source;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -147,7 +192,9 @@ class NewsList extends HookConsumerWidget {
       void scrollListener() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          ref.read(newsNotifierProvider.notifier).getMoreNews();
+          ref
+              .read(newsNotifierProvider.notifier)
+              .getMoreNews(source.toLowerCase().replaceAll(" ", ""));
         }
       }
 
@@ -160,7 +207,9 @@ class NewsList extends HookConsumerWidget {
       controller: controller,
       enablePullUp: true,
       enablePullDown: false,
-      onRefresh: () => ref.read(newsNotifierProvider.notifier).getNews(),
+      onRefresh: () => ref
+          .read(newsNotifierProvider.notifier)
+          .getNews(source.toLowerCase().replaceAll(" ", "")),
       child: ListView.builder(
           controller: scrollController,
           itemCount: newsNotifier.news!.length,
@@ -195,15 +244,21 @@ class NewsList extends HookConsumerWidget {
                       Row(
                         children: [
                           Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: Image(
-                                fit: BoxFit.contain,
-                                image: AssetImage(ImagesAsset.news_default),
-                              )),
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                            ),
+                            child: source == 'Unilorin SU'
+                                ? Image(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage(ImagesAsset.news_default),
+                                  )
+                                : CachedNetworkImage(
+                                    fit: BoxFit.contain,
+                                    imageUrl: newsNotifier.news![index].image!,
+                                  ),
+                          ),
                           XMargin(10.0),
                           Flexible(
                             child: Column(
@@ -235,11 +290,13 @@ class NewsList extends HookConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 10),
-                        child: Text(
-                          "${newsNotifier.news![index].excerpt} Read more",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: Config.b3(context),
+                        child: Container(
+                          child: Text(
+                            "${newsNotifier.news![index].excerpt} Read more",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: Config.b3(context),
+                          ),
                         ),
                       ),
                     ],
