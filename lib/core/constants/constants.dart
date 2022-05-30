@@ -1,1 +1,1 @@
-const BASE_URL = 'https://uilugportal-backend.herokuapp.com/v1/';
+const BASE_URL = 'https://uilugportal-backend-staging.herokuapp.com/v1/';

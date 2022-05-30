@@ -46,7 +46,7 @@ class _NavControllerState extends State<NavController> {
             PostFeeds(),
             Resources(),
             Assignment(),
-            Messages(),
+            News(),
           ],
           onPageChanged: onPageChanged,
           controller: pageController,
