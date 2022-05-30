@@ -61,12 +61,14 @@ class PostsNotifier extends StateNotifier<PostsState> {
   }
 
   Future<void> createComments(String postId, String text) async {
+    state = state.copyWith(viewState: ViewState.idle);
     try {
       await postService.createComments(postId, text);
       Toasts.showSuccessToast("Your comment has successfully been created!");
-      print(loading);
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
