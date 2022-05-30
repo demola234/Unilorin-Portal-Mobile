@@ -36,7 +36,7 @@ class PostList {
         this.images,
         this.createdAt,
         this.commentCount,
-        this.likeCount,
+        required this.likeCount,
         this.isUserLiked,
     });
 
@@ -46,7 +46,7 @@ class PostList {
     List<String>? images;
     DateTime? createdAt;
     int? commentCount;
-    int? likeCount;
+    int likeCount;
     bool? isUserLiked;
 
     factory PostList.fromRawJson(String str) => PostList.fromJson(json.decode(str));

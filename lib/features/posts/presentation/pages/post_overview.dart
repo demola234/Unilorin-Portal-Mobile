@@ -6,9 +6,9 @@ import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import 'package:probitas_app/features/posts/presentation/controller/post_controller.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
+import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -17,7 +17,7 @@ import '../provider/post_provider.dart';
 
 class PostOverView extends ConsumerStatefulWidget {
   PostOverView({required this.singlePostId, Key? key}) : super(key: key);
-  String singlePostId;
+  final String singlePostId;
 
   @override
   ConsumerState<PostOverView> createState() => _PostOverViewState();
@@ -25,8 +25,9 @@ class PostOverView extends ConsumerStatefulWidget {
 
 class _PostOverViewState extends ConsumerState<PostOverView> {
   int currentIndex = 0;
-  late PageController controller;
+  PageController? controller;
   TextEditingController commentsController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +36,7 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller!.dispose();
     super.dispose();
   }
 
@@ -229,41 +230,8 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
                           children: [
-                            Row(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      ref
-                                          .watch(postsNotifierProvider.notifier)
-                                          .likedOrUnlike(
-                                              data.data!.post!.id!, true);
-                                      ref.refresh(getSinglePostProvider(
-                                          widget.singlePostId));
-                                    },
-                                    child: data.data!.post!.isUserLiked!
-                                        ? SvgPicture.asset(ImagesAsset.liked,
-                                            height: 18, width: 18)
-                                        : SvgPicture.asset(
-                                            ImagesAsset.notliked,
-                                            height: 18,
-                                            width: 18,
-                                            color: isDarkMode
-                                                ? ProbitasColor
-                                                    .ProbitasTextPrimary
-                                                : ProbitasColor
-                                                    .ProbitasTextSecondary,
-                                          )),
-                                XMargin(4),
-                                Text(
-                                  "${data.data!.post!.likeCount}",
-                                  style: Config.b3(context).copyWith(
-                                    color: isDarkMode
-                                        ? ProbitasColor.ProbitasTextPrimary
-                                        : ProbitasColor.ProbitasTextSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
+                            LikedOrUnliked(
+                                post: data.data!.post!, isDarkMode: isDarkMode),
                             Spacer(),
                             IconButton(
                               onPressed: () {
@@ -547,12 +515,13 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
           ref
               .watch(postsNotifierProvider.notifier)
               .createComments(widget.singlePostId, commentsController.text);
-          ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
+          Future.delayed(Duration(seconds: 2), () {
+            ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
+          });
+
           setState(() {
             commentsController.clear();
           });
-          Future.delayed(Duration(seconds: 10));
-          ref.refresh(getSinglePostCommentsProvider(widget.singlePostId));
         },
         child: Container(
           height: 70,
@@ -572,5 +541,74 @@ class _PostOverViewState extends ConsumerState<PostOverView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+class LikedOrUnliked extends ConsumerStatefulWidget {
+  const LikedOrUnliked({
+    Key? key,
+    required this.post,
+    required this.isDarkMode,
+  }) : super(key: key);
+
+  final Post post;
+  final bool isDarkMode;
+
+  @override
+  ConsumerState<LikedOrUnliked> createState() => _LikedOrUnlikedState();
+}
+
+class _LikedOrUnlikedState extends ConsumerState<LikedOrUnliked> {
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return Row(children: [
+      InkWell(
+          onTap: isLikedUnlike,
+          child: widget.post.isUserLiked!
+              ? SvgPicture.asset(ImagesAsset.liked, height: 18, width: 18)
+              : SvgPicture.asset(
+                  ImagesAsset.notliked,
+                  height: 18,
+                  width: 18,
+                  color: widget.isDarkMode
+                      ? ProbitasColor.ProbitasTextPrimary
+                      : ProbitasColor.ProbitasTextSecondary,
+                )),
+      XMargin(4),
+      Text(
+        "${widget.post.likeCount}",
+        style: Config.b3(context).copyWith(
+          color: isDarkMode
+              ? ProbitasColor.ProbitasTextPrimary
+              : ProbitasColor.ProbitasTextSecondary,
+        ),
+      ),
+    ]);
+  }
+
+  void isLikedUnlike() async {
+    var liked = widget.post.isUserLiked;
+    setState(() {
+      widget.post.isUserLiked = !widget.post.isUserLiked!;
+      if (liked!) {
+        widget.post.likeCount--;
+      } else {
+        widget.post.likeCount++;
+      }
+      try {
+        ref
+            .watch(postsNotifierProvider.notifier)
+            .likedOrUnlike(widget.post.id!);
+      } catch (e) {
+        widget.post.isUserLiked = liked;
+        if (liked) {
+          widget.post.likeCount++;
+        } else {
+          widget.post.likeCount--;
+        }
+        Toasts.showErrorToast("Error liking post, try again");
+      }
+    });
   }
 }

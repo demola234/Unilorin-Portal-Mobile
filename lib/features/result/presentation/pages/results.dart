@@ -24,13 +24,13 @@ class Results extends ConsumerStatefulWidget {
 class _ResultsState extends ConsumerState<Results> {
   bool isVisible = false;
   bool isResult = false;
-  var session = "2020/2021", semester;
+  var session = "2020/2021";
 
   @override
   Widget build(BuildContext context) {
     final userDetails = ref.watch(getUsersProvider);
     final cgpaDetails = ref.watch(getCgpaProvider);
-    final resultDetails = ref.read(getResultsProvider(session));
+    final resultDetails = ref.watch(getResultsProvider(session));
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
@@ -188,49 +188,45 @@ class _ResultsState extends ConsumerState<Results> {
           ),
         ),
         YMargin(50),
-        InkWell(
-          onTap: () {
-            ref.refresh(getResultsProvider(session));
-            setState(() {
-              isResult = true;
-            });
-          },
-          child: Container(
-            height: 70,
-            width: 220,
-            decoration: BoxDecoration(
-                color: ProbitasColor.ProbitasSecondary,
-                borderRadius: BorderRadius.all(Radius.circular(15.0))),
-            child: Center(
-              child: Text(
-                "Get Result",
-                style: Config.b2(context).copyWith(
-                  color: ProbitasColor.ProbitasTextPrimary,
-                ),
-              ),
-            ),
-          ),
-        ),
+        // InkWell(
+        //   onTap: () {
+        //     ref.watch(getResultsProvider(session));
+
+        //   },
+        //   child: Container(
+        //     height: 70,
+        //     width: 220,
+        //     decoration: BoxDecoration(
+        //         color: ProbitasColor.ProbitasSecondary,
+        //         borderRadius: BorderRadius.all(Radius.circular(15.0))),
+        //     child: Center(
+        //       child: Text(
+        //         "Get Result",
+        //         style: Config.b2(context).copyWith(
+        //           color: ProbitasColor.ProbitasTextPrimary,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         YMargin(20),
-        isResult
-            ? resultDetails.when(
-                data: (data) => GetResults(result: data.data!.result!),
-                error: (err, str) => Text("err"),
-                loading: () => Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        YMargin(100),
-                        Align(
-                            alignment: Alignment.center,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: ProbitasColor.ProbitasSecondary,
-                              ),
-                            )),
-                      ],
-                    ))
-            : SizedBox.fromSize()
+        resultDetails.when(
+            data: (data) => GetResults(result: data.data!.result!),
+            error: (err, str) => Text("err"),
+            loading: () => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    YMargin(100),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: ProbitasColor.ProbitasSecondary,
+                          ),
+                        )),
+                  ],
+                ))
       ]),
     );
   }

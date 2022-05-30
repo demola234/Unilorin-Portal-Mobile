@@ -9,7 +9,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'core/utils/navigation_service.dart';
-import 'data/local/cache.dart';
 import 'features/authentication/presentation/pages/authentication/initail.dart';
 import 'injection_container.dart';
 
@@ -41,7 +40,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
-    Timer(const Duration(days: 5), () => Cache.get().clear());
   }
 
   @override

@@ -34,6 +34,7 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
               filename:
                   "post_image${DateTime.now().millisecondsSinceEpoch}.${image.path.split(".").last}"));
         }
+        print(multiPart);
         data['image'] = multiPart;
       }
       return post("posts",

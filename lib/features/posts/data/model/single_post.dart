@@ -62,7 +62,7 @@ class Post {
     this.text,
     this.createdAt,
     this.commentCount,
-    this.likeCount,
+    required this.likeCount,
     this.isUserLiked,
   });
 
@@ -72,7 +72,7 @@ class Post {
   String? text;
   DateTime? createdAt;
   int? commentCount;
-  int? likeCount;
+  int likeCount;
   bool? isUserLiked;
 
   factory Post.fromRawJson(String str) => Post.fromJson(json.decode(str));

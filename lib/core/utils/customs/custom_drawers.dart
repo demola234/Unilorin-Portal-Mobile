@@ -127,8 +127,8 @@ class ProbitasDrawer extends StatelessWidget {
                   ),
                 ]),
               ),
-              Spacer(),
-              YMargin(10),
+
+            YMargin(40),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Container(

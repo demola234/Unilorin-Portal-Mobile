@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 
+
 class LocalAuthApi {
   static final _auth = LocalAuthentication();
 
@@ -13,24 +14,14 @@ class LocalAuthApi {
     }
   }
 
-  static Future<bool> isDeviceSupported() async {
-    try {
-      return await _auth.isDeviceSupported();
-    } on PlatformException catch (e) {
-      print(e);
-      return false;
-    }
-  }
-
   static Future<bool> authenticate() async {
     final isAvailable = await hasBiometrics();
-    final supportedDevice = await isDeviceSupported();
-    if (!isAvailable && !supportedDevice) return false;
+    if (!isAvailable) return false;
 
     try {
       return await _auth.authenticate(
-          localizedReason: 'Please authenticate to show results',
-          options: const AuthenticationOptions(biometricOnly: true));
+        localizedReason: 'Scan Face to Authenticate',
+      );
     } on PlatformException catch (e) {
       print(e);
       return false;

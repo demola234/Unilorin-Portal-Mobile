@@ -40,7 +40,7 @@ class ScheduleTile extends ConsumerWidget {
                 decoration: BoxDecoration(
                     // borderRadius: _borderRadius,
                     ),
-                height: context.screenHeight() / 3,
+                height: context.screenHeight() / 2.8,
                 child: Column(children: [
                   YMargin(10),
                   Container(

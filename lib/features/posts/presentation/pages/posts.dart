@@ -16,11 +16,13 @@ import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
+import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../data/model/all_posts.dart';
 import '../controller/post_controller.dart';
 import '../provider/post_provider.dart';
 
@@ -478,32 +480,9 @@ class _PostsListState extends ConsumerState<PostsList> {
                       children: [
                         Row(
                           children: [
-                            InkWell(
-                                onTap: () {
-                                  ref
-                                      .watch(postsNotifierProvider.notifier)
-                                      .likedOrUnlike(
-                                          widget
-                                              .postsNotifier.posts![index].id!,
-                                          true);
-
-                                  ref
-                                      .refresh(postsNotifierProvider.notifier)
-                                      .getPosts();
-                                },
-                                child: widget.postsNotifier.posts![index]
-                                        .isUserLiked!
-                                    ? SvgPicture.asset(ImagesAsset.liked,
-                                        height: 18, width: 18)
-                                    : SvgPicture.asset(
-                                        ImagesAsset.notliked,
-                                        height: 18,
-                                        width: 18,
-                                        color: isDarkMode
-                                            ? ProbitasColor.ProbitasTextPrimary
-                                            : ProbitasColor
-                                                .ProbitasTextSecondary,
-                                      )),
+                            UserLikes(
+                                posts: widget.postsNotifier.posts![index],
+                                isDarkMode: isDarkMode),
                             XMargin(4),
                             Text(
                               "${widget.postsNotifier.posts![index].likeCount}",
@@ -562,5 +541,61 @@ class _PostsListState extends ConsumerState<PostsList> {
         },
       ),
     );
+  }
+}
+
+class UserLikes extends ConsumerStatefulWidget {
+  const UserLikes({
+    Key? key,
+    required this.posts,
+    required this.isDarkMode,
+  });
+  final PostList posts;
+  final bool isDarkMode;
+
+  @override
+  ConsumerState<UserLikes> createState() => _UserLikesState();
+}
+
+class _UserLikesState extends ConsumerState<UserLikes> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: isLikedUnlike,
+        child: widget.posts.isUserLiked!
+            ? SvgPicture.asset(ImagesAsset.liked, height: 18, width: 18)
+            : SvgPicture.asset(
+                ImagesAsset.notliked,
+                height: 18,
+                width: 18,
+                color: widget.isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasTextSecondary,
+              ));
+  }
+
+  void isLikedUnlike() async {
+    var liked = widget.posts.isUserLiked;
+    setState(() {
+      widget.posts.isUserLiked = !widget.posts.isUserLiked!;
+      if (liked!) {
+        widget.posts.likeCount--;
+      } else {
+        widget.posts.likeCount++;
+      }
+      try {
+        ref
+            .watch(postsNotifierProvider.notifier)
+            .likedOrUnlike(widget.posts.id!);
+      } catch (e) {
+        widget.posts.isUserLiked = liked;
+        if (liked) {
+          widget.posts.likeCount++;
+        } else {
+          widget.posts.likeCount--;
+        }
+        Toasts.showErrorToast("Error liking post, try again");
+      }
+    });
   }
 }

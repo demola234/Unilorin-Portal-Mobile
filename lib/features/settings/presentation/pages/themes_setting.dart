@@ -38,24 +38,24 @@ class _ThemeModeState extends State<ThemesMode> {
                     });
                   }),
             ),
-            YMargin(10),
-            ListTile(
-              title: Text("Light Mode"),
-              leading: Radio(
-                  activeColor: ProbitasColor.ProbitasSecondary,
-                  value: "light",
-                  groupValue: theme,
-                  onChanged: (value) {}),
-            ),
-            YMargin(10),
-            ListTile(
-              title: Text("Dark Mode"),
-              leading: Radio(
-                  activeColor: ProbitasColor.ProbitasSecondary,
-                  value: "dark",
-                  groupValue: theme,
-                  onChanged: (value) {}),
-            ),
+            // YMargin(10),
+            // ListTile(
+            //   title: Text("Light Mode"),
+            //   leading: Radio(
+            //       activeColor: ProbitasColor.ProbitasSecondary,
+            //       value: "light",
+            //       groupValue: theme,
+            //       onChanged: (value) {}),
+            // ),
+            // YMargin(10),
+            // ListTile(
+            //   title: Text("Dark Mode"),
+            //   leading: Radio(
+            //       activeColor: ProbitasColor.ProbitasSecondary,
+            //       value: "dark",
+            //       groupValue: theme,
+            //       onChanged: (value) {}),
+            // ),
           ],
         ));
   }

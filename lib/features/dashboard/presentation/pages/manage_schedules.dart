@@ -27,7 +27,6 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   DateTime? startText;
   DateTime? endText;
 
-  // String?
   var remindMe;
 
   @override
@@ -281,13 +280,12 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
     if (pickedTime != null) {
       print(pickedTime.format(context));
       DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
-      // print(parsedTime);
-      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+          DateFormat('HH:mm').parse(pickedTime.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
-        startController.text = pickedTime.format(context);
+        startController.text = formattedTime;
         startText = parsedTime;
         print("Its meee=> $startText");
       });
@@ -321,14 +319,12 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
     if (pickedTime != null) {
       print(pickedTime.format(context));
       DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
-
-      print(parsedTime);
-      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+          DateFormat('HH:mm').parse(pickedTime.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
-        endController.text = pickedTime.format(context);
+        endController.text = formattedTime;
         endText = parsedTime;
       });
     } else {

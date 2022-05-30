@@ -72,10 +72,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
       Directory? appDirectory = Platform.isAndroid
           ? await getExternalStorageDirectory()
           : await getApplicationDocumentsDirectory();
-      if (Platform.isAndroid) {
-        Directory(appDirectory!.path.split('Android')[0] + 'Probitas')
-            .createSync();
-      }
 
       String path = Platform.isIOS
           ? appDirectory!.path +

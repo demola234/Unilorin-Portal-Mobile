@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../controller/dashboard_controller.dart';
 import '../empty_state/empty_state.dart';
 import '../schedule_tile.dart/schedule_tile.dart';
 
 class Wednesday extends ConsumerWidget {
+  RefreshController controller = RefreshController();
   Wednesday({Key? key}) : super(key: key);
 
   @override
@@ -28,7 +30,7 @@ class Wednesday extends ConsumerWidget {
                       return data.data!.schedules![index].weekdays!
                               .contains("Wednesday")
                           ? ScheduleTile(
-                            courseId: data.data!.schedules![index].id!,
+                              courseId: data.data!.schedules![index].id!,
                               courseCode:
                                   data.data!.schedules![index].courseCode!,
                               courseTitle:
@@ -41,21 +43,23 @@ class Wednesday extends ConsumerWidget {
                             )
                           : SizedBox.shrink();
                     })
-                : Column(
-                    children: [
-                      SingleChildScrollView(
-                        child: Container(
-                          height: 400,
-                          child: ListView.builder(
-                              itemCount: 1,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                return EmptyState();
-                              }),
-                        ),
-                      )
-                    ],
+                : SmartRefresher(
+                    controller: controller,
+                    enablePullDown: true,
+                    onRefresh: () {
+                      ref.refresh(getSchedulesProvider);
+                    },
+                    child: Container(
+                      height: 400,
+                      child: ListView.builder(
+                          itemCount: 1,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) {
+                            return EmptyState();
+                          }),
+                    ),
                   ),
+                  
           ),
           error: (err, str) => EmptyState(),
           loading: () => Center(

@@ -49,13 +49,14 @@ class PostsNotifier extends StateNotifier<PostsState> {
     }
   }
 
-  Future<void> likedOrUnlike(String postId, bool isLiked) async {
+  Future<void> likedOrUnlike(String postId) async {
+    state = state.copyWith(viewState: ViewState.idle);
     try {
       await postService.likeOrUnlikePost(postId);
-      Toasts.showSuccessToast("You have successfully liked the post");
-      print(loading);
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 

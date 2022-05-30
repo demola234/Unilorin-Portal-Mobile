@@ -122,18 +122,21 @@ class _ResourcesState extends ConsumerState<Resources> {
                                     final response = data.data![index];
                                     return ResourceTile(response: response);
                                   }),
-                              error: (err, _) => Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Align(
-                                          alignment: Alignment.center,
-                                          child: Center(
-                                              child: EmptyState(
-                                            text: "No Resource Found",
-                                          ))),
-                                    ],
+                              error: (err, _) => SingleChildScrollView(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.center,
+                                            child: Center(
+                                                child: EmptyState(
+                                              text: "No Resource Found",
+                                            ))),
+                                      ],
+                                    ),
                                   ),
                               loading: () => Center(
                                     child: CircularProgressIndicator(
