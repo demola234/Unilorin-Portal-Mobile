@@ -7,6 +7,7 @@ import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/dashboard/presentation/pages/manage_schedules.dart';
 import '../../../../core/constants/colors.dart';
+import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/greetings.dart';
 import '../../../../core/utils/image_viewer.dart';
@@ -57,101 +58,175 @@ class _DashboardState extends ConsumerState<Dashboard>
         child: Column(
           children: [
             YMargin(20),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              height: 100,
-              width: context.screenWidth(),
-              decoration: BoxDecoration(
-                  color: ProbitasColor.ProbitasTextPrimary.withOpacity(0.5),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  )),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      width: 60,
-                      height: 60,
-                      child: value.when(
-                          data: (data) => GestureDetector(
-                                onTap: () {
-                                  ImageViewUtils.showImagePreview(
-                                      context, [data.data!.user!.avatar!]);
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.fitWidth,
-                                    imageUrl: data.data!.user!.avatar!,
-                                  ),
+            Consumer(
+              builder: ((context, watch, child) {
+                return value.when(
+                  data: (data) => Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      height: 100,
+                      width: context.screenWidth(),
+                      decoration: BoxDecoration(
+                          color: ProbitasColor.ProbitasTextPrimary.withOpacity(
+                              0.5),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          )),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            child: GestureDetector(
+                              onTap: () {
+                                ImageViewUtils.showImagePreview(
+                                    context, [data.data!.user!.avatar!]);
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                  fit: BoxFit.fitWidth,
+                                  imageUrl: data.data!.user!.avatar!,
                                 ),
                               ),
-                          error: (err, str) => Text("error"),
-                          loading: () => Loading(
-                                height: 60,
-                                width: 60,
-                              ))),
-                  XMargin(20),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Consumer(
-                        builder: ((context, watch, child) {
-                          final response = watch.watch(getUsersProvider);
-                          return response.when(
-                              data: (response) => Text(
-                                    "${getGreetings()}, ${response.data!.user!.fullName!.split(" ")[1]}👋🏾",
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: Config.b2(context).copyWith(
-                                        color: isDarkMode
-                                            ? Colors.white
-                                            : ProbitasColor.ProbitasPrimary),
-                                  ),
-                              error: (err, st) => Text("error"),
-                              loading: () => Loading(
-                                    height: 20,
-                                    width: 200,
-                                  ));
-                        }),
-                      ),
-                      YMargin(5.0),
-                      Consumer(
-                        builder: ((context, watch, child) {
-                          final response = watch.watch(getUsersProvider);
-                          return response.when(
-                            data: (response) => Text(
-                              "You are in the ${response.data!.user!.semester!.type} Semester",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Config.b2(context).copyWith(
-                                  color: isDarkMode
-                                      ? ProbitasColor.ProbitasTextPrimary
-                                      : ProbitasColor.ProbitasTextSecondary),
                             ),
-                            error: (err, st) => Text(
-                              "You are in the Rain Semester",
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: Config.b2(context).copyWith(
-                                  color: isDarkMode
-                                      ? ProbitasColor.ProbitasTextPrimary
-                                      : ProbitasColor.ProbitasTextSecondary),
-                            ),
-                            loading: () => Loading(
-                              height: 20,
-                              width: 200,
-                            ),
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
-                  Spacer()
-                ],
-              ),
+                          ),
+                          XMargin(20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${getGreetings()}, ${data.data!.user!.fullName!.split(" ")[1]}👋🏾",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: Config.b2(context).copyWith(
+                                    color: isDarkMode
+                                        ? Colors.white
+                                        : ProbitasColor.ProbitasPrimary),
+                              ),
+                              YMargin(5.0),
+                              Text(
+                                "You are in the ${data.data!.user!.semester!.type} Semester",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: Config.b2(context).copyWith(
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasTextSecondary),
+                              ),
+                            ],
+                          ),
+                          Spacer()
+                        ],
+                      )),
+                  loading: () {
+                    return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 100,
+                        width: context.screenWidth(),
+                        decoration: BoxDecoration(
+                            color:
+                                ProbitasColor.ProbitasTextPrimary.withOpacity(
+                                    0.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            )),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  width: 60,
+                                  height: 60,
+                                  child: Loading(
+                                    height: 60,
+                                    width: 60,
+                                  )),
+                              XMargin(20),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Loading(
+                                      height: 20,
+                                      width: 200,
+                                    ),
+                                    YMargin(5.0),
+                                    Loading(
+                                      height: 20,
+                                      width: 200,
+                                    )
+                                  ]),
+                            ]));
+                  },
+                  error: (err, str) {
+                    return Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        height: 100,
+                        width: context.screenWidth(),
+                        decoration: BoxDecoration(
+                            color:
+                                ProbitasColor.ProbitasTextPrimary.withOpacity(
+                                    0.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10.0),
+                            )),
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Container(
+                                  width: 60,
+                                  height: 60,
+                                  color: Colors.white,
+                                  child: Image(
+                                      fit: BoxFit.fitWidth,
+                                      image:
+                                          AssetImage(ImagesAsset.empty_image)),
+                                ),
+                              ),
+                              XMargin(40),
+                              Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Failed to Get Details",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: Config.b3(context).copyWith(
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : ProbitasColor.ProbitasPrimary),
+                                    ),
+                                    YMargin(5.0),
+                                    InkWell(
+                                      onTap: () {
+                                        ref.refresh(getUsersProvider);
+                                      },
+                                      child: Container(
+                                        height: 35,
+                                        width: 130,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(12.0))),
+                                        child: Center(
+                                            child: Text("Tap to Retry",
+                                                style:
+                                                    Config.b3(context).copyWith(
+                                                  color: ProbitasColor
+                                                      .ProbitasPrimary,
+                                                ))),
+                                      ),
+                                    ),
+                                  ]),
+                            ]));
+                  },
+                );
+              }),
             ),
             YMargin(30),
             Row(

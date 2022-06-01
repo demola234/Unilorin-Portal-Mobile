@@ -3,9 +3,6 @@ import 'package:probitas_app/data/remote/dashboard/dashboard_service.dart';
 import '../../../../injection_container.dart';
 import '../controller/dashboard_controller.dart';
 
-var dashboardService = getIt<DashBoardService>();
-bool state = false;
-
-
 final dashboardNotifierProvider =
-    StateNotifierProvider((ref) => DashBoardNotifier(dashboardService, state));
+    StateNotifierProvider.autoDispose<DashBoardNotifier, DashBoardState>(
+        (ref) => DashBoardNotifier(ref.read));

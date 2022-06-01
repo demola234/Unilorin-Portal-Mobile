@@ -6,6 +6,7 @@ import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../controller/dashboard_controller.dart';
 import '../provider/dashboard_provider.dart';
@@ -24,6 +25,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   TextEditingController note = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
+
   DateTime? startText;
   DateTime? endText;
 
@@ -43,6 +45,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
+    final dashboardState = ref.watch(dashboardNotifierProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -220,35 +223,26 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
             ),
             YMargin(15),
             InkWell(
-              onTap: () {
-                ref.watch(dashboardNotifierProvider.notifier).createSchedule(
-                    courseCode.text,
-                    courseTitle.text,
-                    courseVenue.text,
-                    remindMe,
-                    startText.toString(),
-                    endText.toString(),
-                    note.text);
-                Future.delayed(const Duration(seconds: 1), () {
-                  ref.refresh(getSchedulesProvider);
-                });
-              },
-              child: Container(
-                height: 70,
-                width: 220,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasSecondary,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                child: Center(
-                  child: Text(
-                    "Create Schedule",
-                    style: Config.b2(context).copyWith(
-                      color: ProbitasColor.ProbitasTextPrimary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                onTap: () {},
+                child: ProbitasButton(
+                  onTap: () async {
+                    ref
+                        .watch(dashboardNotifierProvider.notifier)
+                        .createSchedule(
+                            courseCode.text,
+                            courseTitle.text,
+                            courseVenue.text,
+                            remindMe,
+                            startText.toString(),
+                            endText.toString(),
+                            note.text);
+                    Future.delayed(const Duration(seconds: 1), () {
+                      ref.refresh(getSchedulesProvider);
+                    });
+                  },
+                  showLoading: dashboardState.viewState.isLoading,
+                  text: "Create Schedule",
+                )),
           ],
         ),
       ),

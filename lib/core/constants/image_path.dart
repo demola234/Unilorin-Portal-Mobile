@@ -9,8 +9,8 @@ class ImagesAsset {
   static String default_image = 'assets/images/default.png';
   static String post_default = 'assets/images/post_default.jpg';
   static String news_default = 'assets/images/sug.png';
-  static String test1 = 'assets/images/test1.docx';
-  static String test2 = 'assets/images/test2.pdf';
+  static String empty_image = 'assets/images/avatar-empty.jpg';
+
 
   //Icons
   static String home = 'assets/icons/home.svg';

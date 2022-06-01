@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/data/remote/dashboard/dashboard_service.dart';
 import 'package:probitas_app/features/dashboard/data/model/schedules_response.dart';
 import '../../../../core/error/exceptions.dart';
@@ -7,6 +7,7 @@ import '../../../../core/utils/navigation_service.dart';
 import '../../../../data/local/cache.dart';
 import '../../../../injection_container.dart';
 import '../../data/model/user_response.dart';
+import '../../../../core/utils/states.dart';
 import '../provider/dashboard_provider.dart';
 
 // class DashBoardNotifier extends StateNotifier {
@@ -18,6 +19,7 @@ import '../provider/dashboard_provider.dart';
 // return profile;
 //   }
 // }
+var dashboardService = getIt<DashBoardService>();
 
 final getUsersProvider = FutureProvider<UserResponses>((ref) async {
   final profile = await dashboardService.fetchUsers();
@@ -25,11 +27,11 @@ final getUsersProvider = FutureProvider<UserResponses>((ref) async {
   return profile;
 });
 
-class DashBoardNotifier extends StateNotifier {
+class DashBoardNotifier extends StateNotifier<DashBoardState> {
+  DashBoardNotifier(this._read) : super(DashBoardState.initial());
   var dashBoardService = getIt<DashBoardService>();
   var cache = getIt<Cache>();
-  bool? loading;
-  DashBoardNotifier(this.dashBoardService, loading) : super(loading);
+  final Reader _read;
 
   Future createSchedule(
       String? courseCode,
@@ -39,7 +41,7 @@ class DashBoardNotifier extends StateNotifier {
       String? startTime,
       String? endTime,
       String? note) async {
-    loading = true;
+    state = state.copyWith(viewState: ViewState.loading);
     try {
       await dashBoardService.uploadSchedule(
         courseCode: courseCode,
@@ -52,10 +54,11 @@ class DashBoardNotifier extends StateNotifier {
       );
       NavigationService().goBack();
 
-      Toasts.showSuccessToast("Post Have been uploaded successfully");
-      print(loading);
+      Toasts.showSuccessToast("Schedule Have been uploaded successfully");
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 }
@@ -71,3 +74,18 @@ final deleteSchedulesProvider =
   final delete = await dashboardService.deleteSchedules(scheduleId);
   return delete;
 });
+
+class DashBoardState {
+  final ViewState viewState;
+
+  const DashBoardState._({required this.viewState});
+
+  factory DashBoardState.initial() => const DashBoardState._(
+        viewState: ViewState.idle,
+      );
+
+  DashBoardState copyWith({ViewState? viewState, bool? passwordVisible}) =>
+      DashBoardState._(
+        viewState: viewState ?? this.viewState,
+      );
+}
