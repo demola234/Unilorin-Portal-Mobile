@@ -15,6 +15,7 @@ import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../../../../core/utils/customs/custom_error.dart';
 import '../controller/news_controller.dart';
 import '../provider/news_provider.dart';
 import 'news_overview.dart';
@@ -110,7 +111,7 @@ class _NewsState extends ConsumerState<News> {
                     animSpeedFactor: 5,
                     showChildOpacityTransition: true,
                     onRefresh: () => ref
-                        .watch(newsNotifierProvider.notifier)
+                        .refresh(newsNotifierProvider.notifier)
                         .getMoreNews(source.toLowerCase().replaceAll(" ", "")),
                     child: Container(
                       width: context.screenWidth(),
@@ -130,9 +131,13 @@ class _NewsState extends ConsumerState<News> {
                                   Center(
                                     child: Column(
                                       children: [
-                                        EmptyState(
-                                          text: "Something went wrong!",
-                                        ),
+                                        ErrorsWidget(
+                                            onTap: () => ref
+                                                .refresh(newsNotifierProvider
+                                                    .notifier)
+                                                .getMoreNews(source
+                                                    .toLowerCase()
+                                                    .replaceAll(" ", "")))
                                       ],
                                     ),
                                   )

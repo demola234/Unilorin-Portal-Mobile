@@ -20,6 +20,7 @@ import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../../../../core/utils/customs/custom_error.dart';
 import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../data/model/all_posts.dart';
@@ -113,8 +114,11 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                     Center(
                                       child: Column(
                                         children: [
-                                          EmptyState(
-                                            text: "Something went wrong!",
+                                          ErrorsWidget(
+                                            onTap: () => ref
+                                                .refresh(postsNotifierProvider
+                                                    .notifier)
+                                                .getPosts(),
                                           ),
                                         ],
                                       ),
@@ -371,7 +375,9 @@ class _PostsListState extends ConsumerState<PostsList> {
                         : ProbitasColor.ProbitasTextSecondary,
                   ),
                   widget.postsNotifier.posts![index].images!.isNotEmpty
-                      ? PostListImage(posts: widget.postsNotifier.posts![index],)
+                      ? PostListImage(
+                          posts: widget.postsNotifier.posts![index],
+                        )
                       : SizedBox.shrink(),
                   Container(
                     padding:
@@ -535,7 +541,7 @@ class _UserLikesState extends ConsumerState<UserLikes> {
 
 class PostListImage extends StatefulWidget {
   PostList posts;
-  PostListImage({required this.posts,  Key? key}) : super(key: key);
+  PostListImage({required this.posts, Key? key}) : super(key: key);
 
   @override
   State<PostListImage> createState() => _PostListItemState();
@@ -557,15 +563,13 @@ class _PostListItemState extends State<PostListImage> {
               itemBuilder: (context, imageIndex) {
                 return GestureDetector(
                   onTap: () {
-                    ImageViewUtils.showImagePreview(context, [
-                      widget.posts.images![imageIndex]
-                    ]);
+                    ImageViewUtils.showImagePreview(
+                        context, [widget.posts.images![imageIndex]]);
                   },
                   child: Container(
                     decoration: BoxDecoration(),
                     child: CachedNetworkImage(
-                      imageUrl: widget
-                          .posts.images![imageIndex],
+                      imageUrl: widget.posts.images![imageIndex],
                       fit: BoxFit.cover,
                     ),
                   ),

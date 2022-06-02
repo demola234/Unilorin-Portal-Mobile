@@ -11,7 +11,6 @@ class ImagesAsset {
   static String news_default = 'assets/images/sug.png';
   static String empty_image = 'assets/images/avatar-empty.jpg';
 
-
   //Icons
   static String home = 'assets/icons/home.svg';
   static String post = 'assets/icons/posts.svg';
@@ -35,4 +34,5 @@ class ImagesAsset {
   static String student2 = 'assets/jsons/back-to-school.json';
   static String student3 = 'assets/jsons/school-demo.json';
   static String empty = 'assets/jsons/empty.json';
+  static String empty_screens = 'assets/jsons/empty-screens.json';
 }

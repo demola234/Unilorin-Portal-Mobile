@@ -174,20 +174,9 @@ class _DashboardState extends ConsumerState<Dashboard>
                             )),
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Container(
-                                  width: 60,
-                                  height: 60,
-                                  color: Colors.white,
-                                  child: Image(
-                                      fit: BoxFit.fitWidth,
-                                      image:
-                                          AssetImage(ImagesAsset.empty_image)),
-                                ),
-                              ),
-                              XMargin(40),
+                         
                               Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -201,10 +190,11 @@ class _DashboardState extends ConsumerState<Dashboard>
                                               ? Colors.white
                                               : ProbitasColor.ProbitasPrimary),
                                     ),
-                                    YMargin(5.0),
+                                    YMargin(10.0),
                                     InkWell(
                                       onTap: () {
                                         ref.refresh(getUsersProvider);
+                                        ref.refresh(getSchedulesProvider);
                                       },
                                       child: Container(
                                         height: 35,

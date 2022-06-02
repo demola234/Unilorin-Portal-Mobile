@@ -17,6 +17,8 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../../../../core/utils/customs/custom_error.dart';
+import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../controller/resource_controller.dart';
 import 'add_resources.dart';
 
@@ -92,17 +94,17 @@ class _ResourcesState extends ConsumerState<Resources> {
                                 return ResourceTile(response: response);
                               }),
                           error: (err, _) => Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Align(
-                                      alignment: Alignment.center,
-                                      child: Center(
-                                          child: EmptyState(
-                                        text: "An Error Occurred",
-                                      ))),
-                                ],
-                              ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Align(
+                                        alignment: Alignment.center,
+                                        child: Center(
+                                          child: ErrorsWidget(
+                                              onTap: () => ref.refresh(
+                                                  getResourcesNotifier)),
+                                        ))
+                                  ]),
                           loading: () => Center(
                                 child: CircularProgressIndicator(
                                     color: ProbitasColor.ProbitasSecondary),
