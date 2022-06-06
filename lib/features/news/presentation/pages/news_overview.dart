@@ -26,6 +26,7 @@ class _NewsOverviewState extends State<NewsOverview> {
         body: Stack(
           children: [
             WebView(
+              
               initialUrl: widget.url,
               javascriptMode: JavascriptMode.unrestricted,
               onWebViewCreated: (WebViewController webViewController) {

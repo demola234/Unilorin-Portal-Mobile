@@ -7,7 +7,7 @@ import '../../constants/image_path.dart';
 import '../config.dart';
 
 class ErrorsWidget extends StatelessWidget {
-  void Function()? onTap;
+  final Function()? onTap;
   ErrorsWidget({
     required this.onTap,
     Key? key,

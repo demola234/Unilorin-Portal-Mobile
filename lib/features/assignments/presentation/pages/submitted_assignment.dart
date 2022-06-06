@@ -12,20 +12,16 @@ import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../posts/presentation/pages/posts.dart';
-import '../controller/resource_controller.dart';
-import '../provider/resources_provider.dart';
+import '../../../resources/presentation/provider/resources_provider.dart';
 
-class AddResources extends ConsumerStatefulWidget {
-  const AddResources({Key? key}) : super(key: key);
+class SubmitAssignment extends ConsumerStatefulWidget {
+  const SubmitAssignment({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AddResources> createState() => _AddResourcesState();
+  ConsumerState<SubmitAssignment> createState() => _SubmitAssignmentState();
 }
 
-class _AddResourcesState extends ConsumerState<AddResources> {
-  TextEditingController courseCode = TextEditingController();
-  TextEditingController courseTitle = TextEditingController();
-  var topic = TextEditingController();
+class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
   File? file;
   bool _multiPick = true;
   String? selectedFile = "";
@@ -33,85 +29,57 @@ class _AddResourcesState extends ConsumerState<AddResources> {
 
   @override
   Widget build(BuildContext context) {
-    final resourcesState = ref.watch(resourcesNotifierProvider);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
-        child: CustomNavBar(title: "Add Resources"),
+        child: CustomNavBar(title: "Submit Assignment"),
       ),
       body: SingleChildScrollView(
           child: Column(children: [
         YMargin(20),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Course Code",
-                style: Config.b2(context).copyWith(
-                  color: ProbitasColor.ProbitasTextSecondary,
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Container(
+            padding: EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), border: Border.all()),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                YMargin(20.0),
+                Text(
+                  "LIS121",
+                  style: Config.b2(context).copyWith(
+                    color: Colors.black,
+                    fontSize: 12,
+                  ),
                 ),
-              ),
-              YMargin(10),
-              ProbitasTextFormField(
-                controller: courseCode,
-                hintText: "Course Code",
-              ),
-            ],
+                YMargin(2.0),
+                Text(
+                  "Library and Information Techniques",
+                  style: Config.b2(context).copyWith(
+                    color: Colors.black,
+                    fontSize: 12,
+                  ),
+                ),
+                YMargin(2.0),
+                Text("Library and Information Techniques",
+                    style: Config.b2(context).copyWith(
+                      color: Colors.black,
+                      fontSize: 12,
+                    )),
+                YMargin(2.0),
+                Text("Library and Information Techniques",
+                    style: Config.b2(context).copyWith(
+                      color: Colors.black,
+                      fontSize: 12,
+                    )),
+              ],
+            ),
           ),
         ),
-        YMargin(10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Course Title",
-                style: Config.b2(context).copyWith(
-                  color: ProbitasColor.ProbitasTextSecondary,
-                ),
-              ),
-              YMargin(10),
-              ProbitasTextFormField(
-                controller: courseTitle,
-                hintText: "Course Title",
-              ),
-            ],
-          ),
-        ),
-        YMargin(10),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Topic",
-                style: Config.b2(context).copyWith(
-                  color: ProbitasColor.ProbitasTextSecondary,
-                ),
-              ),
-              YMargin(10),
-              ProbitasTextFormField(
-                controller: topic,
-                hintText: "Course Topic",
-              ),
-            ],
-          ),
-        ),
-        YMargin(10),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: ProbitasSmallButton(
-                title: "Upload File",
-                icon: ImagesAsset.file,
-                onTap: _openFileExplorer,
-              )),
-        ),
+        YMargin(15.0),
+        ProbitasButton(onTap: _openFileExplorer, text: "Upload File"),
         YMargin(20),
         file != null
             ? Container(
@@ -168,43 +136,43 @@ class _AddResourcesState extends ConsumerState<AddResources> {
             : SizedBox.shrink()
       ])),
       floatingActionButton: ProbitasButton(
-        onTap: acceptedInputs,
+        onTap: () {},
         text: "Add Material",
-        showLoading: resourcesState.viewState.isLoading,
+        // showLoading: resourcesState.viewState.isLoading,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  acceptedInputs() async {
-    try {
-      var courseCodeText = courseCode.text;
-      var courseTitleText = courseTitle.text;
-      var topicText = topic.text;
-      if (courseCodeText.trim().isEmpty && courseCodeText.length > 6) {
-        Toasts.showErrorToast("Please pick a Proper Course Code");
-        return;
-      } else if (courseTitleText.trim().isEmpty &&
-          courseTitleText.length >= 8) {
-        Toasts.showErrorToast(
-            "Your Course name cannot be shorter than 8 Characters");
-        return;
-      } else if (file == null) {
-        Toasts.showErrorToast("Select a resource");
-        return;
-      } else if (topicText.trim().isEmpty) {
-        Toasts.showErrorToast(
-            "You must write a short description of your topic");
-        return;
-      }
-      await ref
-          .watch(resourcesNotifierProvider.notifier)
-          .createResource(courseCode.text, courseTitle.text, topic.text, file!);
-      ref.refresh(getResourcesNotifier);
-    } catch (e) {
-      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
-    }
-  }
+  // acceptedInputs() async {
+  //   try {
+  //     var courseCodeText = courseCode.text;
+  //     var courseTitleText = courseTitle.text;
+  //     var topicText = topic.text;
+  //     if (courseCodeText.trim().isEmpty && courseCodeText.length > 6) {
+  //       Toasts.showErrorToast("Please pick a Proper Course Code");
+  //       return;
+  //     } else if (courseTitleText.trim().isEmpty &&
+  //         courseTitleText.length >= 8) {
+  //       Toasts.showErrorToast(
+  //           "Your Course name cannot be shorter than 8 Characters");
+  //       return;
+  //     } else if (file == null) {
+  //       Toasts.showErrorToast("Select a resource");
+  //       return;
+  //     } else if (topicText.trim().isEmpty) {
+  //       Toasts.showErrorToast(
+  //           "You must write a short description of your topic");
+  //       return;
+  //     }
+  //     await ref
+  //         .watch(resourcesNotifierProvider.notifier)
+  //         .createResource(courseCode.text, courseTitle.text, topic.text, file!);
+  //     // ref.refresh(getResourcesNotifier);
+  //   } catch (e) {
+  //     Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+  //   }
+  // }
 
   void _openFileExplorer() async {
     FilePickerResult? result = await FilePicker.platform

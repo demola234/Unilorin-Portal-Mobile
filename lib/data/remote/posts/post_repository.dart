@@ -22,10 +22,8 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
       {required String text, List<File>? images}) async {
     var data = <String, dynamic>{};
     try {
-      if (text != null) {
-        print(text);
-        data['text'] = text;
-      }
+      print(text);
+      data['text'] = text;
       if (images != null && images.isNotEmpty) {
         List<MultipartFile> multiPart = [];
         for (var image in images) {

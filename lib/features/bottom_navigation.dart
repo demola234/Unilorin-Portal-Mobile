@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import '../core/constants/image_path.dart';
-import 'assignments/assignment.dart';
+import 'assignments/presentation/pages/assignment.dart';
 import 'dashboard/presentation/pages/dashboard.dart';
 import 'news/presentation/pages/news.dart';
 import 'posts/presentation/pages/posts.dart';
