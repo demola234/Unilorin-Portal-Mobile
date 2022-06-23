@@ -115,38 +115,6 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Due Date",
-                    style: Config.b2(context).copyWith(
-                      color: ProbitasColor.ProbitasTextSecondary,
-                    ),
-                  ),
-                  YMargin(10),
-                  ProbitasDropDown(
-                    hintText: "Choose Week days",
-                    items: [
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday"
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        remindMe = value;
-                      });
-                    },
-                    value: remindMe,
-                  )
-                ],
-              ),
-            ),
-            YMargin(10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
                     "Due Time",
                     style: Config.b2(context).copyWith(
                       color: ProbitasColor.ProbitasTextSecondary,
@@ -165,7 +133,7 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
                         width: 15,
                       ),
                     ),
-                    onTap: startTime,
+                    onTap: _selectDateTime,
                   ),
                 ],
               ),
@@ -183,6 +151,13 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
       ),
     );
   }
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+  DateTime dateTime = DateTime.now();
+  bool showDate = false;
+  bool showTime = false;
+  bool showDateTime = false;
 
   startTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
@@ -221,5 +196,53 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
     } else {
       print("Time is not selected");
     }
+  }
+
+  _selectDateTime() async {
+    final date = await _selectDate(context);
+    if (date == null) return;
+
+    final time = await _selectTime(context);
+
+    if (time == null) return;
+    setState(() {
+      dateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  // Select for Date
+  Future<DateTime> _selectDate(BuildContext context) async {
+    final selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2030),
+    );
+    if (selected != null && selected != selectedDate) {
+      setState(() {
+        selectedDate = selected;
+      });
+    }
+    return selectedDate;
+  }
+
+// Select for Time
+  Future<TimeOfDay> _selectTime(BuildContext context) async {
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (selected != null && selected != selectedTime) {
+      setState(() {
+        selectedTime = selected;
+      });
+    }
+    return selectedTime;
   }
 }
