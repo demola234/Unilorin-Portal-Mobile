@@ -6,21 +6,30 @@ import '../../../features/assignments/data/model/assignment_response.dart';
 import '../../../features/resources/data/model/resource_response.dart';
 
 abstract class AssignmentRepository {
-  Future<Assignment> getAssignments(String token);
-  Future<Assignment> getSingleAssignments(String token, String assignmentId);
-  Future<Assignment> deleteAssignment(String token, String assignmentId);
-  Future createAssignment(String token, String courseCode,
-      String courseTitle, String lecturer, String dueDate, String topic);
-  Future<Assignment> submitAssignment(String token);
-  Future<Assignment> getSubmittedAssignment(String token);
+  Future<AssignmentResponse> getAssignment(String token);
+  Future<AssignmentResponse> getSingleAssignment(
+      String token, String assignmentId);
+  Future deleteAssignment(String token, String assignmentId);
+  Future createAssignment(String token,
+      {String courseCode,
+      String courseTitle,
+      String lecturer,
+      String dueDate,
+      String topic});
+  Future submitAssignment(String token, String assignmentId,
+      {required File file});
+  Future<AssignmentResponse> getSubmittedAssignment(String token);
 }
 
-class AssignmentRepositoryRepositoryImpl extends BaseApi
-    implements AssignmentRepository {
+class AssignmentRepositoryImpl extends BaseApi implements AssignmentRepository {
   @override
-  Future createAssignment(String token, String courseCode,
-      String courseTitle, String lecturer, String dueDate, String topic) async {
-     try {
+  Future createAssignment(String token,
+      {String? courseCode,
+      String? courseTitle,
+      String? lecturer,
+      String? dueDate,
+      String? topic}) async {
+    try {
       var data = await post("assignments", headers: getHeader(token), data: {
         "courseCode": courseCode,
         "courseTitle": courseTitle,
@@ -38,32 +47,74 @@ class AssignmentRepositoryRepositoryImpl extends BaseApi
   }
 
   @override
-  Future<Assignment> deleteAssignment(String token, String assignmentId) {
-    // TODO: implement deleteAssignment
+  Future deleteAssignment(String token, String assignmentId) async {
+    try {
+      var data =
+          await delete("assignment/$assignmentId", headers: getHeader(token));
+      final s = AssignmentResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<AssignmentResponse> getAssignment(String token) async {
+    try {
+      var data = await get("assignments", headers: getHeader(token));
+      final s = AssignmentResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<AssignmentResponse> getSingleAssignment(
+      String token, String assignmentId) async {
+    try {
+      var data =
+          await get("assignments/$assignmentId", headers: getHeader(token));
+      final s = AssignmentResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<AssignmentResponse> getSubmittedAssignment(String token) {
+    // TODO: implement getSubmittedAssignmentResponse
     throw UnimplementedError();
   }
 
   @override
-  Future<Assignment> getAssignments(String token) {
-    // TODO: implement getAssignments
-    throw UnimplementedError();
-  }
+  Future submitAssignment(String token, String assignmentId,
+      {required File file}) async {
+    try {
+      var data = <String, dynamic>{};
+      data["file"] = await MultipartFile.fromFile(file.path,
+          filename:
+              "assignment${file.path.split(".").last}.${file.path.split(".").last}");
 
-  @override
-  Future<Assignment> getSingleAssignments(String token, String assignmentId) {
-    // TODO: implement getSingleAssignments
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Assignment> getSubmittedAssignment(String token) {
-    // TODO: implement getSubmittedAssignment
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Assignment> submitAssignment(String token) {
-    // TODO: implement submitAssignment
-    throw UnimplementedError();
+      final v = await post("assignments/$assignmentId/submit",
+          headers: getHeader(token), formData: FormData.fromMap(data));
+      print(v);
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      print(err);
+      throw CustomException("Something went wrong");
+    }
   }
 }

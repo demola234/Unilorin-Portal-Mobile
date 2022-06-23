@@ -1,15 +1,67 @@
+import 'dart:io';
+import 'package:probitas_app/data/local/cache.dart';
+import '../../../features/assignments/data/model/assignment_response.dart';
+import 'assignment_repository.dart';
+
 abstract class AssignmentService {
-  Future<AssignmentService> getAssignments(String token);
-  Future<AssignmentService> getSingleAssignments(
-      String token, String assignmentId);
-  Future<AssignmentService> deleteAssignment(String token, String assignmentId);
-  Future<AssignmentService> createAssignment(
-    String token,
-    String courseCode,
-    String courseTitle,
-    String lecturer,
-    String dueDate,
-  );
-  Future<AssignmentService> submitAssignment(String token);
-  Future<AssignmentService> getSubmittedAssignment(String token);
+  Future<AssignmentResponse> getAssignment();
+  Future<AssignmentResponse> getSingleAssignment(String assignmentId);
+  Future deleteAssignment(String assignmentId);
+  Future createAssignment(String courseCode, String courseTitle,
+      String lecturer, String dueDate, String topic);
+  Future submitAssignment(String assignmentId, {required File file});
+  Future<AssignmentResponse> getSubmittedAssignment();
+}
+
+class AssignmentServiceImpl extends AssignmentService {
+  AssignmentRepository assignmentRepository;
+  Cache cache;
+
+  AssignmentServiceImpl(
+      {required this.assignmentRepository, required this.cache});
+
+  @override
+  Future createAssignment(String courseCode, String courseTitle,
+      String lecturer, String dueDate, String topic) async {
+    return assignmentRepository.createAssignment(
+      await cache.getToken(),
+      courseCode: courseCode,
+      courseTitle: courseTitle,
+      lecturer: lecturer,
+      dueDate: dueDate,
+      topic: topic,
+    );
+  }
+
+  @override
+  Future deleteAssignment(String assignmentId) async {
+    return assignmentRepository.deleteAssignment(
+        await cache.getToken(), assignmentId);
+  }
+
+  @override
+  Future<AssignmentResponse> getAssignment() async {
+    return assignmentRepository.getAssignment(await cache.getToken());
+  }
+
+  @override
+  Future<AssignmentResponse> getSingleAssignment(String assignmentId) async {
+    return assignmentRepository.getSingleAssignment(
+        await cache.getToken(), assignmentId);
+  }
+
+  @override
+  Future<AssignmentResponse> getSubmittedAssignment() {
+    // TODO: implement getSubmittedAssignment
+    throw UnimplementedError();
+  }
+
+  @override
+  Future submitAssignment(String assignmentId, {required File file}) async {
+    return assignmentRepository.submitAssignment(
+      await cache.getToken(),
+      assignmentId,
+      file: file,
+    );
+  }
 }

@@ -1,5 +1,5 @@
-class Assignment {
-    Assignment({
+class AssignmentResponse {
+    AssignmentResponse({
         required this.success,
         required this.message,
         required this.data,
@@ -13,7 +13,7 @@ class Assignment {
     final int count;
     final Pagination pagination;
 
-    factory Assignment.fromJson(Map<String, dynamic> json) => Assignment(
+    factory AssignmentResponse.fromJson(Map<String, dynamic> json) => AssignmentResponse(
         success: json["success"],
         message: json["message"],
         data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),

@@ -2,86 +2,90 @@ import 'dart:convert';
 
 class UserRequest {
   UserRequest({
-    this.user,
-    this.token,
+    required this.user,
+    required this.token,
   });
 
-  User? user;
-  String? token;
+  final DataUser user;
+  final String token;
 
-  factory UserRequest.fromRawJson(String str) => UserRequest.fromJson(json.decode(str));
+  factory UserRequest.fromRawJson(String str) =>
+      UserRequest.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
   factory UserRequest.fromJson(Map<String, dynamic> json) => UserRequest(
-        user: User.fromJson(json["user"] ?? Map<String, dynamic>()),
+        user: DataUser.fromJson(json["user"]),
         token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
-        "user": user!.toJson(),
+        "user": user.toJson(),
         "token": token,
       };
 }
 
-class User {
-  User({
-    this.avatar,
-    this.signature,
-    this.matricNumber,
-    this.fullName,
-    this.session,
-    this.faculty,
-    this.department,
-    this.course,
-    this.level,
-    this.gender,
-    this.address,
-    this.studentEmail,
-    this.phoneNumber,
-    this.modeOfEntry,
-    this.studentShipStatus,
-    this.chargesPaid,
-    this.dateOfBirth,
-    this.stateOfOrigin,
-    this.lgaOfOrigin,
-    this.levelAdviser,
-    this.nextOfKin,
-    this.guardian,
-    this.sponsor,
-    this.semester,
+class DataUser {
+  DataUser({
+    required this.avatar,
+    required this.signature,
+    required this.matricNumber,
+    required this.fullName,
+    required this.session,
+    required this.faculty,
+    required this.department,
+    required this.course,
+    required this.level,
+    required this.gender,
+    required this.address,
+    required this.studentEmail,
+    required this.phoneNumber,
+    required this.modeOfEntry,
+    required this.studentShipStatus,
+    required this.chargesPaid,
+    required this.dateOfBirth,
+    required this.stateOfOrigin,
+    required this.lgaOfOrigin,
+    required this.levelAdviser,
+    required this.nextOfKin,
+    required this.guardian,
+    required this.sponsor,
+    required this.semester,
+    required this.user,
   });
 
-  String? avatar;
-  String? signature;
-  String? matricNumber;
-  String? fullName;
-  String? session;
-  String? faculty;
-  String? department;
-  String? course;
-  String? level;
-  String? gender;
-  String? address;
-  String? studentEmail;
-  String? phoneNumber;
-  String? modeOfEntry;
-  String? studentShipStatus;
-  String? chargesPaid;
-  String? dateOfBirth;
-  String? stateOfOrigin;
-  String? lgaOfOrigin;
-  LevelAdviser? levelAdviser;
-  NextOfKin? nextOfKin;
-  Guardian? guardian;
-  Guardian? sponsor;
-  Semester? semester;
+  final String avatar;
+  final String signature;
+  final String matricNumber;
+  final String fullName;
+  final String session;
+  final String faculty;
+  final String department;
+  final String course;
+  final String level;
+  final String gender;
+  final String address;
+  final String studentEmail;
+  final String phoneNumber;
+  final String modeOfEntry;
+  final String studentShipStatus;
+  final String chargesPaid;
+  final String dateOfBirth;
+  final String stateOfOrigin;
+  final String lgaOfOrigin;
+  final LevelAdviser levelAdviser;
+  final NextOfKin nextOfKin;
+  final Guardian guardian;
+  final Guardian sponsor;
+  final Semester semester;
+  final UserUser user;
 
-  factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+  factory DataUser.fromRawJson(String str) =>
+      DataUser.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory DataUser.fromJson(Map<String, dynamic> json) => DataUser(
         avatar: json["avatar"],
         signature: json["signature"],
         matricNumber: json["matricNumber"],
@@ -101,13 +105,12 @@ class User {
         dateOfBirth: json["dateOfBirth"],
         stateOfOrigin: json["stateOfOrigin"],
         lgaOfOrigin: json["lgaOfOrigin"],
-        levelAdviser: LevelAdviser.fromJson(
-            json["levelAdviser"] ?? Map<String, dynamic>()),
-        nextOfKin:
-            NextOfKin.fromJson(json["nextOfKin"] ?? Map<String, dynamic>()),
-        guardian: Guardian.fromJson(json["guardian"] ?? Map<String, dynamic>()),
-        sponsor: Guardian.fromJson(json["sponsor"] ?? Map<String, dynamic>()),
-        semester: Semester.fromJson(json["semester"] ?? Map<String, dynamic>()),
+        levelAdviser: LevelAdviser.fromJson(json["levelAdviser"]),
+        nextOfKin: NextOfKin.fromJson(json["nextOfKin"]),
+        guardian: Guardian.fromJson(json["guardian"]),
+        sponsor: Guardian.fromJson(json["sponsor"]),
+        semester: Semester.fromJson(json["semester"]),
+        user: UserUser.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -130,28 +133,29 @@ class User {
         "dateOfBirth": dateOfBirth,
         "stateOfOrigin": stateOfOrigin,
         "lgaOfOrigin": lgaOfOrigin,
-        "levelAdviser": levelAdviser!.toJson(),
-        "nextOfKin": nextOfKin!.toJson(),
-        "guardian": guardian!.toJson(),
-        "sponsor": sponsor!.toJson(),
-        "semester": semester!.toJson(),
+        "levelAdviser": levelAdviser.toJson(),
+        "nextOfKin": nextOfKin.toJson(),
+        "guardian": guardian.toJson(),
+        "sponsor": sponsor.toJson(),
+        "semester": semester.toJson(),
+        "user": user.toJson(),
       };
 }
 
 class Guardian {
   Guardian({
-    this.name,
-    this.address,
-    this.phoneNumber,
-    this.email,
-    this.fullName,
+    required this.name,
+    required this.address,
+    required this.phoneNumber,
+    required this.email,
+    required this.fullName,
   });
 
-  String? name;
-  String? address;
-  String? phoneNumber;
-  String? email;
-  String? fullName;
+  final String name;
+  final String address;
+  final String phoneNumber;
+  final String email;
+  final String fullName;
 
   factory Guardian.fromRawJson(String str) =>
       Guardian.fromJson(json.decode(str));
@@ -177,14 +181,14 @@ class Guardian {
 
 class LevelAdviser {
   LevelAdviser({
-    this.fullName,
-    this.email,
-    this.phoneNumber,
+    required this.fullName,
+    required this.email,
+    required this.phoneNumber,
   });
 
-  String? fullName;
-  String? email;
-  String? phoneNumber;
+  final String fullName;
+  final String email;
+  final String phoneNumber;
 
   factory LevelAdviser.fromRawJson(String str) =>
       LevelAdviser.fromJson(json.decode(str));
@@ -206,18 +210,18 @@ class LevelAdviser {
 
 class NextOfKin {
   NextOfKin({
-    this.fullName,
-    this.address,
-    this.relationship,
-    this.phoneNumber,
-    this.email,
+    required this.fullName,
+    required this.address,
+    required this.relationship,
+    required this.phoneNumber,
+    required this.email,
   });
 
-  String? fullName;
-  String? address;
-  String? relationship;
-  String? phoneNumber;
-  String? email;
+  final String fullName;
+  final String address;
+  final String relationship;
+  final String phoneNumber;
+  final String email;
 
   factory NextOfKin.fromRawJson(String str) =>
       NextOfKin.fromJson(json.decode(str));
@@ -243,14 +247,14 @@ class NextOfKin {
 
 class Semester {
   Semester({
-    this.type,
-    this.number,
-    this.year,
+    required this.type,
+    required this.number,
+    required this.year,
   });
 
-  String? type;
-  String? number;
-  String? year;
+  final String type;
+  final String number;
+  final String year;
 
   factory Semester.fromRawJson(String str) =>
       Semester.fromJson(json.decode(str));
@@ -267,5 +271,62 @@ class Semester {
         "type": type,
         "number": number,
         "year": year,
+      };
+}
+
+class UserUser {
+  UserUser({
+    required this.id,
+    required this.fullName,
+    required this.avatar,
+    required this.faculty,
+    required this.department,
+    required this.level,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.v,
+    required this.role,
+  });
+
+  final String id;
+  final String fullName;
+  final String avatar;
+  final String faculty;
+  final String department;
+  final String level;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final int v;
+  final String role;
+
+  factory UserUser.fromRawJson(String str) =>
+      UserUser.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory UserUser.fromJson(Map<String, dynamic> json) => UserUser(
+        id: json["_id"],
+        fullName: json["fullName"],
+        avatar: json["avatar"],
+        faculty: json["faculty"],
+        department: json["department"],
+        level: json["level"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+        role: json["role"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "fullName": fullName,
+        "avatar": avatar,
+        "faculty": faculty,
+        "department": department,
+        "level": level,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "__v": v,
+        "role": role,
       };
 }
