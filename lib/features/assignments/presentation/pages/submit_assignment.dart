@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/core/utils/config.dart';
-
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 
-class SubmittedAssignment extends StatelessWidget {
+class SubmittedAssignment extends ConsumerStatefulWidget {
   const SubmittedAssignment({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<SubmittedAssignment> createState() =>
+      _SubmittedAssignmentState();
+}
+
+class _SubmittedAssignmentState extends ConsumerState<SubmittedAssignment> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;

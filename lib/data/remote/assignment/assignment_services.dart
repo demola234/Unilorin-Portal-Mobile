@@ -4,11 +4,15 @@ import '../../../features/assignments/data/model/assignment_response.dart';
 import 'assignment_repository.dart';
 
 abstract class AssignmentService {
-  Future<AssignmentResponse> getAssignment();
+  Future<AssignmentResponse> getAssignments();
   Future<AssignmentResponse> getSingleAssignment(String assignmentId);
   Future deleteAssignment(String assignmentId);
-  Future createAssignment(String courseCode, String courseTitle,
-      String lecturer, String dueDate, String topic);
+  Future createAssignment(
+      {String courseCode,
+      String courseTitle,
+      String lecturer,
+      String topic,
+      String dueDate});
   Future submitAssignment(String assignmentId, {required File file});
   Future<AssignmentResponse> getSubmittedAssignment();
 }
@@ -21,15 +25,19 @@ class AssignmentServiceImpl extends AssignmentService {
       {required this.assignmentRepository, required this.cache});
 
   @override
-  Future createAssignment(String courseCode, String courseTitle,
-      String lecturer, String dueDate, String topic) async {
+  Future createAssignment(
+      {String? courseCode,
+      String? courseTitle,
+      String? lecturer,
+      String? topic,
+      String? dueDate}) async {
     return assignmentRepository.createAssignment(
       await cache.getToken(),
-      courseCode: courseCode,
-      courseTitle: courseTitle,
-      lecturer: lecturer,
-      dueDate: dueDate,
-      topic: topic,
+      courseCode: courseCode!,
+      courseTitle: courseTitle!,
+      lecturer: lecturer!,
+      topic: topic!,
+      dueDate: dueDate!,
     );
   }
 
@@ -40,8 +48,8 @@ class AssignmentServiceImpl extends AssignmentService {
   }
 
   @override
-  Future<AssignmentResponse> getAssignment() async {
-    return assignmentRepository.getAssignment(await cache.getToken());
+  Future<AssignmentResponse> getAssignments() async {
+    return assignmentRepository.getAssignments(await cache.getToken());
   }
 
   @override

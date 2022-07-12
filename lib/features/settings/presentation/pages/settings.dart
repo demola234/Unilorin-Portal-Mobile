@@ -66,7 +66,7 @@ class Settings extends StatelessWidget {
                         final response = watch.read(getUsersProvider);
                         return response.when(
                             data: (response) => Text(
-                                  "${response.data!.user!.fullName!}",
+                                  "${response.data!.user!.fullName}",
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: Config.b2(context).copyWith(

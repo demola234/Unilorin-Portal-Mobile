@@ -91,7 +91,7 @@ class _ResultsState extends ConsumerState<Results> {
                         Text(
                           userDetails.when(
                               data: (data) =>
-                                  "${data.data!.user!.semester!.type!} Semester",
+                                  "${data.data!.user!.semester!.type} Semester",
                               error: (err, str) => "error",
                               loading: () => "loading"),
                           maxLines: 1,

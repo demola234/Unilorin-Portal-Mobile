@@ -22,6 +22,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       await authService.login(matricNumber, password);
       NavigationService().replaceScreen(NavController());
     } catch (e) {
+      print(e);
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     } finally {
       state = state.copyWith(viewState: ViewState.idle);

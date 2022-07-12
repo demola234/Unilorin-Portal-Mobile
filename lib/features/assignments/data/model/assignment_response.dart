@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AssignmentResponse {
     AssignmentResponse({
         required this.success,
@@ -12,6 +14,10 @@ class AssignmentResponse {
     final List<Datum> data;
     final int count;
     final Pagination pagination;
+
+    factory AssignmentResponse.fromRawJson(String str) => AssignmentResponse.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory AssignmentResponse.fromJson(Map<String, dynamic> json) => AssignmentResponse(
         success: json["success"],
@@ -57,6 +63,9 @@ class Datum {
     final DateTime updatedAt;
     final int v;
 
+    factory Datum.fromRawJson(String str) => Datum.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["_id"],
@@ -104,6 +113,9 @@ class User {
     final String department;
     final String level;
 
+    factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["_id"],
@@ -134,6 +146,10 @@ class Pagination {
     final int current;
     final int limit;
     final int total;
+
+    factory Pagination.fromRawJson(String str) => Pagination.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
         current: json["current"],

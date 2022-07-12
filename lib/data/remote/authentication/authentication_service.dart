@@ -3,7 +3,7 @@ import '../../../features/authentication/data/model/user_request.dart';
 import '../../local/cache.dart';
 
 abstract class AuthenticationService {
-  Future<UserRequest?> login(String matricNumber, String password);
+  Future<UserRequest> login(String matricNumber, String password);
 }
 
 class AuthenticationServiceImpl extends AuthenticationService {

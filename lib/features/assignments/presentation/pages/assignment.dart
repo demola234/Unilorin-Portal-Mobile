@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:intl/intl.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submitted_assignment.dart';
 import '../../../../core/constants/colors.dart';
@@ -10,6 +11,8 @@ import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../../../dashboard/presentation/pages/manage_schedules.dart';
+import '../../../dashboard/presentation/widget/empty_state/empty_state.dart';
+import '../controller/assignment_controller.dart';
 import 'create_assignment.dart';
 
 class Assignment extends ConsumerStatefulWidget {
@@ -21,8 +24,10 @@ class Assignment extends ConsumerStatefulWidget {
 
 class _AssignmentState extends ConsumerState<Assignment> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final value = ref.watch(getAssignmentProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -52,79 +57,100 @@ class _AssignmentState extends ConsumerState<Assignment> {
             ]),
             YMargin(10),
             Expanded(
-                child: Container(
-                    width: context.screenWidth(),
-                    child: ListView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return AssignmentTile();
-                        })))
+              child: Container(
+                width: context.screenWidth(),
+                child: value.when(
+                  data: (data) => ListView.builder(
+                      itemCount: data.data.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return AssignmentTile(
+                          courseCode: data.data[index].courseCode,
+                          courseTitle: data.data[index].courseTitle,
+                          dueDate: data.data[index].dueDate,
+                          lecturer: data.data[index].lecturer,
+                          assignmentId: data.data[index].id,
+                        );
+                      }),
+                  loading: () => Center(
+                    child: CircularProgressIndicator(
+                      color: ProbitasColor.ProbitasSecondary,
+                    ),
+                  ),
+                  error: (err, str) => EmptyState(),
+                ),
+              ),
+            )
           ])),
-      floatingActionButton: Visibility(
-        // visible: ref.watch(getUsersProvider).asData!.value.data!.user.role,
-        child: SpeedDial(
-          //Speed dial menu
-          marginBottom: 10, //margin bottom
-          icon: Icons.add, //icon on Floating action button
-          activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor:
-              ProbitasColor.ProbitasSecondary, //background color of button
-          foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: ProbitasColor
-              .ProbitasTextPrimary, //background color when menu is expanded
-          activeForegroundColor: ProbitasColor.ProbitasSecondary,
-          buttonSize: 56.0, //button size
-          visible: true,
-          closeManually: true,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-
-          elevation: 0, //shadow elevation of button
-          shape: CircleBorder(), //shape of button
-          children: [
-            SpeedDialChild(
-              child: Icon(Icons.book_online),
-              backgroundColor: ProbitasColor.ProbitasSecondary,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              label: 'Submitted Assignment',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () =>
-                  NavigationService().navigateToScreen(SubmittedAssignment()),
-              onLongPress: () =>
-                  NavigationService().navigateToScreen(SubmittedAssignment()),
-            ),
-            SpeedDialChild(
-              //speed dial child
-              child: Icon(Icons.add),
-              backgroundColor: ProbitasColor.ProbitasSecondary,
-              foregroundColor: Colors.white,
-              label: 'Create Assignment',
-              labelStyle: TextStyle(fontSize: 18.0),
-              elevation: 0,
-              onTap: () =>
-                  NavigationService().navigateToScreen(CreateAssignment()),
-              onLongPress: () =>
-                  NavigationService().navigateToScreen(CreateAssignment()),
-            ),
-          ],
-        ),
+      floatingActionButton: SpeedDial(
+        marginBottom: 10,
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        backgroundColor: ProbitasColor.ProbitasSecondary,
+        foregroundColor: Colors.white,
+        activeBackgroundColor: ProbitasColor.ProbitasTextPrimary,
+        activeForegroundColor: ProbitasColor.ProbitasSecondary,
+        buttonSize: 56.0,
+        visible: true,
+        closeManually: true,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        elevation: 0,
+        shape: CircleBorder(),
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.book_online),
+            backgroundColor: ProbitasColor.ProbitasSecondary,
+            foregroundColor: Colors.white,
+            elevation: 0,
+            label: 'Submitted Assignment',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () =>
+                NavigationService().navigateToScreen(SubmittedAssignment()),
+            onLongPress: () =>
+                NavigationService().navigateToScreen(SubmittedAssignment()),
+          ),
+          SpeedDialChild(
+            //speed dial child
+            child: Icon(Icons.add),
+            backgroundColor: ProbitasColor.ProbitasSecondary,
+            foregroundColor: Colors.white,
+            label: 'Create Assignment',
+            labelStyle: TextStyle(fontSize: 18.0),
+            elevation: 0,
+            onTap: () =>
+                NavigationService().navigateToScreen(CreateAssignment()),
+            onLongPress: () =>
+                NavigationService().navigateToScreen(CreateAssignment()),
+          ),
+        ],
       ),
     );
   }
 }
 
 class AssignmentTile extends StatelessWidget {
-  const AssignmentTile({
+  String courseCode;
+  String courseTitle;
+  DateTime dueDate;
+  String lecturer;
+  String assignmentId;
+  AssignmentTile({
+    required this.courseCode,
+    required this.courseTitle,
+    required this.dueDate,
+    required this.lecturer,
+    required this.assignmentId,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => NavigationService().navigateToScreen(SubmitAssignment()),
+      onTap: () => NavigationService().navigateToScreen(SubmitAssignment(
+        assignmenttId: assignmentId,
+      )),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.0),
         height: 140,
@@ -150,7 +176,7 @@ class AssignmentTile extends StatelessWidget {
                 children: [
                   YMargin(20.0),
                   Text(
-                    "LIS121",
+                    courseCode,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -158,7 +184,7 @@ class AssignmentTile extends StatelessWidget {
                   ),
                   YMargin(2.0),
                   Text(
-                    "Library and Information Techniques",
+                    courseTitle,
                     style: Config.b2(context).copyWith(
                       color: Colors.white,
                       fontSize: 12,
@@ -169,7 +195,7 @@ class AssignmentTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("Due Date: Jun 10, 2022, 9:00 AM",
+                      Text(DateFormat.MMMMEEEEd().add_jm().format(dueDate),
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,
@@ -180,7 +206,7 @@ class AssignmentTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("By Stephen Peter",
+                      Text("By $lecturer",
                           style: Config.b2(context).copyWith(
                             color: Colors.white,
                             fontSize: 12,

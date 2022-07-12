@@ -6,7 +6,7 @@ import '../../../features/assignments/data/model/assignment_response.dart';
 import '../../../features/resources/data/model/resource_response.dart';
 
 abstract class AssignmentRepository {
-  Future<AssignmentResponse> getAssignment(String token);
+  Future<AssignmentResponse> getAssignments(String token);
   Future<AssignmentResponse> getSingleAssignment(
       String token, String assignmentId);
   Future deleteAssignment(String token, String assignmentId);
@@ -62,7 +62,7 @@ class AssignmentRepositoryImpl extends BaseApi implements AssignmentRepository {
   }
 
   @override
-  Future<AssignmentResponse> getAssignment(String token) async {
+  Future<AssignmentResponse> getAssignments(String token) async {
     try {
       var data = await get("assignments", headers: getHeader(token));
       final s = AssignmentResponse.fromJson(data);
