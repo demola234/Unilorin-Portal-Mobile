@@ -33,7 +33,7 @@ class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
   @override
   Widget build(BuildContext context) {
     final value = ref.watch(getSingleAssignmentProvider(widget.assignmentId));
-    final resourcesState = ref.watch(assignmentNotifierProvider);
+    final assignmentState = ref.watch(assignmentNotifierProvider);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -138,7 +138,7 @@ class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
       floatingActionButton: ProbitasButton(
         onTap: acceptedInputs,
         text: "Add Material",
-        showLoading: resourcesState.viewState.isLoading,
+        showLoading: assignmentState.viewState.isLoading,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
