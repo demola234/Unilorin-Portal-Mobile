@@ -21,7 +21,7 @@ import '../provider/dashboard_provider.dart';
 // }
 var dashboardService = getIt<DashBoardService>();
 
-final getUsersProvider = FutureProvider<UserResponses>((ref) async {
+final getUsersProvider = FutureProvider.autoDispose<UserResponses>((ref) async {
   final profile = await dashboardService.fetchUsers();
   // print(profile.data!.user.fullName);
   return profile;
@@ -63,7 +63,8 @@ class DashBoardNotifier extends StateNotifier<DashBoardState> {
   }
 }
 
-final getSchedulesProvider = FutureProvider<SchedulesResponse>((ref) async {
+final getSchedulesProvider =
+    FutureProvider.autoDispose<SchedulesResponse>((ref) async {
   final profile = await dashboardService.fetchSchedules();
   print(profile.data!.schedules);
   return profile;

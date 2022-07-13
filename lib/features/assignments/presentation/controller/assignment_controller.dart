@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/features/assignments/data/model/assignment_response.dart';
+import 'package:probitas_app/features/assignments/presentation/pages/submitted_assignment.dart';
 import 'package:probitas_app/injection_container.dart';
 
 import '../../../../core/error/exceptions.dart';
@@ -8,6 +11,7 @@ import '../../../../core/utils/navigation_service.dart';
 import '../../../../core/utils/states.dart';
 import '../../../../data/remote/assignment/assignment_services.dart';
 import '../../../../data/remote/dashboard/dashboard_service.dart';
+import '../../data/model/single_assignment_response.dart';
 import '../state/assignment_state.dart';
 
 var assignmentService = getIt<AssignmentService>();
@@ -36,16 +40,31 @@ class AssignmentNotifier extends StateNotifier<AssignmentState> {
       state = state.copyWith(viewState: ViewState.idle);
     }
   }
+
+  submitAssignment(String assignmentId, {required File file}) async {
+    state = state.copyWith(viewState: ViewState.loading);
+    print(file);
+    try {
+      await assignmentService.submitAssignment(assignmentId, file: file);
+
+      NavigationService().goBack();
+      Toasts.showSuccessToast("Resource Have been uploaded successfully");
+    } catch (e) {
+      Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
+    }
+  }
 }
 
-final getAssignmentProvider = FutureProvider<AssignmentResponse>((ref) async {
+final getAssignmentProvider =
+    FutureProvider.autoDispose<AssignmentResponse>((ref) async {
   final assignments = await assignmentService.getAssignments();
   return assignments;
 });
 
-final getSingleAssignmentProvider =
-    FutureProvider.family<AssignmentResponse, String>(
-        (ref, assignmentId) async {
+final getSingleAssignmentProvider = FutureProvider.autoDispose
+    .family<SingleAssignmentResponse, String>((ref, assignmentId) async {
   final assignments = await assignmentService.getSingleAssignment(assignmentId);
   return assignments;
 });

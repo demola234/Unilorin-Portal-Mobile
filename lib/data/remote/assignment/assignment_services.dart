@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:probitas_app/data/local/cache.dart';
 import '../../../features/assignments/data/model/assignment_response.dart';
+import '../../../features/assignments/data/model/single_assignment_response.dart';
 import 'assignment_repository.dart';
 
 abstract class AssignmentService {
   Future<AssignmentResponse> getAssignments();
-  Future<AssignmentResponse> getSingleAssignment(String assignmentId);
+  Future<SingleAssignmentResponse> getSingleAssignment(String assignmentId);
   Future deleteAssignment(String assignmentId);
   Future createAssignment(
       {String courseCode,
@@ -53,7 +54,7 @@ class AssignmentServiceImpl extends AssignmentService {
   }
 
   @override
-  Future<AssignmentResponse> getSingleAssignment(String assignmentId) async {
+  Future<SingleAssignmentResponse> getSingleAssignment(String assignmentId) async {
     return assignmentRepository.getSingleAssignment(
         await cache.getToken(), assignmentId);
   }

@@ -3,11 +3,12 @@ import 'package:dio/dio.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
 import '../../../features/assignments/data/model/assignment_response.dart';
+import '../../../features/assignments/data/model/single_assignment_response.dart';
 import '../../../features/resources/data/model/resource_response.dart';
 
 abstract class AssignmentRepository {
   Future<AssignmentResponse> getAssignments(String token);
-  Future<AssignmentResponse> getSingleAssignment(
+  Future<SingleAssignmentResponse> getSingleAssignment(
       String token, String assignmentId);
   Future deleteAssignment(String token, String assignmentId);
   Future createAssignment(String token,
@@ -76,12 +77,12 @@ class AssignmentRepositoryImpl extends BaseApi implements AssignmentRepository {
   }
 
   @override
-  Future<AssignmentResponse> getSingleAssignment(
+  Future<SingleAssignmentResponse> getSingleAssignment(
       String token, String assignmentId) async {
     try {
-      var data =
-          await get("assignments/$assignmentId", headers: getHeader(token));
-      final s = AssignmentResponse.fromJson(data);
+      var data = await get("users/userId/assignments/$assignmentId",
+          headers: getHeader(token));
+      final s = SingleAssignmentResponse.fromJson(data);
       return s;
     } catch (err) {
       if (err is RequestException) {
