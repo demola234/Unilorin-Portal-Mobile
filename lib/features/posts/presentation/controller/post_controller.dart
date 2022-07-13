@@ -26,6 +26,12 @@ final getSinglePostCommentsProvider =
   return getSinglePost;
 });
 
+final deletePostProvider =
+    FutureProvider.family((ref, String postId) async {
+  final delete = await postService.deletePost(postId);
+  return delete;
+});
+
 class PostsNotifier extends StateNotifier<PostsState> {
   PostsNotifier(this._read) : super(PostsState.initial()) {
     getPosts();

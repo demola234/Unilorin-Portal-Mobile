@@ -23,6 +23,7 @@ import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/customs/custom_error.dart';
 import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../../data/model/all_posts.dart';
 import '../controller/post_controller.dart';
 import '../provider/post_provider.dart';
@@ -219,6 +220,7 @@ class _PostsListState extends ConsumerState<PostsList> {
 
   @override
   Widget build(BuildContext context) {
+    final getUser = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final scrollController = useScrollController();
@@ -338,20 +340,40 @@ class _PostsListState extends ConsumerState<PostsList> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            PopupMenuButton(
-                              child: Icon(
-                                Icons.more_vert,
-                                color: isDarkMode
-                                    ? ProbitasColor.ProbitasTextPrimary
-                                    : ProbitasColor.ProbitasPrimary,
-                              ),
-                              onSelected: (selectedValue) {
-                                print(selectedValue);
-                              },
-                              itemBuilder: (BuildContext ctx) => [
-                                PopupMenuItem(
-                                    child: Text('Delete'), value: '1'),
-                              ],
+                            getUser.when(
+                              data: (data) => data.data!.user!.user!.id ==
+                                      widget
+                                          .postsNotifier.posts![index].user!.id
+                                  ? PopupMenuButton(
+                                      child: Icon(
+                                        Icons.more_vert,
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor.ProbitasPrimary,
+                                      ),
+                                      itemBuilder: (BuildContext ctx) => [
+                                        PopupMenuItem(
+                                            child: Text('Delete'),
+                                            onTap: () => ref.read(
+                                                deletePostProvider(widget
+                                                    .postsNotifier
+                                                    .posts![index]
+                                                    .id!))
+                                            // Future.delayed(
+                                            //     const Duration(seconds: 2),
+                                            //     () {
+                                            //   ref
+                                            //       .refresh(
+                                            //           postsNotifierProvider
+                                            //               .notifier)
+                                            //       .getPosts();
+                                            // });
+                                            )
+                                      ],
+                                    )
+                                  : Container(),
+                              loading: () => Container(),
+                              error: (str, err) => Container(),
                             ),
                             YMargin(2.0),
                             Text(

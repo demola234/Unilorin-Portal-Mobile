@@ -9,6 +9,6 @@ var postService = getIt<PostService>();
 late bool loading;
 
 
-final postsNotifierProvider = StateNotifierProvider<PostsNotifier, PostsState>(
-  (ref) => PostsNotifier(ref.read),
+final postsNotifierProvider = StateNotifierProvider.autoDispose<PostsNotifier, PostsState>(
+  (ref) => PostsNotifier(ref.watch),
 );
