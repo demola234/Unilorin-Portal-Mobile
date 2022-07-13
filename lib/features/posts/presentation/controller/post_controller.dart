@@ -13,14 +13,14 @@ import '../../../../injection_container.dart';
 import '../../data/model/all_comments.dart';
 
 final getSinglePostProvider =
-    FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
+    FutureProvider.family.autoDispose<SinglePostResponse, String>((ref, postId) async {
   final getSinglePost = await postService.getSinglePost(postId);
 
   return getSinglePost;
 });
 
 final getSinglePostCommentsProvider =
-    FutureProvider.family<SingleCommentResponse, String>((ref, postId) async {
+    FutureProvider.family.autoDispose<SingleCommentResponse, String>((ref, postId) async {
   final getSinglePost = await postService.getPostsComments(postId);
 
   return getSinglePost;

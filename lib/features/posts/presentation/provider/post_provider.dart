@@ -8,7 +8,7 @@ import '../../../authentication/data/infrastructure/authentication_state.dart';
 var postService = getIt<PostService>();
 late bool loading;
 
-
-final postsNotifierProvider = StateNotifierProvider.autoDispose<PostsNotifier, PostsState>(
+final postsNotifierProvider =
+    StateNotifierProvider.autoDispose<PostsNotifier, PostsState>(
   (ref) => PostsNotifier(ref.watch),
 );
