@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
+import 'package:probitas_app/core/utils/allowed_extension.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
@@ -192,11 +193,14 @@ class _ResourceTileState extends State<ResourceTile> {
       onTap: () {
         showModalBottomSheet<Null>(
           context: context,
+          isScrollControlled: true,
           builder: (BuildContext context) {
             return Container(
               decoration: BoxDecoration(
-                  // borderRadius: _borderRadius,
-                  ),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+              ),
               height: context.screenHeight() / 3,
               child: Column(
                 children: [
@@ -218,31 +222,8 @@ class _ResourceTileState extends State<ResourceTile> {
                           width: 70.0,
                           height: 100,
                           decoration: BoxDecoration(
-                              color: ProbitasColor.ProbitasTextSecondary,
                               borderRadius: BorderRadius.circular(5.0)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.response!.courseCode!,
-                                style: Config.b2(context).copyWith(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                widget.response!.file!
-                                    .split(".")
-                                    .last
-                                    .toUpperCase(),
-                                style: Config.b2(context).copyWith(
-                                  color: ProbitasColor.ProbitasTextPrimary,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: getResourceIcon(),
                         ),
                         XMargin(15),
                         Column(
@@ -312,9 +293,9 @@ class _ResourceTileState extends State<ResourceTile> {
         height: 120,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-          color: ProbitasColor.ProbitasTextSecondary,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+            // color: ProbitasColor.ProbitasTextSecondary,
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(color: ProbitasColor.ProbitasTextPrimary)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
@@ -323,29 +304,9 @@ class _ResourceTileState extends State<ResourceTile> {
               Container(
                 width: 70.0,
                 height: 100,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasTextPrimary,
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.response!.courseCode!,
-                      style: Config.b2(context).copyWith(
-                          color: ProbitasColor.ProbitasSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      widget.response!.file!.split(".").last.toUpperCase(),
-                      style: Config.b2(context).copyWith(
-                        color: ProbitasColor.ProbitasSecondary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                child: getResourceIcon(),
               ),
               XMargin(15),
               Column(
@@ -356,7 +317,6 @@ class _ResourceTileState extends State<ResourceTile> {
                   Text(
                     widget.response!.courseTitle!,
                     style: Config.b2(context).copyWith(
-                      color: Colors.white,
                       fontSize: 12,
                     ),
                   ),
@@ -368,7 +328,6 @@ class _ResourceTileState extends State<ResourceTile> {
                       Text(
                           "By ${widget.response!.user!.fullName!.split(" ")[0]} ${widget.response!.user!.fullName!.split(" ")[1]}",
                           style: Config.b2(context).copyWith(
-                            color: Colors.white,
                             fontSize: 12,
                           )),
                     ],
@@ -380,6 +339,32 @@ class _ResourceTileState extends State<ResourceTile> {
         ),
       ),
     );
+  }
+
+  getResourceIcon() {
+    if (widget.response!.file!.split(".").last.toLowerCase() == "pdf") {
+      return SvgPicture.asset(ImagesAsset.pdf);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "png") {
+      return SvgPicture.asset(ImagesAsset.png);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "jpg") {
+      return SvgPicture.asset(ImagesAsset.jpg);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "jpeg") {
+      return SvgPicture.asset(ImagesAsset.jpg);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "doc") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "docx") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "xls") {
+      return SvgPicture.asset(ImagesAsset.xls);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "webp") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "xlsx") {
+      return SvgPicture.asset(ImagesAsset.xls);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "pptx") {
+      return SvgPicture.asset(ImagesAsset.ppt);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "ppt") {
+      return SvgPicture.asset(ImagesAsset.ppt);
+    }
   }
 
   Future<List<Directory>?> _getExternalStoragePath() {

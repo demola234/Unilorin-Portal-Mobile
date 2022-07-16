@@ -599,6 +599,7 @@ class _LikedOrUnlikedState extends ConsumerState<LikedOrUnliked> {
         ref
             .watch(postsNotifierProvider.notifier)
             .likedOrUnlike(widget.post.id!);
+        ref.refresh(postsNotifierProvider.notifier).getPosts();
       } catch (e) {
         widget.post.isUserLiked = liked;
         if (liked) {

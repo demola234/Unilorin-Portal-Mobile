@@ -230,8 +230,8 @@ class _PostsListState extends ConsumerState<PostsList> {
       void scrollListener() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          ref.read(postsNotifierProvider.notifier).getMorePosts();
-        }
+          ref.watch(postsNotifierProvider.notifier).getMorePosts();
+        } 
       }
 
       scrollController.addListener(scrollListener);
@@ -356,21 +356,21 @@ class _PostsListState extends ConsumerState<PostsList> {
                                       itemBuilder: (BuildContext ctx) => [
                                         PopupMenuItem(
                                             child: Text('Delete'),
-                                            onTap: () => ref.read(
-                                                deletePostProvider(widget
-                                                    .postsNotifier
-                                                    .posts![index]
-                                                    .id!))
-                                            // Future.delayed(
-                                            //     const Duration(seconds: 2),
-                                            //     () {
-                                            //   ref
-                                            //       .refresh(
-                                            //           postsNotifierProvider
-                                            //               .notifier)
-                                            //       .getPosts();
-                                            // });
-                                            )
+                                            onTap: () {
+                                              ref.read(deletePostProvider(widget
+                                                  .postsNotifier
+                                                  .posts![index]
+                                                  .id!));
+                                              Future.delayed(
+                                                  const Duration(seconds: 4),
+                                                  () {
+                                                ref
+                                                    .refresh(
+                                                        postsNotifierProvider
+                                                            .notifier)
+                                                    .getPosts();
+                                              });
+                                            })
                                       ],
                                     )
                                   : Container(),
@@ -548,7 +548,7 @@ class _UserLikesState extends ConsumerState<UserLikes> {
       }
       try {
         ref
-            .refresh(postsNotifierProvider.notifier)
+            .watch(postsNotifierProvider.notifier)
             .likedOrUnlike(widget.posts.id!);
       } catch (e) {
         widget.posts.isUserLiked = liked;
@@ -573,31 +573,31 @@ class PostListImage extends StatefulWidget {
 
 class _PostListItemState extends State<PostListImage> {
   final pageController = PageController();
-  late VideoPlayerController _controller;
-  @override
-  void initState() {
-    super.initState();
-    for (var i = 0; i < widget.posts.images!.length; i++) {
-      _controller = VideoPlayerController.network(widget.posts.images![i]);
-    }
-    _controller.initialize().then((_) {
-      if (mounted) {
-        setState(() {});
-        _controller.play();
-      }
-    });
-  }
+  // late VideoPlayerController _controller;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   for (var i = 0; i < widget.posts.images!.length; i++) {
+  //     _controller = VideoPlayerController.network(widget.posts.images![i]);
+  //   }
+  //   _controller.initialize().then((_) {
+  //     if (mounted) {
+  //       setState(() {});
+  //       _controller.play();
+  //     }
+  //   });
+  // }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  // }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.pause();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _controller.pause();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -612,37 +612,38 @@ class _PostListItemState extends State<PostListImage> {
               itemCount: widget.posts.images!.length,
               itemBuilder: (context, imageIndex) {
                 return GestureDetector(
-                  onTap: () {
-                    ImageViewUtils.showImagePreview(
-                        context, [widget.posts.images![imageIndex]]);
-                  },
-                  child: !widget.posts.images!.last.contains(".mp4")
-                      ? Container(
-                          decoration: BoxDecoration(),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.posts.images![imageIndex],
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : VisibilityDetector(
-                          key: Key("value"),
-                          onVisibilityChanged: (VisibilityInfo info) {
-                            debugPrint(
-                                "${info.visibleFraction} ${this.mounted}");
-                            if (info.visibleFraction >= 0.8 && this.mounted) {
-                              _controller.play();
-                              _controller.setVolume(1.0);
-                            } else {
-                              _controller.pause();
-                              _controller.setVolume(0.0);
-                            }
-                          },
-                          child: AspectRatio(
-                            aspectRatio: _controller.value.aspectRatio,
-                            child: VideoPlayer(_controller),
-                          ),
-                        ),
-                );
+                    onTap: () {
+                      ImageViewUtils.showImagePreview(
+                          context, [widget.posts.images![imageIndex]]);
+                    },
+                    // child: !widget.posts.images!.last.contains(".mp4")
+                    // ?
+                    child: Container(
+                      decoration: BoxDecoration(),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.posts.images![imageIndex],
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                    // : VisibilityDetector(
+                    //     key: Key("value"),
+                    //     onVisibilityChanged: (VisibilityInfo info) {
+                    //       debugPrint(
+                    //           "${info.visibleFraction} ${this.mounted}");
+                    //       if (info.visibleFraction >= 0.8 && this.mounted) {
+                    //         _controller.play();
+                    //         _controller.setVolume(1.0);
+                    //       } else {
+                    //         _controller.pause();
+                    //         _controller.setVolume(0.0);
+                    //       }
+                    //     },
+                    //     child: AspectRatio(
+                    //       aspectRatio: _controller.value.aspectRatio,
+                    //       child: VideoPlayer(_controller),
+                    //     ),
+                    //   ),
+                    );
               },
             )),
         widget.posts.images!.length > 1

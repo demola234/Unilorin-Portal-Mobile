@@ -9,9 +9,11 @@ class CustomNavBar extends StatelessWidget {
   CustomNavBar({
     Key? key,
     required this.title,
+    this.onTap,
   }) : super(key: key);
 
   final String title;
+  void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;

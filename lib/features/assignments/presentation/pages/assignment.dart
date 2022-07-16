@@ -74,7 +74,9 @@ class _AssignmentState extends ConsumerState<Assignment> {
                                   lecturer: data.data[index].lecturer,
                                   assignmentId: data.data[index].id,
                                 )
-                              : SizedBox.fromSize();
+                              : data.data.first.courseCode.length > 1
+                                  ? Container()
+                                  : Container();
                         }),
                     loading: () => Center(
                       child: CircularProgressIndicator(
