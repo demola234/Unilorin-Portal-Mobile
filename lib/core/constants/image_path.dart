@@ -28,12 +28,14 @@ class ImagesAsset {
   static String file = 'assets/icons/file.svg';
   static String calculator = 'assets/icons/calculator.svg';
   static String download = 'assets/icons/download.svg';
+  static String files = 'assets/icons/nofile.svg';
   static String png = 'assets/icons/png.svg';
   static String pdf = 'assets/icons/pdf.svg';
   static String xls = 'assets/icons/xls.svg';
   static String doc = 'assets/icons/docs.svg';
   static String ppt = 'assets/icons/ppt.svg';
   static String jpg = 'assets/icons/jpg.svg';
+  static String verified = 'assets/icons/verified.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';

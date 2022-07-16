@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
+import 'package:probitas_app/features/resources/presentation/provider/resources_provider.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
@@ -27,6 +28,11 @@ final getResourcesSearchedNotifier =
       await resourceRepository.searchResources(search);
 
   return resourceSearchResponse;
+});
+
+final deleteResourceProvider = FutureProvider.family((ref, String resourceId) async {
+  final delete = await resourceService.deleteResource(resourceId);
+  return delete;
 });
 
 class ResourcesNotifier extends StateNotifier<ResourceState> {

@@ -16,6 +16,7 @@ abstract class ResourceRepository {
     String token,
     String search,
   );
+  Future deleteResources(String token, String resourceId);
 }
 
 class ResourceRepositoryRepositoryImpl extends BaseApi
@@ -70,6 +71,21 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
       "s": search,
     });
     try {
+      final s = ResourceResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future deleteResources(String token, String resourceId) async {
+    try {
+      var data =
+          await delete("resources/$resourceId", headers: getHeader(token));
       final s = ResourceResponse.fromJson(data);
       return s;
     } catch (err) {

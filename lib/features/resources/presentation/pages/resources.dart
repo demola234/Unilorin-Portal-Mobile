@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
@@ -20,6 +21,7 @@ import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/customs/custom_error.dart';
+import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../controller/resource_controller.dart';
 import '../provider/resources_provider.dart';
 import 'package:probitas_app/core/utils/states.dart';
@@ -36,6 +38,8 @@ class _ResourcesState extends ConsumerState<Resources> {
   TextEditingController searchController = TextEditingController();
 
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+      GlobalKey<LiquidPullToRefreshState>();
   @override
   Widget build(BuildContext context) {
     final resourcesNotifier = ref.watch(resourcesNotifierProvider);
@@ -102,8 +106,10 @@ class _ResourcesState extends ConsumerState<Resources> {
                               child: Column(
                                 children: [
                                   ErrorsWidget(
-                                    onTap: () =>
-                                        ref.refresh(resourcesNotifierProvider),
+                                    onTap: () => ref
+                                        .refresh(
+                                            resourcesNotifierProvider.notifier)
+                                        .getResource(),
                                   ),
                                 ],
                               ),
@@ -113,7 +119,19 @@ class _ResourcesState extends ConsumerState<Resources> {
                       ],
                     );
                   } else {
-                    return ResourceItems(resourceNotifier: resourcesNotifier);
+                    return Expanded(
+                      child: LiquidPullToRefresh(
+                          key: _refreshIndicatorKey,
+                          color: ProbitasColor.ProbitasSecondary,
+                          backgroundColor: ProbitasColor.ProbitasTextPrimary,
+                          animSpeedFactor: 5,
+                          showChildOpacityTransition: false,
+                          onRefresh: () => ref
+                              .refresh(resourcesNotifierProvider.notifier)
+                              .getResource(),
+                          child: ResourceItems(
+                              resourceNotifier: resourcesNotifier)),
+                    );
                   }
                 })
               : Expanded(
@@ -147,10 +165,21 @@ class _ResourcesState extends ConsumerState<Resources> {
                                       ],
                                     ),
                                   ),
-                              loading: () => Center(
-                                    child: CircularProgressIndicator(
-                                        color: ProbitasColor.ProbitasSecondary),
-                                  )))),
+                              loading: () => SingleChildScrollView(
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                        Align(
+                                            alignment: Alignment.center,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                  color: ProbitasColor
+                                                      .ProbitasSecondary),
+                                            ))
+                                      ]))))),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -197,24 +226,19 @@ class _ResourceItemsState extends ConsumerState<ResourceItems> {
       return () => scrollController.removeListener(scrollListener);
     }, [scrollController]);
 
-    return Expanded(
-        child: Container(
-      height: context.screenHeight(),
-      width: context.screenWidth(),
-      child: ListView.builder(
-          itemCount: widget.resourceNotifier.resource!.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            if (index == widget.resourceNotifier.resource!.length - 1 &&
-                widget.resourceNotifier.moreDataAvailable) {}
-            final response = widget.resourceNotifier.resource![index];
-            return ResourceTile(response: response);
-          }),
-    ));
+    return ListView.builder(
+        itemCount: widget.resourceNotifier.resource!.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (index == widget.resourceNotifier.resource!.length - 1 &&
+              widget.resourceNotifier.moreDataAvailable) {}
+          final response = widget.resourceNotifier.resource![index];
+          return ResourceTile(response: response);
+        });
   }
 }
 
-class ResourceTile extends StatefulWidget {
+class ResourceTile extends ConsumerStatefulWidget {
   Datum? response;
 
   ResourceTile({
@@ -223,10 +247,10 @@ class ResourceTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ResourceTile> createState() => _ResourceTileState();
+  ConsumerState<ResourceTile> createState() => _ResourceTileState();
 }
 
-class _ResourceTileState extends State<ResourceTile> {
+class _ResourceTileState extends ConsumerState<ResourceTile> {
   bool isLoading = false;
   late Dio dio;
   late String progress;
@@ -241,6 +265,7 @@ class _ResourceTileState extends State<ResourceTile> {
 
   @override
   Widget build(BuildContext context) {
+    final getUser = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
@@ -249,15 +274,15 @@ class _ResourceTileState extends State<ResourceTile> {
           isScrollControlled: true,
           builder: (BuildContext context) {
             return Container(
+              height: context.screenHeight() / 2.5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
               ),
-              height: context.screenHeight() / 3,
               child: Column(
                 children: [
-                  YMargin(10),
+                  YMargin(5),
                   Container(
                       height: 6,
                       width: context.screenWidth() / 3.5,
@@ -265,7 +290,7 @@ class _ResourceTileState extends State<ResourceTile> {
                           color: ProbitasColor.ProbitasTextPrimary.withOpacity(
                               0.7),
                           borderRadius: BorderRadius.circular(5.0))),
-                  YMargin(30),
+                  Spacer(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Row(
@@ -335,7 +360,28 @@ class _ResourceTileState extends State<ResourceTile> {
                             ));
                           },
                           text: "View Material")
-                      : SizedBox.shrink()
+                      : SizedBox.shrink(),
+                  Spacer(),
+                  getUser.when(
+                    data: (data) => data.data!.user!.user!.id ==
+                            widget.response!.user!.id
+                        ? ProbitasButton(
+                            text: "Delete Material",
+                            onTap: () {
+                              ref.read(
+                                  deleteResourceProvider(widget.response!.id!));
+                              Navigator.pop(context);
+                              Future.delayed(const Duration(seconds: 3), () {
+                                ref
+                                    .refresh(resourcesNotifierProvider.notifier)
+                                    .getResource();
+                              });
+                            })
+                        : Container(),
+                    loading: () => Container(),
+                    error: (str, err) => Container(),
+                  ),
+                  Spacer(),
                 ],
               ),
             );
@@ -420,6 +466,8 @@ class _ResourceTileState extends State<ResourceTile> {
       return SvgPicture.asset(ImagesAsset.ppt);
     } else if (widget.response!.file!.split(".").last.toLowerCase() == "ppt") {
       return SvgPicture.asset(ImagesAsset.ppt);
+    } else {
+      return SvgPicture.asset(ImagesAsset.file);
     }
   }
 

@@ -231,7 +231,7 @@ class _PostsListState extends ConsumerState<PostsList> {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
           ref.watch(postsNotifierProvider.notifier).getMorePosts();
-        } 
+        }
       }
 
       scrollController.addListener(scrollListener);
@@ -304,13 +304,12 @@ class _PostsListState extends ConsumerState<PostsList> {
                           ),
                         ),
                         XMargin(10),
-                        Flexible(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 400,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              child: Container(
                                 child: Text(
                                   "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
                                   style: Config.b2(context).copyWith(
@@ -323,20 +322,20 @@ class _PostsListState extends ConsumerState<PostsList> {
                                   textAlign: TextAlign.justify,
                                 ),
                               ),
-                              YMargin(2.0),
-                              Text(
-                                widget.postsNotifier.posts![index].user!
-                                    .department!
-                                    .toString(),
-                                style: Config.b2(context).copyWith(
-                                  color: isDarkMode
-                                      ? ProbitasColor.ProbitasTextPrimary
-                                          .withOpacity(0.5)
-                                      : ProbitasColor.ProbitasTextSecondary,
-                                ),
+                            ),
+                            YMargin(2.0),
+                            Text(
+                              widget
+                                  .postsNotifier.posts![index].user!.department!
+                                  .toString(),
+                              style: Config.b2(context).copyWith(
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                        .withOpacity(0.5)
+                                    : ProbitasColor.ProbitasTextSecondary,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                         Spacer(),
                         Column(

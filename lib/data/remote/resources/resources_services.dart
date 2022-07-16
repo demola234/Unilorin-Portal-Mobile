@@ -13,6 +13,7 @@ abstract class ResourcesService {
   Future<ResourceResponse> searchResources(
     String search,
   );
+    Future deleteResource(String resourceId);
 }
 
 class ResourcesServiceImpl extends ResourcesService {
@@ -43,5 +44,10 @@ class ResourcesServiceImpl extends ResourcesService {
   @override
   Future<ResourceResponse> searchResources(String search) async {
     return resourceRepository.searchResources(await cache.getToken(), search);
+  }
+
+  @override
+  Future deleteResource(String resourceId) async{
+     return resourceRepository.deleteResources(await cache.getToken(), resourceId);
   }
 }

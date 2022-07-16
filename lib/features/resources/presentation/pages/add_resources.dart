@@ -108,7 +108,7 @@ class _AddResourcesState extends ConsumerState<AddResources> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ProbitasSmallButton(
                 title: "Upload File",
-                icon: ImagesAsset.file,
+                // icon: ImagesAsset.file,
                 onTap: _openFileExplorer,
               )),
         ),
