@@ -10,6 +10,7 @@ import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'core/utils/navigation_service.dart';
 import 'features/authentication/presentation/pages/authentication/initail.dart';
+import 'features/settings/controller/theme_controller.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -29,12 +30,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   var brightness = SchedulerBinding.instance!.window.platformBrightness;
   @override
   void initState() {
@@ -44,20 +45,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final _themeNotifier = ref.watch(themeNotifierProvider);
     return OverlaySupport.global(
         child: MaterialApp(
       title: 'Probitas App',
       navigatorKey: NavigationService().navigationKey,
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
+      themeMode: _themeNotifier.themeMode,
+      theme: ThemeData.light(),
       darkTheme: ThemeData(
           brightness: Brightness.dark,
           scaffoldBackgroundColor: Color(0xFF1A1A2A),
           bottomNavigationBarTheme: BottomNavigationBarThemeData(
             elevation: 0,
             backgroundColor: ProbitasColor.ProbitasPrimary,
-          )),
+          ),
+          ),
       debugShowCheckedModeBanner: false,
       home: InitialScreen(),
     ));

@@ -9,6 +9,8 @@ abstract class Cache {
   Future clear();
   Future saveUser(UserRequest user);
   Future<bool> isFirstLoad();
+  Future setFCMToken(String token);
+  String? getFCMToken();
   Future saveToken(String token);
 
   static Cache get() => getIt<Cache>();
@@ -57,5 +59,15 @@ class CacheImpl implements Cache {
   @override
   Future saveUser(UserRequest user) {
     return box.write('user', user.toJson());
+  }
+
+  @override
+  String? getFCMToken() {
+    return box.read('fcm');
+  }
+
+  @override
+  Future setFCMToken(String token) {
+    return box.write('fcm', token);
   }
 }

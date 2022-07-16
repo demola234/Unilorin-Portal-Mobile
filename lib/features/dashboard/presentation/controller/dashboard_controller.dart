@@ -21,7 +21,7 @@ import '../provider/dashboard_provider.dart';
 // }
 var dashboardService = getIt<DashBoardService>();
 
-final getUsersProvider = FutureProvider.autoDispose<UserResponses>((ref) async {
+final getUsersProvider = FutureProvider<UserResponses>((ref) async {
   final profile = await dashboardService.fetchUsers();
   // print(profile.data!.user.fullName);
   return profile;
@@ -71,7 +71,7 @@ final getSchedulesProvider =
 });
 
 final deleteSchedulesProvider =
-    FutureProvider.family((ref, String scheduleId) async {
+    FutureProvider.family.autoDispose((ref, String scheduleId) async {
   final delete = await dashboardService.deleteSchedules(scheduleId);
   return delete;
 });

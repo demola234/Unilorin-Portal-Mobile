@@ -65,13 +65,16 @@ class _AssignmentState extends ConsumerState<Assignment> {
                         itemCount: data.data.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return AssignmentTile(
-                            courseCode: data.data[index].courseCode,
-                            courseTitle: data.data[index].courseTitle,
-                            dueDate: data.data[index].dueDate,
-                            lecturer: data.data[index].lecturer,
-                            assignmentId: data.data[index].id,
-                          );
+                          return data.data[index].dueDate
+                                  .isAfter(DateTime.now())
+                              ? AssignmentTile(
+                                  courseCode: data.data[index].courseCode,
+                                  courseTitle: data.data[index].courseTitle,
+                                  dueDate: data.data[index].dueDate,
+                                  lecturer: data.data[index].lecturer,
+                                  assignmentId: data.data[index].id,
+                                )
+                              : SizedBox.fromSize();
                         }),
                     loading: () => Center(
                       child: CircularProgressIndicator(
@@ -154,77 +157,76 @@ class AssignmentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => NavigationService().navigateToScreen(SubmitAssignment(
-        assignmentId: assignmentId,
-      )),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5.0),
-        height: 140,
-        width: context.screenWidth(),
-        decoration: BoxDecoration(
-            color: ProbitasColor.ProbitasTextSecondary,
-            borderRadius: BorderRadius.circular(12.0)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 6.0,
-                height: 100,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasTextPrimary,
-                    borderRadius: BorderRadius.circular(12.0)),
-              ),
-              XMargin(15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  YMargin(20.0),
-                  Text(
-                    courseCode,
-                    style: Config.b2(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
+        onTap: () => NavigationService().navigateToScreen(SubmitAssignment(
+              assignmentId: assignmentId,
+            )),
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 5.0),
+          height: 140,
+          width: context.screenWidth(),
+          decoration: BoxDecoration(
+              color: ProbitasColor.ProbitasTextSecondary,
+              borderRadius: BorderRadius.circular(12.0)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 6.0,
+                  height: 100,
+                  decoration: BoxDecoration(
+                      color: ProbitasColor.ProbitasTextPrimary,
+                      borderRadius: BorderRadius.circular(12.0)),
+                ),
+                XMargin(15),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    YMargin(20.0),
+                    Text(
+                      courseCode,
+                      style: Config.b2(context).copyWith(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  YMargin(2.0),
-                  Text(
-                    courseTitle,
-                    style: Config.b2(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
+                    YMargin(2.0),
+                    Text(
+                      courseTitle,
+                      style: Config.b2(context).copyWith(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(DateFormat.MMMMEEEEd().add_jm().format(dueDate),
-                          style: Config.b2(context).copyWith(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text("By $lecturer",
-                          style: Config.b2(context).copyWith(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                    ],
-                  ),
-                ],
-              )
-            ],
+                    Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(DateFormat.MMMMEEEEd().add_jm().format(dueDate),
+                            style: Config.b2(context).copyWith(
+                              color: Colors.white,
+                              fontSize: 12,
+                            )),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("By $lecturer",
+                            style: Config.b2(context).copyWith(
+                              color: Colors.white,
+                              fontSize: 12,
+                            )),
+                      ],
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
