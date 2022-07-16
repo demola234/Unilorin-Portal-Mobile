@@ -21,7 +21,7 @@ import '../provider/dashboard_provider.dart';
 // }
 var dashboardService = getIt<DashBoardService>();
 
-final getUsersProvider = FutureProvider<UserResponses>((ref) async {
+final getUsersProvider = FutureProvider.autoDispose<UserResponses>((ref) async {
   final profile = await dashboardService.fetchUsers();
   // print(profile.data!.user.fullName);
   return profile;

@@ -243,165 +243,162 @@ class GetResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: ListView(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              children: <Widget>[
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: DataTable(
-                        dividerThickness: 1,
-                        columnSpacing: 15,
-                        sortColumnIndex: 1,
-                        sortAscending: true,
-                        columns: [
-                          DataColumn(
-                            label: Text(
-                              'Code',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Course Code',
+        child: Container(
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
+      child: ListView(
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          children: <Widget>[
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: DataTable(
+                    dividerThickness: 1,
+                    columnSpacing: 15,
+                    sortColumnIndex: 1,
+                    sortAscending: true,
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          'Code',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Course Code',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Status',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Status',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Unit',
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Unit',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Ca',
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Ca',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Exam',
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Exam',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Total',
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Total',
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Grade',
+                          maxLines: 1,
+                          overflow: TextOverflow.visible,
+                          style: Config.b3(context),
+                        ),
+                        numeric: false,
+                        tooltip: 'Grade',
+                      ),
+                    ],
+                    rows: List.generate(result.length, (index) {
+                      return DataRow(cells: [
+                        DataCell(
+                          Text(
+                            result[index].title!.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
                           ),
-                          DataColumn(
-                            label: Text(
-                              'Status',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Status',
+                        ),
+                        DataCell(
+                          Text(
+                            result[index].status!.name,
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
                           ),
-                          DataColumn(
-                            label: Text(
-                              'Unit',
-                              maxLines: 1,
+                        ),
+                        DataCell(
+                          Text(
+                            result[index].unit!.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            result[index].ca!.toString().replaceAll(regex, ' '),
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            result[index]
+                                .exam!
+                                .toString()
+                                .replaceAll(regex, ' '),
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            result[index].total!.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
+                            style: Config.b3(context),
+                          ),
+                        ),
+                        DataCell(Row(
+                          children: [
+                            Text(
+                              result[index].grade!.toString(),
+                              maxLines: 2,
                               overflow: TextOverflow.visible,
                               style: Config.b3(context),
                             ),
-                            numeric: false,
-                            tooltip: 'Unit',
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Ca',
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Ca',
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Exam',
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Exam',
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Total',
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Total',
-                          ),
-                          DataColumn(
-                            label: Text(
-                              'Grade',
-                              maxLines: 1,
-                              overflow: TextOverflow.visible,
-                              style: Config.b3(context),
-                            ),
-                            numeric: false,
-                            tooltip: 'Grade',
-                          ),
-                        ],
-                        rows: List.generate(result.length, (index) {
-                          return DataRow(cells: [
-                            DataCell(
-                              Text(
-                                result[index].title!.toString(),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                result[index].status!.name,
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                result[index].unit!.toString(),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                result[index]
-                                    .ca!
-                                    .toString()
-                                    .replaceAll(regex, ' '),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                result[index]
-                                    .exam!
-                                    .toString()
-                                    .replaceAll(regex, ' '),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                result[index].total!.toString(),
-                                maxLines: 2,
-                                overflow: TextOverflow.visible,
-                                style: Config.b3(context),
-                              ),
-                            ),
-                            DataCell(Row(
-                              children: [
-                                Text(
-                                  result[index].grade!.toString(),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.visible,
-                                  style: Config.b3(context),
-                                ),
-                              ],
-                            )),
-                          ]);
-                        }),
-                      ))
-                ])
-              ])),
-    );
+                          ],
+                        )),
+                      ]);
+                    }),
+                  ))
+            ])
+          ]),
+    ));
   }
 }

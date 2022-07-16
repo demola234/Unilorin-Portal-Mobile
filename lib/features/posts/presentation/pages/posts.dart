@@ -14,6 +14,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/error/toasts.dart';
@@ -571,6 +573,32 @@ class PostListImage extends StatefulWidget {
 
 class _PostListItemState extends State<PostListImage> {
   final pageController = PageController();
+  late VideoPlayerController _controller;
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < widget.posts.images!.length; i++) {
+      _controller = VideoPlayerController.network(widget.posts.images![i]);
+    }
+    _controller.initialize().then((_) {
+      if (mounted) {
+        setState(() {});
+        _controller.play();
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.pause();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -588,13 +616,32 @@ class _PostListItemState extends State<PostListImage> {
                     ImageViewUtils.showImagePreview(
                         context, [widget.posts.images![imageIndex]]);
                   },
-                  child: Container(
-                    decoration: BoxDecoration(),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.posts.images![imageIndex],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  child: !widget.posts.images!.last.contains(".mp4")
+                      ? Container(
+                          decoration: BoxDecoration(),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.posts.images![imageIndex],
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : VisibilityDetector(
+                          key: Key("value"),
+                          onVisibilityChanged: (VisibilityInfo info) {
+                            debugPrint(
+                                "${info.visibleFraction} ${this.mounted}");
+                            if (info.visibleFraction >= 0.8 && this.mounted) {
+                              _controller.play();
+                              _controller.setVolume(1.0);
+                            } else {
+                              _controller.pause();
+                              _controller.setVolume(0.0);
+                            }
+                          },
+                          child: AspectRatio(
+                            aspectRatio: _controller.value.aspectRatio,
+                            child: VideoPlayer(_controller),
+                          ),
+                        ),
                 );
               },
             )),
