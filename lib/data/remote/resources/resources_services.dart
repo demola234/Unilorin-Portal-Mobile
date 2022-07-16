@@ -9,7 +9,7 @@ abstract class ResourcesService {
       String? courseTitle,
       String? topic,
       required File file});
-  Future<ResourceResponse> getResources();
+  Future<ResourceResponse> getResources(int page);
   Future<ResourceResponse> searchResources(
     String search,
   );
@@ -36,8 +36,8 @@ class ResourcesServiceImpl extends ResourcesService {
   }
 
   @override
-  Future<ResourceResponse> getResources() async {
-    return resourceRepository.getResources(await cache.getToken());
+  Future<ResourceResponse> getResources(int page) async {
+    return resourceRepository.getResources(await cache.getToken(), page);
   }
 
   @override

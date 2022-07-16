@@ -11,7 +11,7 @@ abstract class ResourceRepository {
       String? topic,
       required File file});
 
-  Future<ResourceResponse> getResources(String token);
+  Future<ResourceResponse> getResources(String token, int page);
   Future<ResourceResponse> searchResources(
     String token,
     String search,
@@ -50,7 +50,7 @@ class ResourceRepositoryRepositoryImpl extends BaseApi
   }
 
   @override
-  Future<ResourceResponse> getResources(String token) async {
+  Future<ResourceResponse> getResources(String token, [int page = 1]) async {
     var data = await get("resources", headers: getHeader(token));
     try {
       final s = ResourceResponse.fromJson(data);

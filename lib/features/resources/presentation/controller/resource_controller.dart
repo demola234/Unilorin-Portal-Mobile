@@ -20,11 +20,6 @@ class ResourceNotifier extends StateNotifier {
 }
 
 var resourceRepository = getIt<ResourcesService>();
-final getResourcesNotifier = FutureProvider<ResourceResponse>((ref) async {
-  final resourceResponse = await resourceRepository.getResources();
-
-  return resourceResponse;
-});
 
 final getResourcesSearchedNotifier =
     FutureProvider.family<ResourceResponse, String>((ref, search) async {
@@ -48,7 +43,7 @@ class ResourcesNotifier extends StateNotifier<ResourceState> {
         currentPage: state.currentPage,
       );
 
-      final resource = await resourceRepository.getResources();
+      final resource = await resourceRepository.getResources(state.currentPage + 1);
 
       state = state.copyWith(
         resource: resource.data,
@@ -66,7 +61,7 @@ class ResourcesNotifier extends StateNotifier<ResourceState> {
 
   Future<void> getMoreResources() async {
     try {
-      final resource = await resourceRepository.getResources();
+      final resource = await resourceRepository.getResources(state.currentPage);
 
       if (resource.data!.isNotEmpty) {
         state = state.copyWith(moreDataAvailable: false);

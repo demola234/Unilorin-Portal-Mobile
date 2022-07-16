@@ -12,8 +12,9 @@ import '../../../../core/error/toasts.dart';
 
 class DownloadScreen extends StatefulWidget {
   final String url;
+  final String title;
 
-  DownloadScreen({required this.url});
+  DownloadScreen({required this.url, required this.title});
   @override
   _DownloadScreenState createState() => _DownloadScreenState();
 }
@@ -75,9 +76,9 @@ class _DownloadScreenState extends State<DownloadScreen> {
 
       String path = Platform.isIOS
           ? appDirectory!.path +
-              '/Probitas.${widget.url.toString().split(".").last}'
+              '/${widget.title}-Probitas.${widget.url.toString().split(".").last}'
           : appDirectory!.path.split('Android')[0] +
-              'Probitas.${widget.url.toString().split(".").last}';
+              'Probitas/${widget.title}-Probitas.${widget.url.toString().split(".").last}';
       print('path is $path');
       File file = File(path);
       if (!await file.exists()) {

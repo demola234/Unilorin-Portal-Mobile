@@ -7,7 +7,7 @@ import '../controller/resource_controller.dart';
 var resourceService = getIt<ResourcesService>();
 late bool loading;
 
-final resourceNotifierProvider = StateNotifierProvider(
+final resourceNotifierProviders = StateNotifierProvider(
     (ref) => ResourceNotifier(resourceService, AuthenticationLoading));
 
 final resourcesNotifierProvider = StateNotifierProvider<ResourcesNotifier, ResourceState>(

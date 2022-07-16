@@ -200,15 +200,17 @@ class _AddResourcesState extends ConsumerState<AddResources> {
       await ref
           .watch(resourcesNotifierProvider.notifier)
           .createResource(courseCode.text, courseTitle.text, topic.text, file!);
-      ref.refresh(getResourcesNotifier);
+      Future.delayed(const Duration(seconds: 1), () {
+        ref.refresh(resourceNotifierProviders.notifier);
+      });
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
-    }
+    } finally {}
   }
 
   void _openFileExplorer() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: allowedExtensions);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.any);
 
     // ignore: unnecessary_null_comparison
     if (result != null && result.files.map((e) => e.path) != null) {

@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
-import 'package:probitas_app/core/utils/allowed_extension.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
 import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:probitas_app/features/resources/data/model/resource_response.dart';
 import 'package:probitas_app/features/resources/presentation/pages/download_screen.dart';
 import 'package:probitas_app/features/resources/presentation/pages/pdf_viewer.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 // ignore: unused_import
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
@@ -19,11 +20,12 @@ import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/customs/custom_error.dart';
-import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../controller/resource_controller.dart';
+import '../provider/resources_provider.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import 'add_resources.dart';
 
-class Resources extends ConsumerStatefulWidget {
+class Resources extends StatefulHookConsumerWidget {
   const Resources({Key? key}) : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class _ResourcesState extends ConsumerState<Resources> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final resourcesNotifier = ref.watch(resourcesNotifierProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -82,34 +85,37 @@ class _ResourcesState extends ConsumerState<Resources> {
           ),
           YMargin(15),
           searchController.text.isEmpty
-              ? Expanded(
-                  child: Container(
-                      height: context.screenHeight(),
-                      width: context.screenWidth(),
-                      child: ref.watch(getResourcesNotifier).when(
-                          data: (data) => ListView.builder(
-                              itemCount: data.data!.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final response = data.data![index];
-                                return ResourceTile(response: response);
-                              }),
-                          error: (err, _) => Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Align(
-                                        alignment: Alignment.center,
-                                        child: Center(
-                                          child: ErrorsWidget(
-                                              onTap: () => ref.refresh(
-                                                  getResourcesNotifier)),
-                                        ))
-                                  ]),
-                          loading: () => Center(
-                                child: CircularProgressIndicator(
-                                    color: ProbitasColor.ProbitasSecondary),
-                              ))))
+              ? Builder(builder: (context) {
+                  if (resourcesNotifier.viewState.isLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: ProbitasColor.ProbitasSecondary,
+                    ));
+                  } else if (resourcesNotifier.viewState.isError) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  ErrorsWidget(
+                                    onTap: () =>
+                                        ref.refresh(resourcesNotifierProvider),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return ResourceItems(resourceNotifier: resourcesNotifier);
+                  }
+                })
               : Expanded(
                   child: Container(
                       height: context.screenHeight(),
@@ -158,6 +164,53 @@ class _ResourcesState extends ConsumerState<Resources> {
         ),
       ),
     );
+  }
+}
+
+class ResourceItems extends StatefulHookConsumerWidget {
+  ResourceItems({
+    Key? key,
+    required this.resourceNotifier,
+  }) : super(key: key);
+
+  final ResourceState resourceNotifier;
+
+  @override
+  ConsumerState<ResourceItems> createState() => _ResourceItemsState();
+}
+
+class _ResourceItemsState extends ConsumerState<ResourceItems> {
+  final controller = RefreshController();
+  @override
+  Widget build(BuildContext context) {
+    final scrollController = useScrollController();
+    useEffect(() {
+      void scrollListener() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          ref.watch(resourcesNotifierProvider.notifier).getResource();
+        }
+      }
+
+      scrollController.addListener(scrollListener);
+
+      return () => scrollController.removeListener(scrollListener);
+    }, [scrollController]);
+
+    return Expanded(
+        child: Container(
+      height: context.screenHeight(),
+      width: context.screenWidth(),
+      child: ListView.builder(
+          itemCount: widget.resourceNotifier.resource!.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (index == widget.resourceNotifier.resource!.length - 1 &&
+                widget.resourceNotifier.moreDataAvailable) {}
+            final response = widget.resourceNotifier.resource![index];
+            return ResourceTile(response: response);
+          }),
+    ));
   }
 }
 
@@ -262,12 +315,13 @@ class _ResourceTileState extends State<ResourceTile> {
                                 context: context,
                                 builder: (context) => DownloadScreen(
                                       url: widget.response!.file!,
+                                      title: widget.response!.courseTitle!,
                                     ));
                           },
                           icon: SvgPicture.asset(ImagesAsset.download,
                               color: isDarkMode
                                   ? ProbitasColor.ProbitasTextSecondary
-                                  : ProbitasColor.ProbitasPrimary),
+                                  : ProbitasColor.ProbitasSecondary),
                         )
                       ],
                     ),
@@ -293,9 +347,11 @@ class _ResourceTileState extends State<ResourceTile> {
         height: 120,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-            // color: ProbitasColor.ProbitasTextSecondary,
             borderRadius: BorderRadius.circular(12.0),
-            border: Border.all(color: ProbitasColor.ProbitasTextPrimary)),
+            border: Border.all(
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasSecondary.withOpacity(0.4))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
