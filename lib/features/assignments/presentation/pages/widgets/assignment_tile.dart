@@ -4,9 +4,6 @@ import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
-import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
-
-import '../../../../../core/utils/navigation_service.dart';
 
 class AssignmentTile extends StatelessWidget {
   String courseCode;
@@ -27,6 +24,7 @@ class AssignmentTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -34,7 +32,10 @@ class AssignmentTile extends StatelessWidget {
         height: 140,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-            border: Border.all(color: ProbitasColor.ProbitasSecondary),
+            border: Border.all(
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary.withOpacity(0.5)
+                    : ProbitasColor.ProbitasSecondary.withOpacity(0.5)),
             borderRadius: BorderRadius.circular(12.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -57,7 +58,6 @@ class AssignmentTile extends StatelessWidget {
                   Text(
                     courseCode.toUpperCase(),
                     style: Config.b2(context).copyWith(
-                      color: ProbitasColor.ProbitasSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -65,7 +65,6 @@ class AssignmentTile extends StatelessWidget {
                   Text(
                     courseTitle,
                     style: Config.b2(context).copyWith(
-                      color: ProbitasColor.ProbitasSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -78,9 +77,8 @@ class AssignmentTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                          "Due ${DateFormat.MMMMEEEEd().addPattern(",").add_jm().format(dueDate)}",
+                          "Due: ${DateFormat.MMMMEEEEd().addPattern(",").add_jm().format(dueDate)}",
                           style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasSecondary,
                             fontSize: 12,
                           )),
                     ],
@@ -91,7 +89,6 @@ class AssignmentTile extends StatelessWidget {
                     children: [
                       Text("By $lecturer",
                           style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasSecondary,
                             fontSize: 12,
                           )),
                     ],

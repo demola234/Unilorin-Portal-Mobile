@@ -62,8 +62,12 @@ class _SubmittedAssignmentState
                                       // color:
                                       //     ProbitasColor.ProbitasTextSecondary,
                                       border: Border.all(
-                                          color:
-                                              ProbitasColor.ProbitasSecondary),
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                                .withOpacity(0.5)
+                                            : ProbitasColor.ProbitasSecondary
+                                                .withOpacity(0.5),
+                                      ),
                                       borderRadius:
                                           BorderRadius.circular(12.0)),
                                   child: Padding(
@@ -95,7 +99,6 @@ class _SubmittedAssignmentState
                                                   .courseTitle,
                                               style:
                                                   Config.b2(context).copyWith(
-                                                color: Colors.black,
                                                 fontSize: 12,
                                               ),
                                             ),
@@ -105,7 +108,6 @@ class _SubmittedAssignmentState
                                               "Student: ${data.data.assignments[index].user.fullName.split(" ")[0]} ${data.data.assignments[index].user.fullName.split(" ")[1]}",
                                               style:
                                                   Config.b2(context).copyWith(
-                                                color: Colors.black,
                                                 fontSize: 12,
                                               ),
                                             ),
@@ -121,7 +123,6 @@ class _SubmittedAssignmentState
                                                     "Matric Number ${data.data.assignments[index].user.department}",
                                                     style: Config.b2(context)
                                                         .copyWith(
-                                                      color: Colors.black,
                                                       fontSize: 12,
                                                     )),
                                               ],

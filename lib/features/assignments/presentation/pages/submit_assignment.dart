@@ -35,6 +35,7 @@ class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
   Widget build(BuildContext context) {
     final value = ref.watch(getSingleAssignmentProvider(widget.assignmentId));
     final assignmentState = ref.watch(assignmentNotifierProvider);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -65,7 +66,9 @@ class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
                         Text(
                           data.data.assignment.courseCode.toUpperCase(),
                           style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasSecondary,
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextPrimary
+                                : ProbitasColor.ProbitasSecondary,
                             fontSize: 15,
                           ),
                         ),
@@ -73,7 +76,9 @@ class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
                         Text(
                           data.data.assignment.courseTitle,
                           style: Config.b2(context).copyWith(
-                            color: ProbitasColor.ProbitasSecondary,
+                            color: isDarkMode
+                                ? ProbitasColor.ProbitasTextPrimary
+                                : ProbitasColor.ProbitasSecondary,
                             fontSize: 12,
                           ),
                         ),

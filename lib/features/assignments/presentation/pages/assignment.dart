@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:intl/intl.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submited_assignment.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/widgets/assignment_tile.dart';
@@ -11,7 +10,6 @@ import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../dashboard/presentation/controller/dashboard_controller.dart';
-import '../../../dashboard/presentation/pages/manage_schedules.dart';
 import '../../../dashboard/presentation/widget/empty_state/empty_state.dart';
 import '../controller/assignment_controller.dart';
 import 'create_assignment.dart';
@@ -117,6 +115,9 @@ class _AssignmentState extends ConsumerState<Assignment> {
                         child: Icon(Icons.book_online),
                         backgroundColor: ProbitasColor.ProbitasSecondary,
                         foregroundColor: Colors.white,
+                        labelBackgroundColor: isDarkMode
+                            ? ProbitasColor.ProbitasSecondary
+                            : ProbitasColor.ProbitasTextPrimary,
                         elevation: 0,
                         label: 'Submitted Assignment',
                         labelStyle: TextStyle(fontSize: 18.0),
@@ -131,6 +132,9 @@ class _AssignmentState extends ConsumerState<Assignment> {
                       foregroundColor: Colors.white,
                       label: 'Create Assignment',
                       labelStyle: TextStyle(fontSize: 18.0),
+                      labelBackgroundColor: isDarkMode
+                          ? ProbitasColor.ProbitasSecondary
+                          : ProbitasColor.ProbitasTextPrimary,
                       elevation: 0,
                       onTap: () => NavigationService()
                           .navigateToScreen(CreateAssignment()),
