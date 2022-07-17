@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:intl/intl.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
-import 'package:probitas_app/features/assignments/presentation/pages/submitted_assignment.dart';
+import 'package:probitas_app/features/assignments/presentation/pages/submited_assignment.dart';
+import 'package:probitas_app/features/assignments/presentation/pages/widgets/assignment_tile.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
@@ -68,13 +69,18 @@ class _AssignmentState extends ConsumerState<Assignment> {
                           return data.data[index].dueDate
                                   .isAfter(DateTime.now())
                               ? AssignmentTile(
+                                  onTap: () {
+                                    NavigationService().navigateToScreen(
+                                        SubmitAssignment(
+                                            assignmentId: data.data[index].id));
+                                  },
                                   courseCode: data.data[index].courseCode,
                                   courseTitle: data.data[index].courseTitle,
                                   dueDate: data.data[index].dueDate,
                                   lecturer: data.data[index].lecturer,
                                   assignmentId: data.data[index].id,
                                 )
-                              : data.data.first.courseCode.length > 1
+                              : data.data.length > 2
                                   ? Container()
                                   : Container();
                         }),
@@ -108,17 +114,16 @@ class _AssignmentState extends ConsumerState<Assignment> {
                   shape: CircleBorder(),
                   children: [
                     SpeedDialChild(
-                      child: Icon(Icons.book_online),
-                      backgroundColor: ProbitasColor.ProbitasSecondary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      label: 'Submitted Assignment',
-                      labelStyle: TextStyle(fontSize: 18.0),
-                      onTap: () => NavigationService()
-                          .navigateToScreen(SubmittedAssignment()),
-                      onLongPress: () => NavigationService()
-                          .navigateToScreen(SubmittedAssignment()),
-                    ),
+                        child: Icon(Icons.book_online),
+                        backgroundColor: ProbitasColor.ProbitasSecondary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        label: 'Submitted Assignment',
+                        labelStyle: TextStyle(fontSize: 18.0),
+                        onTap: () => NavigationService()
+                            .navigateToScreen(SubmittedAssignment()),
+                        onLongPress: () => NavigationService()
+                            .navigateToScreen(SubmittedAssignment())),
                     SpeedDialChild(
                       //speed dial child
                       child: Icon(Icons.add),
@@ -137,98 +142,6 @@ class _AssignmentState extends ConsumerState<Assignment> {
               : Container(),
           loading: () => Container(),
           error: (_, err) => Container(),
-        ));
-  }
-}
-
-class AssignmentTile extends StatelessWidget {
-  String courseCode;
-  String courseTitle;
-  DateTime dueDate;
-  String lecturer;
-  String assignmentId;
-  AssignmentTile({
-    required this.courseCode,
-    required this.courseTitle,
-    required this.dueDate,
-    required this.lecturer,
-    required this.assignmentId,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => NavigationService().navigateToScreen(SubmitAssignment(
-              assignmentId: assignmentId,
-            )),
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 5.0),
-          height: 140,
-          width: context.screenWidth(),
-          decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasTextSecondary,
-              borderRadius: BorderRadius.circular(12.0)),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 6.0,
-                  height: 100,
-                  decoration: BoxDecoration(
-                      color: ProbitasColor.ProbitasTextPrimary,
-                      borderRadius: BorderRadius.circular(12.0)),
-                ),
-                XMargin(15),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    YMargin(20.0),
-                    Text(
-                      courseCode,
-                      style: Config.b2(context).copyWith(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                    YMargin(2.0),
-                    Text(
-                      courseTitle,
-                      style: Config.b2(context).copyWith(
-                        color: Colors.white,
-                        fontSize: 12,
-                      ),
-                    ),
-                    Divider(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(DateFormat.MMMMEEEEd().add_jm().format(dueDate),
-                            style: Config.b2(context).copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
-                            )),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text("By $lecturer",
-                            style: Config.b2(context).copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
-                            )),
-                      ],
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
         ));
   }
 }

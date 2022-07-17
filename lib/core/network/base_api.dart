@@ -141,7 +141,7 @@ class BaseApi {
 
       throw Exception(data["message"]);
     } on DioError catch (e) {
-      if (e.response!.statusCode == HttpStatus.unauthorized) {
+      if (e.response?.statusCode == HttpStatus.unauthorized) {
         QueuedInterceptor();
         NavigationService().replaceScreen(Authentication());
         Cache.get().clear();

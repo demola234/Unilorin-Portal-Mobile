@@ -308,19 +308,17 @@ class _PostsListState extends ConsumerState<PostsList> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Flexible(
-                              child: Container(
-                                child: Text(
-                                  "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
-                                  style: Config.b2(context).copyWith(
-                                      color: isDarkMode
-                                          ? ProbitasColor.ProbitasTextPrimary
-                                          : ProbitasColor.ProbitasPrimary),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  textAlign: TextAlign.justify,
-                                ),
+                            Container(
+                              child: Text(
+                                "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
+                                style: Config.b2(context).copyWith(
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasPrimary),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
+                                textAlign: TextAlign.justify,
                               ),
                             ),
                             YMargin(2.0),

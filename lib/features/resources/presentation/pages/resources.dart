@@ -365,7 +365,7 @@ class _ResourceTileState extends ConsumerState<ResourceTile> {
                   getUser.when(
                     data: (data) => data.data!.user!.user!.id ==
                             widget.response!.user!.id
-                        ? ProbitasButton(
+                        ? ProbitasDeleteButton(
                             text: "Delete Material",
                             onTap: () {
                               ref.read(

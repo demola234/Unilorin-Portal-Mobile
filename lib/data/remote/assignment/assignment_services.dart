@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:probitas_app/data/local/cache.dart';
 import '../../../features/assignments/data/model/assignment_response.dart';
 import '../../../features/assignments/data/model/single_assignment_response.dart';
+import '../../../features/assignments/data/model/submitted_assignment_response.dart';
 import 'assignment_repository.dart';
 
 abstract class AssignmentService {
@@ -15,7 +16,7 @@ abstract class AssignmentService {
       String topic,
       String dueDate});
   Future submitAssignment(String assignmentId, {required File file});
-  Future<AssignmentResponse> getSubmittedAssignment();
+  Future<SubmittedAssignmentResponce> getSubmittedAssignment();
 }
 
 class AssignmentServiceImpl extends AssignmentService {
@@ -60,9 +61,9 @@ class AssignmentServiceImpl extends AssignmentService {
   }
 
   @override
-  Future<AssignmentResponse> getSubmittedAssignment() {
-    // TODO: implement getSubmittedAssignment
-    throw UnimplementedError();
+  Future<SubmittedAssignmentResponce> getSubmittedAssignment() async {
+    return assignmentRepository.getSubmittedAssignment(
+        await cache.getToken());
   }
 
   @override

@@ -36,6 +36,8 @@ class ImagesAsset {
   static String ppt = 'assets/icons/ppt.svg';
   static String jpg = 'assets/icons/jpg.svg';
   static String verified = 'assets/icons/verified.svg';
+  static String book = 'assets/icons/book.svg';
+  static String books = 'assets/icons/book-svg.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';
