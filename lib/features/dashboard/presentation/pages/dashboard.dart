@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/customs/custom_drawers.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
@@ -36,6 +37,9 @@ class _DashboardState extends ConsumerState<Dashboard>
   void initState() {
     super.initState();
     _controller = new TabController(length: 5, vsync: this);
+    setState(() {
+      _controller.animateTo(getDayOfWeek());
+    });
   }
 
   @override
@@ -176,7 +180,6 @@ class _DashboardState extends ConsumerState<Dashboard>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                         
                               Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -314,5 +317,23 @@ class _DashboardState extends ConsumerState<Dashboard>
         ),
       ),
     );
+  }
+
+  int getDayOfWeek() {
+    String day = DateFormat('EEEE').format(DateTime.now());
+
+    if (day == "Monday") {
+      return 0;
+    } else if (day == "Tuesday") {
+      return 1;
+    } else if (day == "Wednesday") {
+      return 2;
+    } else if (day == "Thursday") {
+      return 3;
+    } else if (day == "Friday") {
+      return 4;
+    } else {
+      return 0;
+    }
   }
 }
