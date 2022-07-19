@@ -3,17 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
-
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
-import '../../../dashboard/presentation/widget/empty_state/empty_state.dart';
 import '../../../resources/presentation/pages/download_screen.dart';
 import '../controller/assignment_controller.dart';
 
 class SubmittedAssignmentByUser extends StatefulHookConsumerWidget {
-  String courseName;
-  String assignmentId;
-  String courseCode;
+  final String courseName;
+  final String assignmentId;
+  final String courseCode;
   SubmittedAssignmentByUser({
     required this.courseName,
     required this.assignmentId,

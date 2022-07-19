@@ -14,6 +14,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
   var cache = getIt<Cache>();
   LoginNotifier(this._read) : super(LoginState.initial());
 
+  // ignore: unused_field
   final Reader _read;
 
   Future<void> login(String matricNumber, String password) async {

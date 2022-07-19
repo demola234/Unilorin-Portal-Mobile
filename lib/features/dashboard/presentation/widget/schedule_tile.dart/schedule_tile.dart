@@ -3,20 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:readmore/readmore.dart';
-
 import '../../../../../core/constants/colors.dart';
-import '../../../data/model/schedules_response.dart';
 import '../../controller/dashboard_controller.dart';
 
 class ScheduleTile extends ConsumerWidget {
-  var timeFormat = DateFormat.jm();
-  String courseCode;
-  String courseId;
-  String courseTitle;
-  String courseNote;
-  String venue;
-  DateTime startTime;
-  DateTime endTime;
+  final DateFormat timeFormat = DateFormat.jm();
+  final String courseCode;
+  final String courseId;
+  final String courseTitle;
+  final String courseNote;
+  final String venue;
+  final DateTime startTime;
+  final DateTime endTime;
   ScheduleTile({
     required this.courseCode,
     required this.courseId,

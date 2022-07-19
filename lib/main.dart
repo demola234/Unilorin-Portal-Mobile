@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'core/utils/navigation_service.dart';
-import 'features/authentication/presentation/pages/authentication/initail.dart';
+import 'features/authentication/presentation/pages/authentication/initial.dart';
 import 'features/settings/controller/theme_controller.dart';
 import 'injection_container.dart';
 

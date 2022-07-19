@@ -37,7 +37,7 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final assignmentState = ref.watch(assignmentNotifierProvider);
 
     return Scaffold(
@@ -187,10 +187,11 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
 
   _selectDateTime() async {
     final date = await _selectDate(context);
+    // ignore: unnecessary_null_comparison
     if (date == null) return;
 
     final time = await _selectTime(context);
-
+    // ignore: unnecessary_null_comparison
     if (time == null) return;
 
     setState(() {

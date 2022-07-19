@@ -1,15 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import '../../../core/constants/colors.dart';
 import '../../../../../core/utils/customs/custom_nav_bar.dart';
-import '../../../core/constants/image_path.dart';
 import '../../../core/utils/customs/custom_error.dart';
 import '../../../core/utils/image_viewer.dart';
-import '../../../core/utils/shimmer_loading.dart';
+
 
 class Profile extends ConsumerWidget {
   Profile({Key? key});

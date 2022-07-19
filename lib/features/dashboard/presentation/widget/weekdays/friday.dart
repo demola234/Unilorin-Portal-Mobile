@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../controller/dashboard_controller.dart';
@@ -9,7 +8,7 @@ import '../schedule_tile.dart/schedule_tile.dart';
 
 class Friday extends ConsumerWidget {
   Friday({Key? key}) : super(key: key);
-  RefreshController controller = RefreshController();
+  final RefreshController controller = RefreshController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

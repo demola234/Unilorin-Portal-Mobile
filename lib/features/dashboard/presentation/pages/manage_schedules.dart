@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,7 +47,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final dashboardState = ref.watch(dashboardNotifierProvider);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -264,7 +265,9 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
       setState(() {
         startController.text = formattedTime;
         startText = parsedTime;
-        print("Its meee=> $startText");
+        if (kDebugMode) {
+          print("Its me=> $startText");
+        }
       });
     } else {
       print("Time is not selected");
@@ -286,7 +289,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
       setState(() {
         endController.text = formattedTime;
         endText = parsedTime;
-        print("Its meee=> $endText");
+        print("Its me=> $endText");
       });
     } else {
       print("Time is not selected");

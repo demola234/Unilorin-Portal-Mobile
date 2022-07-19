@@ -1,6 +1,7 @@
+// ignore_for_file: unused_field
+
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import 'package:probitas_app/features/posts/presentation/provider/post_provider.dart';

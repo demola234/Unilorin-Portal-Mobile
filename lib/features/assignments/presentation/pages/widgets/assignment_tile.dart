@@ -6,12 +6,12 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
 class AssignmentTile extends StatelessWidget {
-  String courseCode;
-  String courseTitle;
-  DateTime dueDate;
-  String lecturer;
-  String assignmentId;
-  Function()? onTap;
+  final String courseCode;
+  final String courseTitle;
+  final DateTime dueDate;
+  final String lecturer;
+  final String assignmentId;
+  final Function()? onTap;
   AssignmentTile({
     required this.courseCode,
     required this.courseTitle,

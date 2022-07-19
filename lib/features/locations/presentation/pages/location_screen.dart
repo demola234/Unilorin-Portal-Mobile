@@ -18,11 +18,6 @@ class _LocationsState extends State<Locations> {
     zoom: 19,
   );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(8.477871, 4.672868),
-      tilt: 59.440717697143555,
-      zoom: 19);
 
   @override
   Widget build(BuildContext context) {

@@ -21,7 +21,7 @@ class _SubmittedAssignmentState extends ConsumerState<SubmittedAssignment> {
   @override
   Widget build(BuildContext context) {
     final value = ref.watch(getAssignmentProvider);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),

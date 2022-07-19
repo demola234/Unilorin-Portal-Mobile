@@ -27,7 +27,6 @@ class SubmitAssignment extends ConsumerStatefulWidget {
 
 class _SubmitAssignmentState extends ConsumerState<SubmitAssignment> {
   File? file;
-  bool _multiPick = true;
   String? selectedFile = "";
   String? fileType = "";
 

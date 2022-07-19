@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:probitas_app/features/authentication/presentation/provider/authentication_provider.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/result/data/model/result_response.dart';
 import 'package:probitas_app/features/result/presentation/controller/result_controller.dart';
@@ -233,8 +232,8 @@ class _ResultsState extends ConsumerState<Results> {
 }
 
 class GetResults extends StatelessWidget {
-  List<Result> result;
-  RegExp regex = RegExp(r'([.]*00)(?!.*\d)');
+  final List<Result> result;
+  final RegExp regex = RegExp(r'([.]*00)(?!.*\d)');
   GetResults({
     required this.result,
     Key? key,

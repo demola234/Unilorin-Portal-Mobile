@@ -2,17 +2,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/error/exceptions.dart';
-import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../posts/presentation/pages/posts.dart';
-import '../controller/resource_controller.dart';
 import '../provider/resources_provider.dart';
 
 class AddResources extends ConsumerStatefulWidget {
@@ -27,7 +24,6 @@ class _AddResourcesState extends ConsumerState<AddResources> {
   TextEditingController courseTitle = TextEditingController();
   var topic = TextEditingController();
   File? file;
-  bool _multiPick = true;
   String? selectedFile = "";
   String? fileType = "";
 

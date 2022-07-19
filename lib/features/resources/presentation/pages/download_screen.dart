@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
@@ -7,7 +9,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
-
 import '../../../../core/error/toasts.dart';
 
 class DownloadScreen extends StatefulWidget {

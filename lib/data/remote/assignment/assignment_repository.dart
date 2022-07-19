@@ -5,7 +5,6 @@ import '../../../core/network/base_api.dart';
 import '../../../features/assignments/data/model/assignment_response.dart';
 import '../../../features/assignments/data/model/single_assignment_response.dart';
 import '../../../features/assignments/data/model/submitted_assignment_response.dart';
-import '../../../features/resources/data/model/resource_response.dart';
 
 abstract class AssignmentRepository {
   Future<AssignmentResponse> getAssignments(String token);
@@ -20,7 +19,7 @@ abstract class AssignmentRepository {
       String topic});
   Future submitAssignment(String token, String assignmentId,
       {required File file});
-  Future<SubmittedAssignmentResponce> getSubmittedAssignment(String token);
+  Future<SubmittedAssignmentResponse> getSubmittedAssignment(String token);
 }
 
 class AssignmentRepositoryImpl extends BaseApi implements AssignmentRepository {
@@ -94,10 +93,10 @@ class AssignmentRepositoryImpl extends BaseApi implements AssignmentRepository {
   }
 
   @override
-  Future<SubmittedAssignmentResponce> getSubmittedAssignment(String token) async {
+  Future<SubmittedAssignmentResponse> getSubmittedAssignment(String token) async {
     try {
       var data = await get("assignments/submitted", headers: getHeader(token));
-      final s = SubmittedAssignmentResponce.fromJson(data);
+      final s = SubmittedAssignmentResponse.fromJson(data);
       return s;
     } catch (err) {
       if (err is RequestException) {

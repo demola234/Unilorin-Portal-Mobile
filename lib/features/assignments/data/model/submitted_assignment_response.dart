@@ -1,8 +1,8 @@
-import 'package:meta/meta.dart';
+
 import 'dart:convert';
 
-class SubmittedAssignmentResponce {
-  SubmittedAssignmentResponce({
+class SubmittedAssignmentResponse {
+  SubmittedAssignmentResponse({
     required this.success,
     required this.message,
     required this.data,
@@ -12,13 +12,13 @@ class SubmittedAssignmentResponce {
   final String message;
   final Data data;
 
-  factory SubmittedAssignmentResponce.fromRawJson(String str) =>
-      SubmittedAssignmentResponce.fromJson(json.decode(str));
+  factory SubmittedAssignmentResponse.fromRawJson(String str) =>
+      SubmittedAssignmentResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory SubmittedAssignmentResponce.fromJson(Map<String, dynamic> json) =>
-      SubmittedAssignmentResponce(
+  factory SubmittedAssignmentResponse.fromJson(Map<String, dynamic> json) =>
+      SubmittedAssignmentResponse(
         success: json["success"],
         message: json["message"],
         data: Data.fromJson(json["data"]),

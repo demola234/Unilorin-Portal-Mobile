@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
-import 'package:path_provider/path_provider.dart' as path;
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
@@ -14,8 +12,6 @@ import 'package:probitas_app/features/resources/data/model/resource_response.dar
 import 'package:probitas_app/features/resources/presentation/pages/download_screen.dart';
 import 'package:probitas_app/features/resources/presentation/pages/pdf_viewer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-// ignore: unused_import
-import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
@@ -239,7 +235,7 @@ class _ResourceItemsState extends ConsumerState<ResourceItems> {
 }
 
 class ResourceTile extends ConsumerStatefulWidget {
-  Datum? response;
+  final Datum? response;
 
   ResourceTile({
     required this.response,
@@ -470,60 +466,4 @@ class _ResourceTileState extends ConsumerState<ResourceTile> {
       return SvgPicture.asset(ImagesAsset.file);
     }
   }
-
-  Future<List<Directory>?> _getExternalStoragePath() {
-    return path.getExternalStorageDirectories(
-        type: path.StorageDirectory.documents);
-  }
-
-  Future _downloadSaveFileToStorage(String urlPath, String fileName) async {
-    try {
-      final dirList = await _getExternalStoragePath();
-      final path = dirList![0].path;
-      final file = File("$path/$fileName");
-      await dio.download(urlPath, file.path, onReceiveProgress: (rec, total) {
-        setState(() {
-          isLoading = true;
-          progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
-          print(progress);
-        });
-      });
-      _fileFullPath = file.path;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Future openFile({required String url, String? fileName}) async {
-  //   final name = fileName ?? url.split('/').last;
-
-  //   final file = await downloadFile(url, name);
-  //   print(file);
-  //   if (file == null) return;
-
-  //   print("${file.path}");
-
-  //   OpenFile.open(file.path);
-  // }
-
-  // Future<File?> downloadFile(String url, String name) async {
-  //   final appStorage = await getApplicationDocumentsDirectory();
-  //   final file = File('${appStorage.path}/$name');
-  //   try {
-  //     final response = await Dio().get(url,
-  //         options: Options(
-  //           responseType: ResponseType.bytes,
-  //           followRedirects: false,
-  //           receiveTimeout: 0,
-  //         ));
-  //     print(response);
-  //     final raf = file.openSync(mode: FileMode.write);
-  //     raf.writeByteSync(response.data);
-  //     await raf.close();
-
-  //     return file;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
 }

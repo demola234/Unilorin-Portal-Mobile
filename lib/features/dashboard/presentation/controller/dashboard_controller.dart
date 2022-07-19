@@ -8,17 +8,7 @@ import '../../../../data/local/cache.dart';
 import '../../../../injection_container.dart';
 import '../../data/model/user_response.dart';
 import '../../../../core/utils/states.dart';
-import '../provider/dashboard_provider.dart';
 
-// class DashBoardNotifier extends StateNotifier {
-//   DashBoardNotifier(state) : super(state);
-//   var dashboardService = getIt<DashBoardService>();
-
-//   Future getUsers() async {
-// final profile = await dashboardService.fetchUsers();
-// return profile;
-//   }
-// }
 var dashboardService = getIt<DashBoardService>();
 
 final getUsersProvider = FutureProvider.autoDispose<UserResponses>((ref) async {
@@ -31,6 +21,7 @@ class DashBoardNotifier extends StateNotifier<DashBoardState> {
   DashBoardNotifier(this._read) : super(DashBoardState.initial());
   var dashBoardService = getIt<DashBoardService>();
   var cache = getIt<Cache>();
+  // ignore: unused_field
   final Reader _read;
 
   Future createSchedule(

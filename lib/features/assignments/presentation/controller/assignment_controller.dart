@@ -1,16 +1,14 @@
-import 'dart:io';
+// ignore_for_file: unused_field
 
+import 'dart:io';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/features/assignments/data/model/assignment_response.dart';
-import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
 import 'package:probitas_app/injection_container.dart';
-
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../core/utils/states.dart';
 import '../../../../data/remote/assignment/assignment_services.dart';
-import '../../../../data/remote/dashboard/dashboard_service.dart';
 import '../../data/model/single_assignment_response.dart';
 import '../../data/model/submitted_assignment_response.dart';
 import '../state/assignment_state.dart';
@@ -71,7 +69,7 @@ final getSingleAssignmentProvider = FutureProvider.autoDispose
 });
 
 final getSubmittedAssignmentProvider = FutureProvider.autoDispose
-    <SubmittedAssignmentResponce>((ref) async {
+    <SubmittedAssignmentResponse>((ref) async {
   final assignments = await assignmentService.getSubmittedAssignment();
   return assignments;
 });

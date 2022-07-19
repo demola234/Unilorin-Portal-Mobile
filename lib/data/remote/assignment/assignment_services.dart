@@ -16,7 +16,7 @@ abstract class AssignmentService {
       String topic,
       String dueDate});
   Future submitAssignment(String assignmentId, {required File file});
-  Future<SubmittedAssignmentResponce> getSubmittedAssignment();
+  Future<SubmittedAssignmentResponse> getSubmittedAssignment();
 }
 
 class AssignmentServiceImpl extends AssignmentService {
@@ -61,7 +61,7 @@ class AssignmentServiceImpl extends AssignmentService {
   }
 
   @override
-  Future<SubmittedAssignmentResponce> getSubmittedAssignment() async {
+  Future<SubmittedAssignmentResponse> getSubmittedAssignment() async {
     return assignmentRepository.getSubmittedAssignment(
         await cache.getToken());
   }

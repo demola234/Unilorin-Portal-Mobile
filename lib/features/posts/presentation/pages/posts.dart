@@ -3,19 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// ignore: unused_import
-import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/utils/states.dart';
-import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:probitas_app/features/posts/presentation/pages/add_post.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/constants/image_path.dart';
 import '../../../../core/error/toasts.dart';
@@ -561,7 +556,7 @@ class _UserLikesState extends ConsumerState<UserLikes> {
 }
 
 class PostListImage extends StatefulWidget {
-  PostList posts;
+  final PostList posts;
   PostListImage({required this.posts, Key? key}) : super(key: key);
 
   @override
