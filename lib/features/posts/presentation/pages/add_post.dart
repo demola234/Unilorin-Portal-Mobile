@@ -1,23 +1,32 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import '../../../../core/constants/colors.dart';
-import '../../../../core/constants/image_path.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../../../core/utils/image_viewer.dart';
+import '../provider/post_provider.dart';
+import '../../../../core/utils/states.dart';
 
-class AddPost extends StatefulWidget {
+class AddPost extends ConsumerStatefulWidget {
   const AddPost({Key? key}) : super(key: key);
 
   @override
-  State<AddPost> createState() => _AddPostState();
+  ConsumerState<AddPost> createState() => _AddPostState();
 }
 
-class _AddPostState extends State<AddPost> {
+class _AddPostState extends ConsumerState<AddPost> {
+  TextEditingController postText = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    var image = ref.watch(getUsersProvider).value!.data!.user!.avatar;
+    final postState = ref.watch(postsNotifierProvider);
     // ignore: unused_local_variable
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
@@ -32,18 +41,33 @@ class _AddPostState extends State<AddPost> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                  child: Image(
-                    image: AssetImage(ImagesAsset.default_image),
+                GestureDetector(
+                  onTap: () {
+                    ImageViewUtils.showImagePreview(context, [image!]);
+                  },
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        imageUrl: image!,
+                      ),
+                    ),
                   ),
                 ),
                 XMargin(10.0),
                 Flexible(
                   child: ProbitasTextFormField(
+                    controller: postText,
                     hintText: "Say Something...",
                   ),
                 ),
@@ -151,23 +175,17 @@ class _AddPostState extends State<AddPost> {
           )
         ],
       ),
-      floatingActionButton: InkWell(
-        onTap: () {},
-        child: Container(
-          height: 70,
-          width: 220,
-          decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasSecondary,
-              borderRadius: BorderRadius.all(Radius.circular(15.0))),
-          child: Center(
-            child: Text(
-              "Add Post",
-              style: Config.b2(context).copyWith(
-                color: ProbitasColor.ProbitasTextPrimary,
-              ),
-            ),
-          ),
-        ),
+      floatingActionButton: ProbitasButton(
+        text: "Add Post",
+        onTap: () {
+          print(images);
+          // print(postText.text);
+          ref
+              .watch(postsNotifierProvider.notifier)
+              .createPost(postText.text, images);
+          ref.refresh(postsNotifierProvider.notifier).getPosts();
+        },
+        showLoading: postState.viewState.isLoading,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
@@ -188,6 +206,7 @@ class _AddPostState extends State<AddPost> {
     if (res != null) {
       setState(() {
         images.addAll(res.map((e) => File(e.path)));
+        print(images);
       });
     } else if (res == null) {
       Toasts.showErrorToast("No Image Selected");

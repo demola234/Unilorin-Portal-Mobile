@@ -1,31 +1,32 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/authentication/data/model/user_request.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../../core/utils/states.dart';
 import '../../../../data/remote/authentication/authentication_service.dart';
 import '../../../../injection_container.dart';
-import '../../data/infrastructure/authentication_state.dart';
 
-class LoginNotifier extends StateNotifier<AuthenticationState> {
+class LoginNotifier extends StateNotifier<LoginState> {
   var authService = getIt<AuthenticationService>();
   var cache = getIt<Cache>();
-  LoginNotifier(this.authService) : super(AuthenticationInitial());
+  LoginNotifier(this._read) : super(LoginState.initial());
+
+  // ignore: unused_field
+  final Reader _read;
 
   Future<void> login(String matricNumber, String password) async {
-    state = AuthenticationLoading(true);
+    state = state.copyWith(viewState: ViewState.loading);
     try {
-      final response = await authService.login(matricNumber, password);
-      state = AuthenticatingUser(response);
+      await authService.login(matricNumber, password);
       NavigationService().replaceScreen(NavController());
-      state = AuthenticationLoading(false);
     } catch (e) {
-      state = AuthenticationError("An Error Occurred");
-      bool isLoading = false;
-      state = AuthenticationLoading(isLoading);
+      print(e);
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
+    } finally {
+      state = state.copyWith(viewState: ViewState.idle);
     }
   }
 
@@ -33,4 +34,22 @@ class LoginNotifier extends StateNotifier<AuthenticationState> {
     var usr = await cache.getUser();
     return usr;
   }
+}
+
+class LoginState {
+  final ViewState viewState;
+  final bool passwordVisible;
+
+  const LoginState._({required this.viewState, required this.passwordVisible});
+
+  factory LoginState.initial() => const LoginState._(
+        viewState: ViewState.idle,
+        passwordVisible: false,
+      );
+
+  LoginState copyWith({ViewState? viewState, bool? passwordVisible}) =>
+      LoginState._(
+        viewState: viewState ?? this.viewState,
+        passwordVisible: passwordVisible ?? this.passwordVisible,
+      );
 }

@@ -12,38 +12,55 @@ dependencies:
   animate_do: ^2.1.0
   cached_network_image: ^3.1.0
   cupertino_icons: ^1.0.2
+  datetime_picker_formfield: ^2.0.0
   dio: ^4.0.6
+  easy_image_viewer: ^1.0.4
   equatable: ^2.0.3
-  file_picker: ^4.1.3
+  file_picker: ^4.6.1
   flutter:
     sdk: flutter
-  flutter_hooks: ^0.18.3
+  flutter_cached_pdfview: null
+  flutter_hooks: ^0.18.2
+  flutter_launcher_icons: ^0.9.0
   flutter_native_splash: ^2.1.6
   flutter_riverpod: ^1.0.3
+  flutter_speed_dial: ^3.0.5
   flutter_svg: ^1.0.3
   get_it: ^7.2.0
   get_storage: ^2.0.3
   google_fonts: 2.3.1
+  google_maps_flutter: ^2.1.6
   hooks_riverpod: ^1.0.3
-  share_plus: ^4.0.1
+  http_parser: ^4.0.0
   images_picker: ^1.2.11
   intl: ^0.17.0
+  liquid_progress_indicator: ^0.4.0
   liquid_pull_to_refresh: ^3.0.1
   local_auth: ^2.0.2
   lottie: ^1.3.0
   open_file: ^3.2.1
   overlay_support: ^1.2.1
   path_provider: ^2.0.9
+  permission_handler: ^9.2.0
+  photo_view: ^0.13.0
   pretty_dio_logger: ^1.1.1
   progress_dialog: ^1.2.4
+  pull_to_refresh: ^2.0.0
   readmore: ^2.1.0
+  share_plus: ^4.0.1
+  shared_preferences: 
+  shimmer: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
   timeago: ^3.2.2
-  url_launcher: ^6.1.0
+  video_player: ^2.4.5
+  visibility_detector: 
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
+  build_runner: null
   flutter_test:
     sdk: flutter
+  freezed: null
 
 flutter_native_splash:
   color: "#FFFFFF"
@@ -53,6 +70,11 @@ flutter_native_splash:
   android: true
   ios: true
   fullscreen: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/logo.png"
 
 flutter:
   uses-material-design: true

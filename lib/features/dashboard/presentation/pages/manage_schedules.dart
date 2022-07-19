@@ -1,35 +1,54 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../controller/dashboard_controller.dart';
+import '../provider/dashboard_provider.dart';
 
-class ManageSchedule extends StatefulWidget {
+class ManageSchedule extends ConsumerStatefulWidget {
   const ManageSchedule({Key? key}) : super(key: key);
 
   @override
-  State<ManageSchedule> createState() => _ManageScheduleState();
+  ConsumerState<ManageSchedule> createState() => _ManageScheduleState();
 }
 
-class _ManageScheduleState extends State<ManageSchedule> {
-  TextEditingController dateController = TextEditingController();
+class _ManageScheduleState extends ConsumerState<ManageSchedule> {
+  TextEditingController courseCode = TextEditingController();
+  TextEditingController courseTitle = TextEditingController();
+  TextEditingController courseVenue = TextEditingController();
+  TextEditingController note = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
+  late DateTime dueDateTime;
+  DateTime? startText;
+  DateTime? endText;
+
   var remindMe;
 
   @override
-  void initState() {
-    dateController.text = ""; //set the initial value of text field
-    super.initState();
+  void dispose() {
+    super.dispose();
+    courseCode.dispose();
+    courseTitle.dispose();
+    courseVenue.dispose();
+    note.dispose();
+    startController.dispose();
+    endController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final dashboardState = ref.watch(dashboardNotifierProvider);
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(70.0),
@@ -53,6 +72,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
                   YMargin(10),
                   ProbitasTextFormField(
                     hintText: "Course Code",
+                    controller: courseCode,
                   ),
                 ],
               ),
@@ -72,6 +92,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
                   YMargin(10),
                   ProbitasTextFormField(
                     hintText: "Course Title",
+                    controller: courseTitle,
                   ),
                 ],
               ),
@@ -91,6 +112,7 @@ class _ManageScheduleState extends State<ManageSchedule> {
                   YMargin(10),
                   ProbitasTextFormField(
                     hintText: "Course Venue",
+                    controller: courseVenue,
                   ),
                 ],
               ),
@@ -101,7 +123,6 @@ class _ManageScheduleState extends State<ManageSchedule> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                
                   Text(
                     "Date",
                     style: Config.b2(context).copyWith(
@@ -196,29 +217,33 @@ class _ManageScheduleState extends State<ManageSchedule> {
                   YMargin(10),
                   ProbitasTextFormField(
                     hintText: "Short Note",
+                    controller: note,
                   ),
                 ],
               ),
             ),
             YMargin(15),
             InkWell(
-              onTap: () {},
-              child: Container(
-                height: 70,
-                width: 220,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasSecondary,
-                    borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                child: Center(
-                  child: Text(
-                    "Create Schedule",
-                    style: Config.b2(context).copyWith(
-                      color: ProbitasColor.ProbitasTextPrimary,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                onTap: () {},
+                child: ProbitasButton(
+                  onTap: () async {
+                    ref
+                        .watch(dashboardNotifierProvider.notifier)
+                        .createSchedule(
+                            courseCode.text,
+                            courseTitle.text,
+                            courseVenue.text,
+                            remindMe,
+                            startText.toString(),
+                            endText.toString(),
+                            note.text);
+                    Future.delayed(const Duration(seconds: 1), () {
+                      ref.refresh(getSchedulesProvider);
+                    });
+                  },
+                  showLoading: dashboardState.viewState.isLoading,
+                  text: "Create Schedule",
+                )),
           ],
         ),
       ),
@@ -229,34 +254,20 @@ class _ManageScheduleState extends State<ManageSchedule> {
     TimeOfDay? pickedTime = await showTimePicker(
       initialTime: TimeOfDay.now(),
       context: context,
-       builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: ProbitasColor.ProbitasSecondary,
-                      onPrimary: ProbitasColor.ProbitasTextPrimary,
-                      onSurface: ProbitasColor.ProbitasSecondary,
-                    ),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        primary: ProbitasColor.ProbitasSecondary,
-                      ),
-                    ),
-                  ),
-                  child: child!,
-                )}
     );
 
     if (pickedTime != null) {
       print(pickedTime.format(context));
-      DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
-      print(parsedTime);
-      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+      DateTime parsedTime = DateFormat.jm().parse(pickedTime.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
         startController.text = formattedTime;
+        startText = parsedTime;
+        if (kDebugMode) {
+          print("Its me=> $startText");
+        }
       });
     } else {
       print("Time is not selected");
@@ -265,38 +276,20 @@ class _ManageScheduleState extends State<ManageSchedule> {
 
   endTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
-      
       initialTime: TimeOfDay.now(),
       context: context,
-      builder: (context, child) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    colorScheme: ColorScheme.light(
-                      primary: ProbitasColor.ProbitasSecondary,
-                      onPrimary: ProbitasColor.ProbitasTextPrimary,
-                      onSurface: ProbitasColor.ProbitasSecondary,
-                    ),
-                    textButtonTheme: TextButtonThemeData(
-                      style: TextButton.styleFrom(
-                        primary: ProbitasColor.ProbitasSecondary,
-                      ),
-                    ),
-                  ),
-                  child: child!,
-                )}
     );
 
     if (pickedTime != null) {
       print(pickedTime.format(context));
-      DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
-
-      print(parsedTime);
-      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+      DateTime parsedTime = DateFormat.jm().parse(pickedTime.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
         endController.text = formattedTime;
+        endText = parsedTime;
+        print("Its me=> $endText");
       });
     } else {
       print("Time is not selected");

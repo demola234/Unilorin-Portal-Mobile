@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
+import 'package:probitas_app/core/utils/shimmer_loading.dart';
 import 'package:probitas_app/features/authentication/presentation/pages/authentication/authentication.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
-import 'package:probitas_app/features/profile/profile.dart';
-import 'package:probitas_app/features/result/results.dart';
-import 'package:probitas_app/features/settings/settings.dart';
+import 'package:probitas_app/features/locations/presentation/pages/location_screen.dart';
+import 'package:probitas_app/features/profile/presentation/profile.dart';
+import 'package:probitas_app/features/result/presentation/pages/results.dart';
+import 'package:probitas_app/features/settings/presentation/pages/settings.dart';
 import '../../../data/local/cache.dart';
-import '../../../features/result/local_auth.dart';
+import '../../../features/result/presentation/controller/local_auth.dart';
 import '../config.dart';
+import '../image_viewer.dart';
 
 class ProbitasDrawer extends StatelessWidget {
   const ProbitasDrawer({
@@ -44,22 +47,30 @@ class ProbitasDrawer extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            child: ref.read(getUsers).when(
-                                  data: (data) => ClipRRect(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: data.data!.user!.avatar!,
-                                      
+                            child: ref.read(getUsersProvider).when(
+                                data: (data) => GestureDetector(
+                                      onTap: () {
+                                        ImageViewUtils.showImagePreview(context,
+                                            [data.data!.user!.avatar!]);
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.cover,
+                                          imageUrl: data.data!.user!.avatar!,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  error: (err, str) => Text("error"),
-                                  loading: () => Text("loading"),
-                                )))),
+                                error: (err, str) => Text("error"),
+                                loading: () => Loading(
+                                      width: 110,
+                                      height: 110,
+                                    ))))),
                     YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
-                        final response = watch.read(getUsers);
+                        final response = watch.read(getUsersProvider);
                         return response.when(
                             data: (response) => Text(
                                   "${response.data!.user!.fullName!}",
@@ -71,7 +82,7 @@ class ProbitasDrawer extends StatelessWidget {
                                           : ProbitasColor.ProbitasPrimary),
                                 ),
                             error: (err, st) => Text("error"),
-                            loading: () => Text("loading..."));
+                            loading: () => Loading(width: 100, height: 10));
                       }),
                     ),
                     YMargin(30),
@@ -97,14 +108,14 @@ class ProbitasDrawer extends StatelessWidget {
 
                         if (isAuthenticated) {
                           NavigationService().goBack();
-                          NavigationService().navigateToScreen(Result());
+                          NavigationService().navigateToScreen(Results());
                         }
                       }),
                   DrawerListTile(
-                    title: 'Locate Theaters',
+                    title: 'Locate Places',
                     onPressed: () {
                       NavigationService().goBack();
-                      // NavigationService().navigateToScreen(Profile());
+                      NavigationService().navigateToScreen(Locations());
                     },
                   ),
                   DrawerListTile(
@@ -116,8 +127,8 @@ class ProbitasDrawer extends StatelessWidget {
                   ),
                 ]),
               ),
-              Spacer(),
-              YMargin(10),
+
+            YMargin(40),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Container(
@@ -136,11 +147,11 @@ class ProbitasDrawer extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-              ).ripple(() {
-                Cache.get().clear();
-                NavigationService().replaceScreen(Authentication());
-              }),
+                ).ripple(() {
+                  Cache.get().clear();
+                  NavigationService().replaceScreen(Authentication());
+                }),
+              ),
               YMargin(50),
             ],
           ),

@@ -9,7 +9,8 @@ class UserRequest {
   User? user;
   String? token;
 
-  factory UserRequest.fromRawJson(String str) => UserRequest.fromJson(json.decode(str));
+  factory UserRequest.fromRawJson(String str) =>
+      UserRequest.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
@@ -49,7 +50,8 @@ class User {
     this.nextOfKin,
     this.guardian,
     this.sponsor,
-    this.semester,
+    this.semester, 
+    this.user,
   });
 
   String? avatar;
@@ -76,6 +78,7 @@ class User {
   Guardian? guardian;
   Guardian? sponsor;
   Semester? semester;
+  UserUser? user;
 
   factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
 
@@ -108,6 +111,7 @@ class User {
         guardian: Guardian.fromJson(json["guardian"] ?? Map<String, dynamic>()),
         sponsor: Guardian.fromJson(json["sponsor"] ?? Map<String, dynamic>()),
         semester: Semester.fromJson(json["semester"] ?? Map<String, dynamic>()),
+        user: UserUser.fromJson(json["user"] ?? Map<String, dynamic>()),
       );
 
   Map<String, dynamic> toJson() => {
@@ -135,6 +139,7 @@ class User {
         "guardian": guardian!.toJson(),
         "sponsor": sponsor!.toJson(),
         "semester": semester!.toJson(),
+        "user": user!.toJson(),
       };
 }
 
@@ -267,5 +272,62 @@ class Semester {
         "type": type,
         "number": number,
         "year": year,
+      };
+}
+
+class UserUser {
+  UserUser({
+    this.id,
+    this.fullName,
+    this.avatar,
+    this.faculty,
+    this.department,
+    this.level,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+    this.role,
+  });
+
+  String? id;
+  String? fullName;
+  String? avatar;
+  String? faculty;
+  String? department;
+  String? level;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  int? v;
+  String? role;
+
+  factory UserUser.fromRawJson(String str) =>
+      UserUser.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory UserUser.fromJson(Map<String, dynamic> json) => UserUser(
+        id: json["_id"],
+        fullName: json["fullName"],
+        avatar: json["avatar"],
+        faculty: json["faculty"],
+        department: json["department"],
+        level: json["level"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+        role: json["role"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "fullName": fullName,
+        "avatar": avatar,
+        "faculty": faculty,
+        "department": department,
+        "level": level,
+        "createdAt": createdAt!.toIso8601String(),
+        "updatedAt": updatedAt!.toIso8601String(),
+        "__v": v,
+        "role": role,
       };
 }

@@ -65,32 +65,35 @@ class _OnBoardingState extends State<OnBoarding> {
               },
               itemBuilder: (_, index) {
                 return Column(children: [
-                  YMargin(120),
                   Column(children: [
+                    YMargin(context.screenWidth() / 3),
                     Lottie.asset(
                       onboarding[index].img,
-                      height: 250,
-                      width: 250,
+                      height: 320,
+                      width: 320,
                       animate: true,
                       repeat: false,
                     ),
-                    YMargin(20),
-                    Container(
-                        width: context.screenWidth(),
-                        height: 103,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFE3D6C5).withOpacity(0.3),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.5))),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text(onboarding[index].desc,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.montserrat()),
-                          ),
-                        ))
+                    YMargin(context.screenWidth() / 5),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Container(
+                          width: context.screenWidth(),
+                          height: 103,
+                          decoration: BoxDecoration(
+                              color: Color(0xFFE3D6C5).withOpacity(0.3),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12.5))),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(onboarding[index].desc,
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.montserrat()),
+                            ),
+                          )),
+                    )
                   ]),
                 ]);
               }),

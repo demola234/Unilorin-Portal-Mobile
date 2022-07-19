@@ -4,7 +4,9 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
 class EmptyState extends StatelessWidget {
-  const EmptyState({Key? key}) : super(key: key);
+  final String text;
+
+  EmptyState({Key? key, this.text = "No Schedule Available"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class EmptyState extends StatelessWidget {
             repeat: true,
           ),
           Text(
-            "No Schedule Available",
+            text,
             style: Config.b2(context),
           )
         ],

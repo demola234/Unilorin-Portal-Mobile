@@ -6,10 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
-import 'package:probitas_app/features/authentication/presentation/pages/authentication/logger_screen.dart';
-import 'package:probitas_app/features/authentication/presentation/pages/onboarding/onboarding.dart';
+import 'core/constants/theme.dart';
 import 'core/utils/navigation_service.dart';
-import 'data/local/cache.dart';
+import 'features/authentication/presentation/pages/authentication/initial.dart';
+import 'features/settings/controller/theme_controller.dart';
 import 'injection_container.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -29,12 +29,12 @@ void main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   var brightness = SchedulerBinding.instance!.window.platformBrightness;
   @override
   void initState() {
@@ -44,35 +44,16 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final _themeNotifier = ref.watch(themeNotifierProvider);
     return OverlaySupport.global(
         child: MaterialApp(
       title: 'Probitas App',
       navigatorKey: NavigationService().navigationKey,
-      theme: ThemeData(
-        brightness: Brightness.light,
-      ),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          scaffoldBackgroundColor: Color(0xFF1A1A2A),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            elevation: 0,
-            backgroundColor: ProbitasColor.ProbitasPrimary,
-          )),
+      themeMode: _themeNotifier.themeMode,
+      theme: themes(),
+      darkTheme: darkTheme(),
       debugShowCheckedModeBanner: false,
-      home: FutureBuilder<bool>(
-          future: Cache.get().isFirstLoad(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data! == true) {
-                Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(OnBoarding()));
-              } else {
-                Future.delayed(Duration(microseconds: 1),
-                    () => NavigationService().replaceScreen(LoggerScreen()));
-              }
-            }
-            return Scaffold();
-          }),
+      home: InitialScreen(),
     ));
   }
 }

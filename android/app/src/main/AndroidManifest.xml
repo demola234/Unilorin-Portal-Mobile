@@ -1,9 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.probitas_app">
+    package="com.example.probitas_app" xmlns:tools="http://schemas.android.com/tools">
   <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+  <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    tools:ignore="ScopedStorage" />
    <application
-        android:label="probitas_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Probitas"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -38,5 +45,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+          <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAxpiL5nuz7HWw0EHoyOUPRBVG-nVUcac8"/>
     </application>
 </manifest>

@@ -12,6 +12,34 @@ class LoggerScreen extends ConsumerWidget {
     return Scaffold(
         body: FutureBuilder<UserRequest>(
       future:
+          ref.watch(authenticationNotifierProvider.notifier).getUserFromCache(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData ||
+            snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data == null) {
+            return Authentication();
+          } else {
+            return NavController();
+          }
+        }
+        return Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        );
+      },
+    ));
+  }
+}
+
+// ADD DATA CONNECTION CHECKER
+class CheckConnectionScreen extends ConsumerWidget {
+  CheckConnectionScreen({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context, ref) {
+    return Scaffold(
+        body: FutureBuilder<UserRequest>(
+      future:
           ref.read(authenticationNotifierProvider.notifier).getUserFromCache(),
       builder: (context, snapshot) {
         if (snapshot.hasData ||

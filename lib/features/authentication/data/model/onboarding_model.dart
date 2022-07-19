@@ -14,16 +14,16 @@ List<OnboardModel> onboarding = <OnboardModel>[
   OnboardModel(
     img: ImagesAsset.student1,
     desc:
-        "We have varieties of cars available for you\n with luxury features to ensure you have a \nperfect ride.",
+        "Welcome to Probitas,\n Our goal is to make the lives of unilorin\n students easier.",
   ),
   OnboardModel(
     img: ImagesAsset.student2,
     desc:
-        "We have varieties of cars available for you\n with luxury features to ensure you have a \nperfect ride.",
+        "Get access to class Free Books, Hand-outs, Textbooks, Assignments and\n Other materials.",
   ),
   OnboardModel(
     img: ImagesAsset.student3,
     desc:
-        "We have varieties of cars available for you\n with luxury features to ensure you have a \nperfect ride.",
+        "Create and Share your thoughts with you class mates and school mates\n on our feeds page.",
   ),
 ];
