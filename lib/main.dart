@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:probitas_app/core/constants/colors.dart';
+import 'core/constants/theme.dart';
 import 'core/utils/navigation_service.dart';
 import 'features/authentication/presentation/pages/authentication/initial.dart';
 import 'features/settings/controller/theme_controller.dart';
@@ -49,36 +50,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'Probitas App',
       navigatorKey: NavigationService().navigationKey,
       themeMode: _themeNotifier.themeMode,
-      theme: ThemeData(
-        colorScheme: ColorScheme.light(
-          primary: ProbitasColor.ProbitasSecondary,
-          onPrimary: ProbitasColor.ProbitasTextPrimary,
-          onSurface: ProbitasColor.ProbitasSecondary,
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: ProbitasColor.ProbitasSecondary,
-          ),
-        ),
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.dark(
-          primary: ProbitasColor.ProbitasSecondary,
-          onPrimary: ProbitasColor.ProbitasTextPrimary,
-          onSurface: ProbitasColor.ProbitasSecondary,
-        ),
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            primary: ProbitasColor.ProbitasSecondary,
-          ),
-        ),
-        brightness: Brightness.dark,
-        scaffoldBackgroundColor: Color(0xFF1A1A2A),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          elevation: 0,
-          backgroundColor: ProbitasColor.ProbitasPrimary,
-        ),
-      ),
+      theme: themes(),
+      darkTheme: darkTheme(),
       debugShowCheckedModeBanner: false,
       home: InitialScreen(),
     ));
