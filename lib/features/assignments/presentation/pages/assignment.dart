@@ -8,9 +8,9 @@ import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../../../../core/utils/customs/custom_error.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../dashboard/presentation/controller/dashboard_controller.dart';
-import '../../../dashboard/presentation/widget/empty_state/empty_state.dart';
 import '../controller/assignment_controller.dart';
 import 'create_assignment.dart';
 
@@ -60,34 +60,57 @@ class _AssignmentState extends ConsumerState<Assignment> {
                 child: Container(
                   width: context.screenWidth(),
                   child: value.when(
-                    data: (data) => ListView.builder(
-                        itemCount: data.data.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return data.data[index].dueDate
-                                  .isAfter(DateTime.now())
-                              ? AssignmentTile(
-                                  onTap: () {
-                                    NavigationService().navigateToScreen(
-                                        SubmitAssignment(
-                                            assignmentId: data.data[index].id));
-                                  },
-                                  courseCode: data.data[index].courseCode,
-                                  courseTitle: data.data[index].courseTitle,
-                                  dueDate: data.data[index].dueDate,
-                                  lecturer: data.data[index].lecturer,
-                                  assignmentId: data.data[index].id,
-                                )
-                              : data.data.length > 2
-                                  ? Container()
-                                  : Container();
-                        }),
+                    data: (data) => data.data.contains((element) =>
+                            element.dueDate.isAfter(DateTime.now()))
+                        ? ListView.builder(
+                            itemCount: data.data.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return data.data[index].dueDate
+                                      .isAfter(DateTime.now())
+                                  ? AssignmentTile(
+                                      onTap: () {
+                                        NavigationService().navigateToScreen(
+                                            SubmitAssignment(
+                                                assignmentId:
+                                                    data.data[index].id));
+                                      },
+                                      courseCode: data.data[index].courseCode,
+                                      courseTitle: data.data[index].courseTitle,
+                                      dueDate: data.data[index].dueDate,
+                                      lecturer: data.data[index].lecturer,
+                                      assignmentId: data.data[index].id,
+                                    )
+                                  : data.data.length > 2
+                                      ? Container()
+                                      : Container();
+                            })
+                        : Center(child: Text("No Assignment Found!")),
                     loading: () => Center(
                       child: CircularProgressIndicator(
                         color: ProbitasColor.ProbitasSecondary,
                       ),
                     ),
-                    error: (err, str) => EmptyState(),
+                    error: (err, str) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  ErrorsWidget(
+                                    onTap: () =>
+                                        ref.refresh(getAssignmentProvider),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )

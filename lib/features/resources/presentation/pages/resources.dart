@@ -125,8 +125,41 @@ class _ResourcesState extends ConsumerState<Resources> {
                           onRefresh: () => ref
                               .refresh(resourcesNotifierProvider.notifier)
                               .getResource(),
-                          child: ResourceItems(
-                              resourceNotifier: resourcesNotifier)),
+                          child: Builder(builder: (context) {
+                            if (resourcesNotifier.viewState.isLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator(
+                                color: ProbitasColor.ProbitasSecondary,
+                              ));
+                            } else if (resourcesNotifier.viewState.isError) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            ErrorsWidget(
+                                              onTap: () => ref
+                                                  .refresh(
+                                                      resourcesNotifierProvider
+                                                          .notifier)
+                                                  .getResource(),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return ResourceItems(
+                                  resourceNotifier: resourcesNotifier);
+                            }
+                          })),
                     );
                   }
                 })
