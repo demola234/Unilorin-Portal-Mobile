@@ -10,6 +10,8 @@ class ImagesAsset {
   static String post_default = 'assets/images/post_default.jpg';
   static String news_default = 'assets/images/sug.png';
   static String empty_image = 'assets/images/avatar-empty.jpg';
+  static String nslt = 'assets/images/NSLT.jpeg';
+  static String theatre = 'assets/images/Theatre.png';
 
   //Icons
   static String home = 'assets/icons/home.svg';
@@ -38,6 +40,7 @@ class ImagesAsset {
   static String verified = 'assets/icons/verified.svg';
   static String book = 'assets/icons/book.svg';
   static String books = 'assets/icons/book-svg.svg';
+    static String lecture = 'assets/icons/lecture.svg';
 
   //Jsons
   static String student1 = 'assets/jsons/student.json';
