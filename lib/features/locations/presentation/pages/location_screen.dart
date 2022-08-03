@@ -6,6 +6,7 @@ import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'dart:async';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../data/dark_mode.dart';
 
 class Locations extends StatefulWidget {
   const Locations({Key? key}) : super(key: key);
@@ -25,37 +26,8 @@ class _LocationsState extends State<Locations> {
 
   Set<Marker> _marker = {};
 
-
   onMapCreated(GoogleMapController controller) {
-    setState(() {
-      _marker.add(Marker(
-        markerId: MarkerId("Science Lecture Theater(SLT)"),
-        position: LatLng(8.48208314244034, 4.676300336200427),
-        infoWindow: InfoWindow(title: "Science Lecture Theater(SLT)"),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-
-      _marker.add(Marker(
-        markerId: MarkerId("lt1"),
-        position: LatLng(8.481935268625094, 4.673528025135144),
-        infoWindow: InfoWindow(title: "Lecture Theatre I"),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
-    });
-
-    _marker.add(Marker(
-      markerId: MarkerId("elt1"),
-      position: LatLng(8.484244241568872, 4.67626633491362),
-      infoWindow: InfoWindow(title: "Engineering Lecture Theater"),
-      icon: BitmapDescriptor.defaultMarker,
-    ));
-
-    _marker.add(Marker(
-      markerId: MarkerId("elt1"),
-      position: LatLng(8.485491900257072, 4.677487756608535),
-      infoWindow: InfoWindow(title: "Agriculture Lecture Theatre"),
-      icon: BitmapDescriptor.defaultMarker,
-    ));
+    setState(() {});
   }
 
   @override
@@ -76,9 +48,16 @@ class _LocationsState extends State<Locations> {
               _controller.complete(controller);
               newMapControler = controller;
 
-              isDarkMode ? darkModeMapFeature() : null;
+              isDarkMode ? darkModeMapFeature(controller) : null;
             },
-            markers: _marker,
+            markers: {
+              altMarker,
+              sltMarker,
+              eltMarker,
+              lt1Marker,
+              msltMarker,
+              desmMarker
+            },
           ),
           _buildContainer(),
           YMargin(20),
@@ -104,37 +83,58 @@ class _LocationsState extends State<Locations> {
                   8.48208314244034,
                   4.676300336200427,
                   "Science Lecture Theater",
-                  "Lecture Theater"),
+                  "Lecture Theater",
+                  "SLT"),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                ImagesAsset.nslt,
-                8.481935268625094,
-                4.673528025135144,
-                "Lecture Theatre I",
-                "Lecture Theater",
-              ),
+                  ImagesAsset.nslt,
+                  8.481935268625094,
+                  4.673528025135144,
+                  "Lecture Theatre I",
+                  "Lecture Theater",
+                  "LT1"),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                ImagesAsset.nslt,
-                8.484244241568872,
-                4.67626633491362,
-                "Engineering Lecture Theater",
-                "Lecture Theater",
-              ),
+                  ImagesAsset.nslt,
+                  8.484244241568872,
+                  4.67626633491362,
+                  "Engineering Lecture Theater",
+                  "Lecture Theater",
+                  "ELT"),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                ImagesAsset.nslt,
-                8.485491900257072,
-                4.677487756608535,
-                "Agriculture Lecture Theatre",
-                "Lecture Theater",
-              ),
+                  ImagesAsset.nslt,
+                  8.485491900257072,
+                  4.677487756608535,
+                  "Agriculture Lecture Theatre",
+                  "Lecture Theater",
+                  "ALT"),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _boxes(
+                  ImagesAsset.nslt,
+                  8.487776883238588,
+                  4.67707806304939,
+                  "Management Science Lecture Theatre",
+                  "Lecture Theater",
+                  "MSLT"),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _boxes(
+                  ImagesAsset.nslt,
+                  8.490538000989174,
+                  4.676535505798677,
+                  "Department of Estate Management",
+                  "Department",
+                  "ESM"),
             ),
           ],
         ),
@@ -142,8 +142,8 @@ class _LocationsState extends State<Locations> {
     );
   }
 
-  Widget _boxes(
-      String _image, double lat, double long, String lecture, String place) {
+  Widget _boxes(String _image, double lat, double long, String lecture,
+      String place, String lectureAbb) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
@@ -182,7 +182,7 @@ class _LocationsState extends State<Locations> {
                   child: Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: myDetailsContainer1(lecture, place),
+                      child: myDetailsContainer1(lecture, place, lectureAbb),
                     ),
                   ),
                 ),
@@ -192,7 +192,7 @@ class _LocationsState extends State<Locations> {
     );
   }
 
-  Widget myDetailsContainer1(String lecture, String place) {
+  Widget myDetailsContainer1(String lecture, String place, String lectureAbb) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +207,22 @@ class _LocationsState extends State<Locations> {
                 color: isDarkMode
                     ? ProbitasColor.ProbitasTextPrimary
                     : ProbitasColor.ProbitasSecondary,
-                fontSize: 18.0,
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold),
+          )),
+        ),
+        YMargin(15),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Container(
+              child: Text(
+            lectureAbb,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasSecondary,
+                fontSize: 13.0,
                 fontWeight: FontWeight.bold),
           )),
         ),
@@ -226,7 +241,7 @@ class _LocationsState extends State<Locations> {
               XMargin(5.0),
               Container(
                   child: Text(
-                "Lecture Theatre",
+                place,
                 style: TextStyle(
                     // color: ProbitasColor.ProbitasSecondary,
                     fontSize: 16.0,
@@ -239,6 +254,48 @@ class _LocationsState extends State<Locations> {
     );
   }
 
+  Marker altMarker = new Marker(
+    markerId: MarkerId("alt"),
+    position: LatLng(8.485491900257072, 4.677487756608535),
+    infoWindow: InfoWindow(title: "Agriculture Lecture Theatre"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
+  Marker sltMarker = new Marker(
+    markerId: MarkerId("slt"),
+    position: LatLng(8.48208314244034, 4.676300336200427),
+    infoWindow: InfoWindow(title: "Science Lecture Theater(SLT)"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
+  Marker lt1Marker = new Marker(
+    markerId: MarkerId("lt1"),
+    position: LatLng(8.481935268625094, 4.673528025135144),
+    infoWindow: InfoWindow(title: "Lecture Theatre I"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
+  Marker eltMarker = new Marker(
+    markerId: MarkerId("elt"),
+    position: LatLng(8.484244241568872, 4.67626633491362),
+    infoWindow: InfoWindow(title: "Engineering Lecture Theater"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
+  Marker msltMarker = new Marker(
+    markerId: MarkerId("mslt"),
+    position: LatLng(8.487776883238588, 4.67707806304939),
+    infoWindow: InfoWindow(title: "Management Science Lecture Theatre"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
+  Marker desmMarker = new Marker(
+    markerId: MarkerId("desm"),
+    position: LatLng(8.490538000989174, 4.676535505798677),
+    infoWindow: InfoWindow(title: "Department of Estate Management"),
+    icon: BitmapDescriptor.defaultMarker,
+  );
+
   Future<void> _gotoLocation(double lat, double long) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -247,171 +304,5 @@ class _LocationsState extends State<Locations> {
       tilt: 50.0,
       bearing: 45.0,
     )));
-  }
-
-  darkModeMapFeature() {
-    newMapControler!.setMapStyle('''
-                    [
-                      {
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#242f3e"
-                          }
-                        ]
-                      },
-                      {
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#746855"
-                          }
-                        ]
-                      },
-                      {
-                        "elementType": "labels.text.stroke",
-                        "stylers": [
-                          {
-                            "color": "#242f3e"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "administrative.locality",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#d59563"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "poi",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#d59563"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "poi.park",
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#263c3f"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "poi.park",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#6b9a76"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road",
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#38414e"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road",
-                        "elementType": "geometry.stroke",
-                        "stylers": [
-                          {
-                            "color": "#212a37"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#9ca5b3"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road.highway",
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#746855"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road.highway",
-                        "elementType": "geometry.stroke",
-                        "stylers": [
-                          {
-                            "color": "#1f2835"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "road.highway",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#f3d19c"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "transit",
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#2f3948"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "transit.station",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#d59563"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "water",
-                        "elementType": "geometry",
-                        "stylers": [
-                          {
-                            "color": "#17263c"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "water",
-                        "elementType": "labels.text.fill",
-                        "stylers": [
-                          {
-                            "color": "#515c6d"
-                          }
-                        ]
-                      },
-                      {
-                        "featureType": "water",
-                        "elementType": "labels.text.stroke",
-                        "stylers": [
-                          {
-                            "color": "#17263c"
-                          }
-                        ]
-                      }
-                    ]
-                ''');
   }
 }
