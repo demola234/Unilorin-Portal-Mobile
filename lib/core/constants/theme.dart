@@ -5,7 +5,7 @@ import 'package:probitas_app/core/constants/colors.dart';
 ThemeData themes() {
     return ThemeData(
       colorScheme: ColorScheme.light(
-        primary: ProbitasColor.ProbitasSecondary,
+        primary: ProbitasColor.ProbitasTextPrimary,
         onPrimary: ProbitasColor.ProbitasTextPrimary,
         onSurface: ProbitasColor.ProbitasSecondary,
       ),

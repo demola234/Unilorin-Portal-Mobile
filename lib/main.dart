@@ -17,15 +17,15 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  ]).then((_) {
+    runApp(
+      ProviderScope(
+        child: MyApp(),
+      ),
+    );
+  });
   await injector();
   await GetStorage.init();
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -34,7 +34,7 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  var brightness = SchedulerBinding.instance!.window.platformBrightness;
+  var brightness = SchedulerBinding.instance.window.platformBrightness;
   @override
   void initState() {
     super.initState();

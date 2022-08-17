@@ -177,7 +177,8 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
                               width: 15,
                             ),
                           ),
-                          onTap: startTime,
+                          onTap:
+                              Config.isAndroid ? startAndroidTime : startTime,
                         ),
                       ),
                       XMargin(15),
@@ -250,6 +251,8 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
     );
   }
 
+  TimeOfDay selectedTime = TimeOfDay.now();
+
   startTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
       initialTime: TimeOfDay.now(),
@@ -294,5 +297,25 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
     } else {
       print("Time is not selected");
     }
+  }
+
+  // Select for Time
+  Future<TimeOfDay> startAndroidTime() async {
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+
+    if (selected != null && selected != selectedTime) {
+      DateTime parsedTime = DateFormat.jm().parse(selected.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
+      setState(() {
+        selectedTime = selected;
+        startController.text = formattedTime;
+        print("Its me=> $endText");
+      });
+    }
+    return selectedTime;
   }
 }
