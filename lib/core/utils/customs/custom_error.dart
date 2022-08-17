@@ -15,6 +15,7 @@ class ErrorsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Center(
         child: Container(
             child: Column(
@@ -28,7 +29,10 @@ class ErrorsWidget extends StatelessWidget {
         ),
         Text(
           "An Error Occurred",
-          style: Config.b2(context),
+          style: Config.b2(context).copyWith(
+            color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
+                : ProbitasColor.ProbitasPrimary
+          ),
         ),
         YMargin(10),
         InkWell(
@@ -37,12 +41,15 @@ class ErrorsWidget extends StatelessWidget {
             height: 35,
             width: 130,
             decoration: BoxDecoration(
-                border: Border.all(),
+                border: Border.all(color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
+                : ProbitasColor.ProbitasPrimary),
+
                 borderRadius: BorderRadius.all(Radius.circular(12.0))),
             child: Center(
                 child: Text("Tap to Retry",
                     style: Config.b3(context).copyWith(
-                      color: ProbitasColor.ProbitasPrimary,
+                      color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
+                : ProbitasColor.ProbitasPrimary
                     ))),
           ),
         ),

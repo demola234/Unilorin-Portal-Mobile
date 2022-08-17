@@ -5,7 +5,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:probitas_app/core/constants/colors.dart';
 import 'core/constants/theme.dart';
 import 'core/utils/navigation_service.dart';
 import 'features/authentication/presentation/pages/authentication/initial.dart';
@@ -18,15 +17,15 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  ]).then((_) {
+    runApp(
+      ProviderScope(
+        child: MyApp(),
+      ),
+    );
+  });
   await injector();
   await GetStorage.init();
-  runApp(
-    ProviderScope(
-      child: MyApp(),
-    ),
-  );
 }
 
 class MyApp extends ConsumerStatefulWidget {
@@ -35,7 +34,7 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  var brightness = SchedulerBinding.instance!.window.platformBrightness;
+  var brightness = SchedulerBinding.instance.window.platformBrightness;
   @override
   void initState() {
     super.initState();

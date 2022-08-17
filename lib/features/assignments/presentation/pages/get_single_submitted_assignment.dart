@@ -47,9 +47,11 @@ class _SubmittedAssignmentState
                       itemCount: data.data.assignments.length,
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return (data.data.assignments[index].courseTitle ==
+                        return (data.data.assignments[index].assignment
+                                        .courseTitle ==
                                     widget.courseName &&
-                                data.data.assignments[index].courseCode ==
+                                data.data.assignments[index].assignment
+                                        .courseCode ==
                                     widget.courseCode)
                             ? GestureDetector(
                                 child: Container(
@@ -94,7 +96,7 @@ class _SubmittedAssignmentState
                                             YMargin(20.0),
                                             Text(
                                               data.data.assignments[index]
-                                                  .courseTitle,
+                                                  .assignment.courseCode,
                                               style:
                                                   Config.b2(context).copyWith(
                                                 fontSize: 12,
@@ -139,11 +141,11 @@ class _SubmittedAssignmentState
                                                     url: data
                                                         .data
                                                         .assignments[index]
-                                                        .user
-                                                        .avatar,
+                                                        .file,
                                                     title: data
                                                         .data
                                                         .assignments[index]
+                                                        .user
                                                         .department,
                                                   );
                                                 });

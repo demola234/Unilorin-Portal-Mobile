@@ -137,7 +137,10 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                 children: [
                                   Text(
                                     "Posts Not Available",
-                                    style: Config.b3(context),
+                                    style: Config.b3(context).copyWith(
+                                      color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
+                : ProbitasColor.ProbitasPrimary
+                                    ),
                                   ),
                                 ],
                               );

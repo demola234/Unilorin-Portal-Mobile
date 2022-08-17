@@ -202,16 +202,22 @@ class _DashboardState extends ConsumerState<Dashboard>
                                         height: 35,
                                         width: 130,
                                         decoration: BoxDecoration(
-                                            border: Border.all(),
+                                            border: Border.all(
+                                                color: isDarkMode
+                                                    ? ProbitasColor
+                                                        .ProbitasTextPrimary
+                                                    : ProbitasColor
+                                                        .ProbitasPrimary),
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(12.0))),
                                         child: Center(
                                             child: Text("Tap to Retry",
-                                                style:
-                                                    Config.b3(context).copyWith(
-                                                  color: ProbitasColor
-                                                      .ProbitasPrimary,
-                                                ))),
+                                                style: Config.b3(context).copyWith(
+                                                    color: isDarkMode
+                                                        ? ProbitasColor
+                                                            .ProbitasTextPrimary
+                                                        : ProbitasColor
+                                                            .ProbitasPrimary))),
                                       ),
                                     ),
                                   ]),
