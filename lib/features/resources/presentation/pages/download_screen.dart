@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
+import 'package:saf/saf.dart';
 
 import '../../../../core/error/toasts.dart';
 
@@ -18,11 +19,14 @@ class DownloadScreen extends StatefulWidget {
   _DownloadScreenState createState() => _DownloadScreenState();
 }
 
+const directory = "Probitas";
+
 class _DownloadScreenState extends State<DownloadScreen> {
   Dio dio = Dio();
   String downloadProgress = '0';
   int downloadedBytes = 0;
   int totalBytes = 0;
+  late Saf saf;
 
   static formatBytes(bytes, decimals) {
     if (bytes == 0) return 0.0;
@@ -44,11 +48,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
 
   Future<bool> _hasAcceptedPermissions() async {
     if (Platform.isAndroid) {
-      if (await _requestPermission(Permission.storage) &&
-          // access media location needed for android 10/Q
-          await _requestPermission(Permission.accessMediaLocation) &&
-          // manage external storage needed for android 11/R
-          await _requestPermission(Permission.manageExternalStorage)) {
+      if (await _requestPermission(Permission.storage)) {
         return true;
       } else {
         return false;
@@ -69,16 +69,37 @@ class _DownloadScreenState extends State<DownloadScreen> {
 
   void downloadBook(String link) async {
     if (await _hasAcceptedPermissions()) {
-      Directory? appDirectory = Platform.isAndroid
-          ? await getExternalStorageDirectory()
-          : await getApplicationDocumentsDirectory();
+      String timeInMilliseconds =
+          DateTime.now().millisecondsSinceEpoch.toString();
+      String fileName =
+          "/$timeInMilliseconds.${widget.url.toString().split(".").last}";
 
-      String path = Platform.isIOS
-          ? appDirectory!.path +
-              '/Probitas.${widget.url.toString().split(".").last}'
-          : appDirectory!.path.split('Android')[0] +
-              'Probitas.${widget.url.toString().split(".").last}';
+      String path = '';
+
+      if (Platform.isAndroid) {
+        // await saf.releasePersistedPermission();
+        // await Saf.getPersistedPermissionDirectories();
+
+        bool? isGrantedDirectoryPermission =
+            await saf.getDirectoryPermission(isDynamic: true);
+
+        if (isGrantedDirectoryPermission != null &&
+            isGrantedDirectoryPermission) {
+          List<String>? directoriesPath =
+              await Saf.getPersistedPermissionDirectories();
+          print('directories path is $directoriesPath');
+          path = '/storage/emulated/0/' + directoriesPath![0] + fileName;
+        } else {
+          Toasts.showErrorToast('Storage location not selected');
+          return;
+        }
+      } else {
+        Directory? appDirectory = await getApplicationDocumentsDirectory();
+        path = appDirectory.path + fileName;
+      }
+
       print('path is $path');
+
       File file = File(path);
       if (!await file.exists()) {
         await file.create();
@@ -86,6 +107,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
         await file.delete();
         await file.create();
       }
+
       await dio
           .download(
             link,
@@ -125,8 +147,9 @@ class _DownloadScreenState extends State<DownloadScreen> {
 
   @override
   void initState() {
-    super.initState();
+    saf = Saf(directory);
     downloadBook(widget.url);
+    super.initState();
   }
 
   @override

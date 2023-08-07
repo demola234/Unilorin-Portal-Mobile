@@ -30,10 +30,11 @@ class ProbitasDrawer extends StatelessWidget {
         backgroundColor:
             isDarkMode ? ProbitasColor.ProbitasPrimary : Colors.white,
         child: Padding(
-          padding: EdgeInsets.only(top: 70),
+          padding: EdgeInsets.only(top: 10),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              YMargin(40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -103,13 +104,19 @@ class ProbitasDrawer extends StatelessWidget {
                   DrawerListTile(
                       title: 'Check Result',
                       onPressed: () async {
-                        final isAuthenticated =
-                            await LocalAuthApi.authenticate();
+                        final hasBiometrics =
+                            await LocalAuthApi.hasBiometrics();
 
-                        if (isAuthenticated) {
-                          NavigationService().goBack();
-                          NavigationService().navigateToScreen(Results());
+                        print(hasBiometrics);
+
+                        if (hasBiometrics) {
+                          final isAuthenticated =
+                              await LocalAuthApi.authenticate();
+                          if (!isAuthenticated) return;
                         }
+
+                        NavigationService().goBack();
+                        NavigationService().navigateToScreen(Results());
                       }),
                   DrawerListTile(
                     title: 'Locate Places',
@@ -127,8 +134,8 @@ class ProbitasDrawer extends StatelessWidget {
                   ),
                 ]),
               ),
-
-            YMargin(40),
+              YMargin(40),
+              Expanded(child: Container()),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Container(

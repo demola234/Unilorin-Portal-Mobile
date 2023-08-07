@@ -34,44 +34,49 @@ class CustomNavBar extends StatelessWidget {
         ),
       ),
       leadingWidth: 80,
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 24.0),
-        child: GestureDetector(
-          onTap: () {
-            NavigationService().goBack();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10.0),
-                ),
-                border: Border.all(
-                  color:
-                      isDarkMode ? Colors.white : ProbitasColor.ProbitasPrimary,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 9.0),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: isDarkMode
-                          ? Colors.white
-                          : ProbitasColor.ProbitasPrimary,
-                    ),
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 0.0, top: 7),
+            child: GestureDetector(
+              onTap: () {
+                NavigationService().goBack();
+              },
+              child: Container(
+                height: 35,
+                width: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
                   ),
-                ],
+                  border: Border.all(
+                    color: isDarkMode
+                        ? Colors.white
+                        : ProbitasColor.ProbitasPrimary,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 17,
+                        color: isDarkMode
+                            ? Colors.white
+                            : ProbitasColor.ProbitasPrimary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

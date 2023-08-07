@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:probitas_app/core/utils/features.dart';
 import 'package:probitas_app/features/authentication/presentation/provider/authentication_provider.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import 'package:probitas_app/features/result/data/model/result_response.dart';
@@ -24,13 +25,14 @@ class Results extends ConsumerStatefulWidget {
 class _ResultsState extends ConsumerState<Results> {
   bool isVisible = false;
   bool isResult = false;
-  var session = "2020/2021";
+  final sessions = getSessions();
+  var currentSession = getSessions()[0];
 
   @override
   Widget build(BuildContext context) {
     final userDetails = ref.watch(getUsersProvider);
     final cgpaDetails = ref.watch(getCgpaProvider);
-    final resultDetails = ref.watch(getResultsProvider(session));
+    final resultDetails = ref.watch(getResultsProvider(currentSession));
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
@@ -44,10 +46,8 @@ class _ResultsState extends ConsumerState<Results> {
           height: 100,
           width: context.screenWidth(),
           decoration: BoxDecoration(
-              color: ProbitasColor.ProbitasTextPrimary.withOpacity(0.5),
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
-              )),
+            color: ProbitasColor.ProbitasTextPrimary.withOpacity(0.5),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,53 +163,18 @@ class _ResultsState extends ConsumerState<Results> {
               ),
               YMargin(10),
               ProbitasDropDown(
-                hintText: "2021/2022",
-                items: [
-                  "2021/2022",
-                  "2020/2021",
-                  "2019/2020",
-                  "2018/2019",
-                  "2017/2018",
-                  "2016/2017",
-                  "2015/2016",
-                  "2014/2015",
-                  "2013/2014",
-                  "2012/2011",
-                  "2010/2009",
-                ],
+                hintText: currentSession,
+                items: sessions,
                 onChanged: (value) {
                   setState(() {
-                    session = value!;
+                    currentSession = value!;
                   });
                 },
-                value: session,
+                value: currentSession,
               )
             ],
           ),
         ),
-        YMargin(50),
-        // InkWell(
-        //   onTap: () {
-        //     ref.watch(getResultsProvider(session));
-
-        //   },
-        //   child: Container(
-        //     height: 70,
-        //     width: 220,
-        //     decoration: BoxDecoration(
-        //         color: ProbitasColor.ProbitasSecondary,
-        //         borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        //     child: Center(
-        //       child: Text(
-        //         "Get Result",
-        //         style: Config.b2(context).copyWith(
-        //           color: ProbitasColor.ProbitasTextPrimary,
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        YMargin(20),
         resultDetails.when(
             data: (data) => GetResults(result: data.data!.result!),
             error: (err, str) => Text("err"),
@@ -262,13 +227,13 @@ class GetResults extends StatelessWidget {
                         columns: [
                           DataColumn(
                             label: Text(
-                              'Code',
+                              'Title',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: Config.b3(context),
                             ),
                             numeric: false,
-                            tooltip: 'Course Code',
+                            tooltip: 'Title',
                           ),
                           DataColumn(
                             label: Text(
@@ -343,7 +308,7 @@ class GetResults extends StatelessWidget {
                             ),
                             DataCell(
                               Text(
-                                result[index].status!.name,
+                                result[index].status?.name ?? '-',
                                 maxLines: 2,
                                 overflow: TextOverflow.visible,
                                 style: Config.b3(context),

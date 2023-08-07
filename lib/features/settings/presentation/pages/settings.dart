@@ -144,7 +144,7 @@ class Settings extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            height: 70,
+                            height: 50,
                             width: context.screenWidth() / 2,
                             decoration: BoxDecoration(
                               color: Colors.red,
@@ -189,7 +189,7 @@ class SettingsButton extends StatelessWidget {
     return ClipRRect(
         borderRadius: BorderRadius.all(Radius.circular(10.0)),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 20),
           height: 70,
           width: context.screenWidth(),
           decoration: BoxDecoration(
