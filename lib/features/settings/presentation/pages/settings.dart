@@ -40,7 +40,7 @@ class Settings extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: ref.read(getUsersProvider).when(
+                            child: ref.read(getUserSummaryProvider).when(
                                 data: (data) => GestureDetector(
                                       onTap: () {
                                         ImageViewUtils.showImagePreview(context,
@@ -63,7 +63,7 @@ class Settings extends StatelessWidget {
                     YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
-                        final response = watch.read(getUsersProvider);
+                        final response = watch.read(getUserSummaryProvider);
                         return response.when(
                             data: (response) => Text(
                                   "${response.data!.user!.fullName}",

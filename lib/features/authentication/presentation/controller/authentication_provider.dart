@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
-import 'package:probitas_app/features/authentication/data/model/user_request.dart';
 import 'package:probitas_app/features/bottom_navigation.dart';
+import 'package:probitas_app/features/dashboard/data/model/user_request.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';

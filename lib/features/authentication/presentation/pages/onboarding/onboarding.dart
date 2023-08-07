@@ -130,18 +130,23 @@ class _OnBoardingState extends State<OnBoarding> {
               ),
             ),
           ),
-          ProbitasButton(
-            text: "Continue to login",
-            onTap: () {
-              if (currentIndex == onboarding.length - 1) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => Authentication()));
-              }
-              _pageController.nextPage(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: ProbitasButton(
+              text: "Continue to login",
+              onTap: () {
+                if (currentIndex == onboarding.length - 1) {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Authentication()));
+                }
+                _pageController.nextPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              },
+            ),
           )
         ],
       ),

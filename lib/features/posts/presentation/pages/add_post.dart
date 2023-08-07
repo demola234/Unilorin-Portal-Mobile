@@ -25,7 +25,7 @@ class _AddPostState extends ConsumerState<AddPost> {
 
   @override
   Widget build(BuildContext context) {
-    var image = ref.watch(getUsersProvider).value!.data!.user!.avatar;
+    var image = ref.watch(getUserSummaryProvider).value!.data!.user!.avatar;
     final postState = ref.watch(postsNotifierProvider);
     // ignore: unused_local_variable
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;

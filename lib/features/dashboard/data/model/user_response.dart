@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:probitas_app/features/dashboard/data/model/user_request.dart';
 
-
-class UserResponses {
-  UserResponses({
+class UserResponse {
+  UserResponse({
     this.success,
     this.message,
     this.data,
@@ -11,17 +10,17 @@ class UserResponses {
 
   bool? success;
   String? message;
-  Data? data;
+  UserRequest? data;
 
-  factory UserResponses.fromRawJson(String str) =>
-      UserResponses.fromJson(json.decode(str));
+  factory UserResponse.fromRawJson(String str) =>
+      UserResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory UserResponses.fromJson(Map<String, dynamic> json) => UserResponses(
+  factory UserResponse.fromJson(Map<String, dynamic> json) => UserResponse(
         success: json["success"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: UserRequest.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {

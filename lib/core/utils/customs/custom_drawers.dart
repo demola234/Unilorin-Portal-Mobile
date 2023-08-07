@@ -48,7 +48,7 @@ class ProbitasDrawer extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            child: ref.read(getUsersProvider).when(
+                            child: ref.read(getUserSummaryProvider).when(
                                 data: (data) => GestureDetector(
                                       onTap: () {
                                         ImageViewUtils.showImagePreview(context,
@@ -71,7 +71,7 @@ class ProbitasDrawer extends StatelessWidget {
                     YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
-                        final response = watch.read(getUsersProvider);
+                        final response = watch.read(getUserSummaryProvider);
                         return response.when(
                             data: (response) => Text(
                                   "${response.data!.user!.fullName!}",

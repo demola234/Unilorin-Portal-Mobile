@@ -30,7 +30,7 @@ class _ResultsState extends ConsumerState<Results> {
 
   @override
   Widget build(BuildContext context) {
-    final userDetails = ref.watch(getUsersProvider);
+    final userDetails = ref.watch(getUserSummaryProvider);
     final cgpaDetails = ref.watch(getCgpaProvider);
     final resultDetails = ref.watch(getResultsProvider(currentSession));
 

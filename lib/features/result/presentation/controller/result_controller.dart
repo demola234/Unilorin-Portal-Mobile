@@ -8,8 +8,8 @@ import '../../../../injection_container.dart';
 var resultService = getIt<ResultService>();
 
 final getCgpaProvider = FutureProvider<CgpaResponse>((ref) async {
-  final cgpaResult = await resultService
-      .fetchCGPA(ref.read(getUsersProvider).asData!.value.data!.user!.level!);
+  final cgpaResult = await resultService.fetchCGPA(
+      ref.read(getUserSummaryProvider).asData!.value.data!.user!.level!);
 
   return cgpaResult;
 });

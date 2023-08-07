@@ -43,7 +43,7 @@ class _DashboardState extends ConsumerState<Dashboard>
 
   @override
   Widget build(BuildContext context) {
-    final value = ref.watch(getUsersProvider);
+    final value = ref.watch(getUserSummaryProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -195,7 +195,7 @@ class _DashboardState extends ConsumerState<Dashboard>
                                     YMargin(10.0),
                                     InkWell(
                                       onTap: () {
-                                        ref.refresh(getUsersProvider);
+                                        ref.refresh(getUserSummaryProvider);
                                         ref.refresh(getSchedulesProvider);
                                       },
                                       child: Container(

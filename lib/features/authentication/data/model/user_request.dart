@@ -50,7 +50,7 @@ class User {
     this.nextOfKin,
     this.guardian,
     this.sponsor,
-    this.semester, 
+    this.semester,
     this.user,
   });
 
@@ -250,12 +250,12 @@ class Semester {
   Semester({
     this.type,
     this.number,
-    this.year,
+    this.session,
   });
 
   String? type;
   String? number;
-  String? year;
+  String? session;
 
   factory Semester.fromRawJson(String str) =>
       Semester.fromJson(json.decode(str));
@@ -265,13 +265,13 @@ class Semester {
   factory Semester.fromJson(Map<String, dynamic> json) => Semester(
         type: json["type"],
         number: json["number"],
-        year: json["year"],
+        session: json["session"],
       );
 
   Map<String, dynamic> toJson() => {
         "type": type,
         "number": number,
-        "year": year,
+        "session": session,
       };
 }
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:probitas_app/features/dashboard/data/model/user_request.dart';
 import '../../../../bottom_navigation.dart';
-import '../../../data/model/user_request.dart';
 import '../../provider/authentication_provider.dart';
 import 'authentication.dart';
 
