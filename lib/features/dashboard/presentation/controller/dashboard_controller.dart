@@ -6,14 +6,19 @@ import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../../data/local/cache.dart';
 import '../../../../injection_container.dart';
+import '../../data/model/user_summary_response.dart';
 import '../../data/model/user_response.dart';
 import '../../../../core/utils/states.dart';
 
 var dashboardService = getIt<DashBoardService>();
 
-final getUsersProvider = FutureProvider.autoDispose<UserResponses>((ref) async {
-  final profile = await dashboardService.fetchUsers();
-  // print(profile.data!.user.fullName);
+final getUserSummaryProvider =
+    FutureProvider.autoDispose<UserSummaryResponse>((ref) async {
+  final profile = await dashboardService.fetchUserSummary();
+  return profile;
+});
+final getUserProvider = FutureProvider.autoDispose<UserResponse>((ref) async {
+  final profile = await dashboardService.fetchUser();
   return profile;
 });
 

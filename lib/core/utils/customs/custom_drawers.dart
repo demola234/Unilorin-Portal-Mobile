@@ -30,10 +30,11 @@ class ProbitasDrawer extends StatelessWidget {
         backgroundColor:
             isDarkMode ? ProbitasColor.ProbitasPrimary : Colors.white,
         child: Padding(
-          padding: EdgeInsets.only(top: 70),
+          padding: EdgeInsets.only(top: 10),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              YMargin(40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -47,7 +48,7 @@ class ProbitasDrawer extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
-                            child: ref.read(getUsersProvider).when(
+                            child: ref.read(getUserSummaryProvider).when(
                                 data: (data) => GestureDetector(
                                       onTap: () {
                                         ImageViewUtils.showImagePreview(context,
@@ -70,7 +71,7 @@ class ProbitasDrawer extends StatelessWidget {
                     YMargin(10),
                     Consumer(
                       builder: ((context, watch, child) {
-                        final response = watch.read(getUsersProvider);
+                        final response = watch.read(getUserSummaryProvider);
                         return response.when(
                             data: (response) => Text(
                                   "${response.data!.user!.fullName!}",
@@ -103,13 +104,19 @@ class ProbitasDrawer extends StatelessWidget {
                   DrawerListTile(
                       title: 'Check Result',
                       onPressed: () async {
-                        final isAuthenticated =
-                            await LocalAuthApi.authenticate();
+                        final hasBiometrics =
+                            await LocalAuthApi.hasBiometrics();
 
-                        if (isAuthenticated) {
-                          NavigationService().goBack();
-                          NavigationService().navigateToScreen(Results());
+                        print(hasBiometrics);
+
+                        if (hasBiometrics) {
+                          final isAuthenticated =
+                              await LocalAuthApi.authenticate();
+                          if (!isAuthenticated) return;
                         }
+
+                        NavigationService().goBack();
+                        NavigationService().navigateToScreen(Results());
                       }),
                   DrawerListTile(
                     title: 'Locate Places',
@@ -127,8 +134,8 @@ class ProbitasDrawer extends StatelessWidget {
                   ),
                 ]),
               ),
-
-            YMargin(40),
+              YMargin(40),
+              Expanded(child: Container()),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50),
                 child: Container(

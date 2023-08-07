@@ -138,9 +138,9 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                   Text(
                                     "Posts Not Available",
                                     style: Config.b3(context).copyWith(
-                                      color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
-                : ProbitasColor.ProbitasPrimary
-                                    ),
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor.ProbitasPrimary),
                                   ),
                                 ],
                               );
@@ -220,7 +220,7 @@ class _PostsListState extends ConsumerState<PostsList> {
 
   @override
   Widget build(BuildContext context) {
-    final getUser = ref.watch(getUsersProvider);
+    final getUser = ref.watch(getUserProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final scrollController = useScrollController();

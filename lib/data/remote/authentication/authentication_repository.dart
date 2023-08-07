@@ -1,15 +1,15 @@
-import 'package:probitas_app/features/authentication/data/model/user_response.dart';
+import 'package:probitas_app/features/authentication/data/model/user_summary_response.dart';
 
 import '../../../core/network/base_api.dart';
 
 abstract class AuthenticationRepository {
-  Future<UserResponse> login(String matricNumber, String password);
+  Future<UserSummaryResponse> login(String matricNumber, String password);
 }
 
 class AuthenticationRepositoryImpl extends BaseApi
     implements AuthenticationRepository {
   @override
-  Future<UserResponse> login(
+  Future<UserSummaryResponse> login(
     String matricNumber,
     String password,
   ) async {
@@ -20,9 +20,7 @@ class AuthenticationRepositoryImpl extends BaseApi
         "password": password,
       },
     );
-    print("HEEEEEEEERE ${data.toString()}");
-    final s = UserResponse.fromJson(data);
-    print(s.data!.token);
+    final s = UserSummaryResponse.fromJson(data);
     return s;
   }
 }

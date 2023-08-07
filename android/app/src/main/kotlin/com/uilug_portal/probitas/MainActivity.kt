@@ -1,4 +1,4 @@
-package com.example.probitas_app
+package com.uilug_portal.probitas
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

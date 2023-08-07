@@ -27,7 +27,7 @@ class _AssignmentState extends ConsumerState<Assignment> {
   @override
   Widget build(BuildContext context) {
     final value = ref.watch(getAssignmentProvider);
-    final getUser = ref.watch(getUsersProvider);
+    final getUser = ref.watch(getUserProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         key: _key,

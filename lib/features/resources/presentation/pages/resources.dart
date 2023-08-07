@@ -294,7 +294,7 @@ class _ResourceTileState extends ConsumerState<ResourceTile> {
 
   @override
   Widget build(BuildContext context) {
-    final getUser = ref.watch(getUsersProvider);
+    final getUser = ref.watch(getUserProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {

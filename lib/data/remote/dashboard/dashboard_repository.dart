@@ -1,11 +1,13 @@
 import 'package:probitas_app/features/dashboard/data/model/schedules_response.dart';
+import 'package:probitas_app/features/dashboard/data/model/user_response.dart';
+import 'package:probitas_app/features/dashboard/data/model/user_summary_response.dart';
 
 import '../../../core/error/exceptions.dart';
 import '../../../core/network/base_api.dart';
-import '../../../features/dashboard/data/model/user_response.dart';
 
 abstract class DashboardRepository {
-  Future<UserResponses> fetchUser(String token);
+  Future<UserSummaryResponse> fetchUserSummary(String token);
+  Future<UserResponse> fetchUser(String token);
   Future uploadSchedule(String token,
       {String? courseCode,
       String? courseTitle,
@@ -20,11 +22,24 @@ abstract class DashboardRepository {
 
 class DashboardRepositoryImpl extends BaseApi implements DashboardRepository {
   @override
-  Future<UserResponses> fetchUser(String token) async {
-      
+  Future<UserSummaryResponse> fetchUserSummary(String token) async {
     try {
       var data = await get("auth/me", headers: getHeader(token));
-      final s = UserResponses.fromJson(data);
+      final s = UserSummaryResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future<UserResponse> fetchUser(String token) async {
+    try {
+      var data = await get("auth/me", headers: getHeader(token));
+      final s = UserResponse.fromJson(data);
       return s;
     } catch (err) {
       if (err is RequestException) {
@@ -77,9 +92,10 @@ class DashboardRepositoryImpl extends BaseApi implements DashboardRepository {
   }
 
   @override
-  Future deleteSchedules(String token, String scheduleId)async {
-        try {
-      var data = await delete("schedules/$scheduleId", headers: getHeader(token));
+  Future deleteSchedules(String token, String scheduleId) async {
+    try {
+      var data =
+          await delete("schedules/$scheduleId", headers: getHeader(token));
       final s = SchedulesResponse.fromJson(data);
       return s;
     } catch (err) {

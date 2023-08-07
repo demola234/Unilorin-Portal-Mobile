@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class Data {
-  Data({
+class UserRequest {
+  UserRequest({
     this.user,
     this.token,
   });
@@ -9,12 +9,12 @@ class Data {
   User? user;
   String? token;
 
-  factory Data.fromRawJson(String str) =>
-      Data.fromJson(json.decode(str));
+  factory UserRequest.fromRawJson(String str) =>
+      UserRequest.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory UserRequest.fromJson(Map<String, dynamic> json) => UserRequest(
         user: User.fromJson(json["user"] ?? Map<String, dynamic>()),
         token: json["token"],
       );
@@ -50,7 +50,7 @@ class User {
     this.nextOfKin,
     this.guardian,
     this.sponsor,
-    this.semester, 
+    this.semester,
     this.user,
   });
 
@@ -145,14 +145,12 @@ class User {
 
 class Guardian {
   Guardian({
-    this.name,
     this.address,
     this.phoneNumber,
     this.email,
     this.fullName,
   });
 
-  String? name;
   String? address;
   String? phoneNumber;
   String? email;
@@ -164,7 +162,6 @@ class Guardian {
   String toRawJson() => json.encode(toJson());
 
   factory Guardian.fromJson(Map<String, dynamic> json) => Guardian(
-        name: json["name"] == null ? null : json["name"],
         address: json["address"],
         phoneNumber: json["phoneNumber"],
         email: json["email"],
@@ -172,7 +169,6 @@ class Guardian {
       );
 
   Map<String, dynamic> toJson() => {
-        "name": name == null ? null : name,
         "address": address,
         "phoneNumber": phoneNumber,
         "email": email,
@@ -250,12 +246,12 @@ class Semester {
   Semester({
     this.type,
     this.number,
-    this.year,
+    this.session,
   });
 
   String? type;
   String? number;
-  String? year;
+  String? session;
 
   factory Semester.fromRawJson(String str) =>
       Semester.fromJson(json.decode(str));
@@ -265,13 +261,13 @@ class Semester {
   factory Semester.fromJson(Map<String, dynamic> json) => Semester(
         type: json["type"],
         number: json["number"],
-        year: json["year"],
+        session: json["session"],
       );
 
   Map<String, dynamic> toJson() => {
         "type": type,
         "number": number,
-        "year": year,
+        "session": session,
       };
 }
 

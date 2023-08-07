@@ -34,7 +34,7 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  var brightness = SchedulerBinding.instance.window.platformBrightness;
+  var brightness = SchedulerBinding.instance!.window.platformBrightness;
   @override
   void initState() {
     super.initState();

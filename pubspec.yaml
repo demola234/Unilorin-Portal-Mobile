@@ -1,12 +1,12 @@
 name: probitas_app
 description: A new Flutter project.
 
-publish_to: "none"
+publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.2+3
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   animate_do: ^2.1.0
@@ -19,7 +19,7 @@ dependencies:
   file_picker: ^4.6.1
   flutter:
     sdk: flutter
-  flutter_cached_pdfview: null
+  flutter_cached_pdfview: ^0.4.2
   flutter_hooks: ^0.18.2
   flutter_launcher_icons: ^0.9.0
   flutter_native_splash: ^2.1.6
@@ -41,20 +41,21 @@ dependencies:
   open_file: ^3.2.1
   overlay_support: ^1.2.1
   path_provider: ^2.0.9
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   photo_view: ^0.13.0
   pretty_dio_logger: ^1.1.1
   progress_dialog: ^1.2.4
   pull_to_refresh: ^2.0.0
   readmore: ^2.1.0
   share_plus: ^4.0.1
-  shared_preferences: 
+  shared_preferences:
   shimmer: ^2.0.0
   smooth_page_indicator: ^1.0.0+2
   timeago: ^3.2.2
   video_player: ^2.4.5
-  visibility_detector: 
+  visibility_detector:
   webview_flutter: ^3.0.4
+  saf: ^1.0.3+4
 
 dev_dependencies:
   build_runner: null
@@ -63,9 +64,9 @@ dev_dependencies:
   freezed: null
 
 flutter_native_splash:
-  color: "#FFFFFF"
+  color: '#FFFFFF'
   image: assets/images/splash.png
-  color_dark: "#1A1A2A"
+  color_dark: '#1A1A2A'
   image_dark: assets/images/splashdark.png
   android: true
   ios: true
@@ -74,7 +75,7 @@ flutter_native_splash:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.png"
+  image_path: 'assets/images/logo.png'
 
 flutter:
   uses-material-design: true

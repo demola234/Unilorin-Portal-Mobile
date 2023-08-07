@@ -1,10 +1,12 @@
 import 'package:probitas_app/data/remote/dashboard/dashboard_repository.dart';
 import 'package:probitas_app/features/dashboard/data/model/schedules_response.dart';
+import 'package:probitas_app/features/dashboard/data/model/user_summary_response.dart';
 import '../../../features/dashboard/data/model/user_response.dart';
 import '../../local/cache.dart';
 
 abstract class DashBoardService {
-  Future<UserResponses> fetchUsers();
+  Future<UserSummaryResponse> fetchUserSummary();
+  Future<UserResponse> fetchUser();
   Future uploadSchedule(
       {String? courseCode,
       String? courseTitle,
@@ -25,7 +27,12 @@ class DashBoardServiceImpl extends DashBoardService {
       {required this.dashboardRepository, required this.cache});
 
   @override
-  Future<UserResponses> fetchUsers() async {
+  Future<UserSummaryResponse> fetchUserSummary() async {
+    return dashboardRepository.fetchUserSummary(await cache.getToken());
+  }
+
+  @override
+  Future<UserResponse> fetchUser() async {
     return dashboardRepository.fetchUser(await cache.getToken());
   }
 
