@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/constants/colors.dart';
 import 'package:probitas_app/core/utils/config.dart';
 
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../../controller/theme_controller.dart';
 
-class ThemesMode extends StatefulWidget {
+class ThemesMode extends ConsumerStatefulWidget {
   const ThemesMode({Key? key}) : super(key: key);
 
   @override
-  State<ThemesMode> createState() => _ThemeModeState();
+  ConsumerState<ThemesMode> createState() => _ThemeModeState();
 }
 
-class _ThemeModeState extends State<ThemesMode> {
+class _ThemeModeState extends ConsumerState<ThemesMode> {
   String? theme = "system";
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final notifier = ref.watch(themeNotifierProvider);
     return Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(70.0),
@@ -24,39 +26,21 @@ class _ThemeModeState extends State<ThemesMode> {
         body: Column(
           children: [
             YMargin(20),
-            ListTile(
-              title: Text("System Preferences"),
-              leading: Radio(
-                  activeColor: isDarkMode
-                      ? ProbitasColor.ProbitasTextPrimary
-                      : ProbitasColor.ProbitasSecondary,
-                  value: "system",
-                  groupValue: theme,
-                  onChanged: (value) {
-                    setState(() {
-                      theme = value.toString();
-                    });
-                  }),
-            ),
-            // YMargin(10),
-            // ListTile(
-            //   title: Text("Light Mode"),
-            //   leading: Radio(
-            //       activeColor: ProbitasColor.ProbitasSecondary,
-            //       value: "light",
-            //       groupValue: theme,
-            //       onChanged: (value) {}),
-            // ),
-            // YMargin(10),
-            // ListTile(
-            //   title: Text("Dark Mode"),
-            //   leading: Radio(
-            //       activeColor: ProbitasColor.ProbitasSecondary,
-            //       value: "dark",
-            //       groupValue: theme,
-            //       onChanged: (value) {}),
-            // ),
+            _singleTile("Dark Theme", ThemeMode.dark, notifier),
+            _singleTile("Light Theme", ThemeMode.light, notifier),
+            _singleTile("System Preferences", ThemeMode.system, notifier),
           ],
         ));
   }
+}
+
+Widget _singleTile(String title, ThemeMode mode, ThemeNotifier notifier) {
+  return RadioListTile<ThemeMode>(
+      value: mode,
+      title: Text(title),
+      groupValue: notifier.themeMode,
+      activeColor: ProbitasColor.ProbitasSecondary,
+      onChanged: (val) {
+        if (val != null) notifier.setTheme(val);
+      });
 }

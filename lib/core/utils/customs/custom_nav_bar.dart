@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: must_be_immutable
 
+import 'package:flutter/material.dart';
 import '../../constants/colors.dart';
 import '../../constants/image_path.dart';
 import '../config.dart';
@@ -9,9 +10,11 @@ class CustomNavBar extends StatelessWidget {
   CustomNavBar({
     Key? key,
     required this.title,
+    this.onTap,
   }) : super(key: key);
 
   final String title;
+  void Function()? onTap;
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;

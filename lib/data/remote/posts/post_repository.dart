@@ -14,6 +14,7 @@ abstract class PostRepository {
   Future<SinglePostResponse> getSinglePost(String token, String postId);
   Future createComments(String token, String postId, String? text);
   Future<SingleCommentResponse> getPostsComments(String token, String postId);
+  Future deletePost(String token, String postId);
 }
 
 class PostRepositoryImpl extends BaseApi implements PostRepository {
@@ -115,6 +116,20 @@ class PostRepositoryImpl extends BaseApi implements PostRepository {
     try {
       var data = await get("posts/$postId/comments", headers: getHeader(token));
       final s = SingleCommentResponse.fromJson(data);
+      return s;
+    } catch (err) {
+      if (err is RequestException) {
+        throw CustomException(err.message);
+      }
+      throw CustomException("Something went wrong");
+    }
+  }
+
+  @override
+  Future deletePost(String token, String postId) async {
+    try {
+      var data = await delete("posts/$postId", headers: getHeader(token));
+      final s = SinglePostResponse.fromJson(data);
       return s;
     } catch (err) {
       if (err is RequestException) {

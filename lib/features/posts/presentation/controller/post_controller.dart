@@ -1,6 +1,7 @@
+// ignore_for_file: unused_field
+
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:probitas_app/data/local/cache.dart';
 import 'package:probitas_app/features/posts/data/model/all_posts.dart';
 import 'package:probitas_app/features/posts/data/model/single_post.dart';
 import 'package:probitas_app/features/posts/presentation/provider/post_provider.dart';
@@ -12,18 +13,23 @@ import '../../../../data/remote/posts/post_service.dart';
 import '../../../../injection_container.dart';
 import '../../data/model/all_comments.dart';
 
-final getSinglePostProvider =
-    FutureProvider.family<SinglePostResponse, String>((ref, postId) async {
+final getSinglePostProvider = FutureProvider.family
+    .autoDispose<SinglePostResponse, String>((ref, postId) async {
   final getSinglePost = await postService.getSinglePost(postId);
 
   return getSinglePost;
 });
 
-final getSinglePostCommentsProvider =
-    FutureProvider.family<SingleCommentResponse, String>((ref, postId) async {
+final getSinglePostCommentsProvider = FutureProvider.family
+    .autoDispose<SingleCommentResponse, String>((ref, postId) async {
   final getSinglePost = await postService.getPostsComments(postId);
 
   return getSinglePost;
+});
+
+final deletePostProvider = FutureProvider.family((ref, String postId) async {
+  final delete = await postService.deletePost(postId);
+  return delete;
 });
 
 class PostsNotifier extends StateNotifier<PostsState> {
@@ -97,7 +103,6 @@ class PostsNotifier extends StateNotifier<PostsState> {
   Future<void> getMorePosts() async {
     try {
       final posts = await postService.getPosts(state.currentPage + 1);
-
       if (posts.isEmpty) {
         state = state.copyWith(moreDataAvailable: false);
       }
@@ -105,7 +110,8 @@ class PostsNotifier extends StateNotifier<PostsState> {
       state = state.copyWith(
         posts: [...state.posts!, ...posts],
         viewState: ViewState.idle,
-        currentPage: state.currentPage + 1,
+        moreDataAvailable: false,
+        currentPage: state.currentPage,
       );
     } on CustomException {
       state = state.copyWith(viewState: ViewState.error);
@@ -128,7 +134,7 @@ class PostsState {
 
   factory PostsState.initial() => const PostsState._(
         currentPage: 1,
-        moreDataAvailable: true,
+        moreDataAvailable: false,
         viewState: ViewState.idle,
       );
 

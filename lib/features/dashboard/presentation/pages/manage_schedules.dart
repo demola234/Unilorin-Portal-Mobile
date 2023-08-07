@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,7 +26,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   TextEditingController note = TextEditingController();
   TextEditingController startController = TextEditingController();
   TextEditingController endController = TextEditingController();
-
+  late DateTime dueDateTime;
   DateTime? startText;
   DateTime? endText;
 
@@ -46,7 +47,7 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final dashboardState = ref.watch(dashboardNotifierProvider);
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -176,7 +177,8 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
                               width: 15,
                             ),
                           ),
-                          onTap: startTime,
+                          onTap:
+                              Config.isAndroid ? startAndroidTime : startTime,
                         ),
                       ),
                       XMargin(15),
@@ -249,39 +251,26 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
     );
   }
 
+  TimeOfDay selectedTime = TimeOfDay.now();
+
   startTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
-        initialTime: TimeOfDay.now(),
-        context: context,
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: ProbitasColor.ProbitasSecondary,
-                onPrimary: ProbitasColor.ProbitasTextPrimary,
-                onSurface: ProbitasColor.ProbitasSecondary,
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: ProbitasColor.ProbitasSecondary,
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        });
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
 
     if (pickedTime != null) {
       print(pickedTime.format(context));
-      DateTime parsedTime =
-          DateFormat('HH:mm').parse(pickedTime.format(context));
+      DateTime parsedTime = DateFormat.jm().parse(pickedTime.format(context));
       String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
         startController.text = formattedTime;
         startText = parsedTime;
-        print("Its meee=> $startText");
+        if (kDebugMode) {
+          print("Its me=> $startText");
+        }
       });
     } else {
       print("Time is not selected");
@@ -290,39 +279,43 @@ class _ManageScheduleState extends ConsumerState<ManageSchedule> {
 
   endTime() async {
     TimeOfDay? pickedTime = await showTimePicker(
-        initialTime: TimeOfDay.now(),
-        context: context,
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: ProbitasColor.ProbitasSecondary,
-                onPrimary: ProbitasColor.ProbitasTextPrimary,
-                onSurface: ProbitasColor.ProbitasSecondary,
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: ProbitasColor.ProbitasSecondary,
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        });
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
 
     if (pickedTime != null) {
       print(pickedTime.format(context));
-      DateTime parsedTime =
-          DateFormat('HH:mm').parse(pickedTime.format(context));
+      DateTime parsedTime = DateFormat.jm().parse(pickedTime.format(context));
       String formattedTime = DateFormat.jm().format(parsedTime);
       print(formattedTime);
 
       setState(() {
         endController.text = formattedTime;
         endText = parsedTime;
+        print("Its me=> $endText");
       });
     } else {
       print("Time is not selected");
     }
+  }
+
+  // Select for Time
+  Future<TimeOfDay> startAndroidTime() async {
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+
+    if (selected != null && selected != selectedTime) {
+      DateTime parsedTime = DateFormat.jm().parse(selected.format(context));
+      String formattedTime = DateFormat.jm().format(parsedTime);
+      setState(() {
+        selectedTime = selected;
+        startController.text = formattedTime;
+        print("Its me=> $endText");
+      });
+    }
+    return selectedTime;
   }
 }

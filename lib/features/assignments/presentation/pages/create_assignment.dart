@@ -8,6 +8,7 @@ import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
+import '../provider/assignment_provider.dart';
 
 class CreateAssignment extends ConsumerStatefulWidget {
   const CreateAssignment({Key? key}) : super(key: key);
@@ -20,10 +21,9 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
   TextEditingController courseCode = TextEditingController();
   TextEditingController courseTitle = TextEditingController();
   TextEditingController lecturesName = TextEditingController();
-  TextEditingController dueTimeController = TextEditingController();
-
-  DateTime? startText;
-  DateTime? endText;
+  TextEditingController topic = TextEditingController();
+  TextEditingController dueDateTimeText = TextEditingController();
+  late DateTime dueDateTime;
 
   var remindMe;
 
@@ -33,12 +33,12 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
     courseCode.dispose();
     courseTitle.dispose();
     lecturesName.dispose();
-    dueTimeController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    // final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final assignmentState = ref.watch(assignmentNotifierProvider);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -115,28 +115,16 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Due Date",
+                    "Topic",
                     style: Config.b2(context).copyWith(
                       color: ProbitasColor.ProbitasTextSecondary,
                     ),
                   ),
                   YMargin(10),
-                  ProbitasDropDown(
-                    hintText: "Choose Week days",
-                    items: [
-                      "Monday",
-                      "Tuesday",
-                      "Wednesday",
-                      "Thursday",
-                      "Friday"
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        remindMe = value;
-                      });
-                    },
-                    value: remindMe,
-                  )
+                  ProbitasTextFormField(
+                    hintText: "Topic",
+                    controller: topic,
+                  ),
                 ],
               ),
             ),
@@ -156,7 +144,7 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
                   ProbitasTextFormField(
                     hintText: "8:00",
                     readOnly: true,
-                    controller: dueTimeController,
+                    controller: dueDateTimeText,
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
@@ -165,7 +153,7 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
                         width: 15,
                       ),
                     ),
-                    onTap: startTime,
+                    onTap: _selectDateTime,
                   ),
                 ],
               ),
@@ -174,8 +162,18 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
             InkWell(
                 onTap: () {},
                 child: ProbitasButton(
-                  onTap: () async {},
-                  // showLoading: dashboardState.viewState.isLoading,
+                  onTap: () async {
+                    ref
+                        .watch(assignmentNotifierProvider.notifier)
+                        .createAssignment(
+                          courseCode.text,
+                          courseTitle.text,
+                          lecturesName.text,
+                          dueDateTime.toString(),
+                          topic.text,
+                        );
+                  },
+                  showLoading: assignmentState.viewState.isLoading,
                   text: "Create Schedule",
                 )),
           ]),
@@ -184,42 +182,59 @@ class _CreateAssignmentState extends ConsumerState<CreateAssignment> {
     );
   }
 
-  startTime() async {
-    TimeOfDay? pickedTime = await showTimePicker(
-        initialTime: TimeOfDay.now(),
-        context: context,
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              colorScheme: ColorScheme.light(
-                primary: ProbitasColor.ProbitasSecondary,
-                onPrimary: ProbitasColor.ProbitasTextPrimary,
-                onSurface: ProbitasColor.ProbitasSecondary,
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: ProbitasColor.ProbitasSecondary,
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        });
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
 
-    if (pickedTime != null) {
-      print(pickedTime.format(context));
-      DateTime parsedTime =
-          DateFormat('HH:mm:ss').parse(pickedTime.format(context));
-      String formattedTime = DateFormat.jm().format(parsedTime);
-      print(formattedTime);
+  _selectDateTime() async {
+    final date = await _selectDate(context);
+    // ignore: unnecessary_null_comparison
+    if (date == null) return;
 
+    final time = await _selectTime(context);
+    // ignore: unnecessary_null_comparison
+    if (time == null) return;
+
+    setState(() {
+      dueDateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+      String formattedTime =
+          DateFormat.MMMMEEEEd().add_jm().format(dueDateTime);
+      dueDateTimeText.text = formattedTime;
+    });
+  }
+
+  // Select for Date
+  Future<DateTime> _selectDate(BuildContext context) async {
+    final selected = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2024),
+    );
+    if (selected != null && selected != selectedDate) {
       setState(() {
-        dueTimeController.text = formattedTime;
-        startText = parsedTime;
-        print("Its meee=> $startText");
+        selectedDate = selected;
       });
-    } else {
-      print("Time is not selected");
     }
+    return selectedDate;
+  }
+
+// Select for Time
+  Future<TimeOfDay> _selectTime(BuildContext context) async {
+    final selected = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (selected != null && selected != selectedTime) {
+      setState(() {
+        selectedTime = selected;
+      });
+    }
+    return selectedTime;
   }
 }

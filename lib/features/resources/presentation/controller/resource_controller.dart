@@ -1,6 +1,9 @@
+// ignore_for_file: unused_field
+
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/data/local/cache.dart';
+import 'package:probitas_app/features/resources/presentation/provider/resources_provider.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/toasts.dart';
 import '../../../../core/utils/navigation_service.dart';
@@ -20,11 +23,6 @@ class ResourceNotifier extends StateNotifier {
 }
 
 var resourceRepository = getIt<ResourcesService>();
-final getResourcesNotifier = FutureProvider<ResourceResponse>((ref) async {
-  final resourceResponse = await resourceRepository.getResources();
-
-  return resourceResponse;
-});
 
 final getResourcesSearchedNotifier =
     FutureProvider.family<ResourceResponse, String>((ref, search) async {
@@ -32,6 +30,11 @@ final getResourcesSearchedNotifier =
       await resourceRepository.searchResources(search);
 
   return resourceSearchResponse;
+});
+
+final deleteResourceProvider = FutureProvider.family((ref, String resourceId) async {
+  final delete = await resourceService.deleteResource(resourceId);
+  return delete;
 });
 
 class ResourcesNotifier extends StateNotifier<ResourceState> {
@@ -48,7 +51,7 @@ class ResourcesNotifier extends StateNotifier<ResourceState> {
         currentPage: state.currentPage,
       );
 
-      final resource = await resourceRepository.getResources();
+      final resource = await resourceRepository.getResources(state.currentPage + 1);
 
       state = state.copyWith(
         resource: resource.data,
@@ -66,7 +69,7 @@ class ResourcesNotifier extends StateNotifier<ResourceState> {
 
   Future<void> getMoreResources() async {
     try {
-      final resource = await resourceRepository.getResources();
+      final resource = await resourceRepository.getResources(state.currentPage);
 
       if (resource.data!.isNotEmpty) {
         state = state.copyWith(moreDataAvailable: false);

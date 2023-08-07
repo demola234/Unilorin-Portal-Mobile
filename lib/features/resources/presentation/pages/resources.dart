@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:path_provider/path_provider.dart' as path;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/utils/components.dart';
 import 'package:probitas_app/core/utils/navigation_service.dart';
@@ -11,8 +11,7 @@ import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/
 import 'package:probitas_app/features/resources/data/model/resource_response.dart';
 import 'package:probitas_app/features/resources/presentation/pages/download_screen.dart';
 import 'package:probitas_app/features/resources/presentation/pages/pdf_viewer.dart';
-// ignore: unused_import
-import 'package:url_launcher/url_launcher.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
@@ -20,9 +19,11 @@ import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/customs/custom_error.dart';
 import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../controller/resource_controller.dart';
+import '../provider/resources_provider.dart';
+import 'package:probitas_app/core/utils/states.dart';
 import 'add_resources.dart';
 
-class Resources extends ConsumerStatefulWidget {
+class Resources extends StatefulHookConsumerWidget {
   const Resources({Key? key}) : super(key: key);
 
   @override
@@ -33,8 +34,11 @@ class _ResourcesState extends ConsumerState<Resources> {
   TextEditingController searchController = TextEditingController();
 
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
+      GlobalKey<LiquidPullToRefreshState>();
   @override
   Widget build(BuildContext context) {
+    final resourcesNotifier = ref.watch(resourcesNotifierProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       key: _key,
@@ -81,34 +85,84 @@ class _ResourcesState extends ConsumerState<Resources> {
           ),
           YMargin(15),
           searchController.text.isEmpty
-              ? Expanded(
-                  child: Container(
-                      height: context.screenHeight(),
-                      width: context.screenWidth(),
-                      child: ref.watch(getResourcesNotifier).when(
-                          data: (data) => ListView.builder(
-                              itemCount: data.data!.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                final response = data.data![index];
-                                return ResourceTile(response: response);
-                              }),
-                          error: (err, _) => Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Align(
-                                        alignment: Alignment.center,
-                                        child: Center(
-                                          child: ErrorsWidget(
-                                              onTap: () => ref.refresh(
-                                                  getResourcesNotifier)),
-                                        ))
-                                  ]),
-                          loading: () => Center(
-                                child: CircularProgressIndicator(
-                                    color: ProbitasColor.ProbitasSecondary),
-                              ))))
+              ? Builder(builder: (context) {
+                  if (resourcesNotifier.viewState.isLoading) {
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: ProbitasColor.ProbitasSecondary,
+                    ));
+                  } else if (resourcesNotifier.viewState.isError) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  ErrorsWidget(
+                                    onTap: () => ref
+                                        .refresh(
+                                            resourcesNotifierProvider.notifier)
+                                        .getResource(),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Expanded(
+                      child: LiquidPullToRefresh(
+                          key: _refreshIndicatorKey,
+                          color: ProbitasColor.ProbitasSecondary,
+                          backgroundColor: ProbitasColor.ProbitasTextPrimary,
+                          animSpeedFactor: 5,
+                          showChildOpacityTransition: false,
+                          onRefresh: () => ref
+                              .refresh(resourcesNotifierProvider.notifier)
+                              .getResource(),
+                          child: Builder(builder: (context) {
+                            if (resourcesNotifier.viewState.isLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator(
+                                color: ProbitasColor.ProbitasSecondary,
+                              ));
+                            } else if (resourcesNotifier.viewState.isError) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ListView(
+                                    shrinkWrap: true,
+                                    children: [
+                                      Center(
+                                        child: Column(
+                                          children: [
+                                            ErrorsWidget(
+                                              onTap: () => ref
+                                                  .refresh(
+                                                      resourcesNotifierProvider
+                                                          .notifier)
+                                                  .getResource(),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return ResourceItems(
+                                  resourceNotifier: resourcesNotifier);
+                            }
+                          })),
+                    );
+                  }
+                })
               : Expanded(
                   child: Container(
                       height: context.screenHeight(),
@@ -140,10 +194,21 @@ class _ResourcesState extends ConsumerState<Resources> {
                                       ],
                                     ),
                                   ),
-                              loading: () => Center(
-                                    child: CircularProgressIndicator(
-                                        color: ProbitasColor.ProbitasSecondary),
-                                  )))),
+                              loading: () => SingleChildScrollView(
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                        Align(
+                                            alignment: Alignment.center,
+                                            child: Center(
+                                              child: CircularProgressIndicator(
+                                                  color: ProbitasColor
+                                                      .ProbitasSecondary),
+                                            ))
+                                      ]))))),
         ]),
       ),
       floatingActionButton: FloatingActionButton(
@@ -160,8 +225,50 @@ class _ResourcesState extends ConsumerState<Resources> {
   }
 }
 
-class ResourceTile extends StatefulWidget {
-  Datum? response;
+class ResourceItems extends StatefulHookConsumerWidget {
+  ResourceItems({
+    Key? key,
+    required this.resourceNotifier,
+  }) : super(key: key);
+
+  final ResourceState resourceNotifier;
+
+  @override
+  ConsumerState<ResourceItems> createState() => _ResourceItemsState();
+}
+
+class _ResourceItemsState extends ConsumerState<ResourceItems> {
+  final controller = RefreshController();
+  @override
+  Widget build(BuildContext context) {
+    final scrollController = useScrollController();
+    useEffect(() {
+      void scrollListener() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          ref.watch(resourcesNotifierProvider.notifier).getResource();
+        }
+      }
+
+      scrollController.addListener(scrollListener);
+
+      return () => scrollController.removeListener(scrollListener);
+    }, [scrollController]);
+
+    return ListView.builder(
+        itemCount: widget.resourceNotifier.resource!.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          if (index == widget.resourceNotifier.resource!.length - 1 &&
+              widget.resourceNotifier.moreDataAvailable) {}
+          final response = widget.resourceNotifier.resource![index];
+          return ResourceTile(response: response);
+        });
+  }
+}
+
+class ResourceTile extends ConsumerStatefulWidget {
+  final Datum? response;
 
   ResourceTile({
     required this.response,
@@ -169,10 +276,10 @@ class ResourceTile extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ResourceTile> createState() => _ResourceTileState();
+  ConsumerState<ResourceTile> createState() => _ResourceTileState();
 }
 
-class _ResourceTileState extends State<ResourceTile> {
+class _ResourceTileState extends ConsumerState<ResourceTile> {
   bool isLoading = false;
   late Dio dio;
   late String progress;
@@ -187,20 +294,24 @@ class _ResourceTileState extends State<ResourceTile> {
 
   @override
   Widget build(BuildContext context) {
+    final getUser = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         showModalBottomSheet<Null>(
           context: context,
+          isScrollControlled: true,
           builder: (BuildContext context) {
             return Container(
+              height: context.screenHeight() / 2.5,
               decoration: BoxDecoration(
-                  // borderRadius: _borderRadius,
-                  ),
-              height: context.screenHeight() / 3,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10)),
+              ),
               child: Column(
                 children: [
-                  YMargin(10),
+                  YMargin(5),
                   Container(
                       height: 6,
                       width: context.screenWidth() / 3.5,
@@ -208,7 +319,7 @@ class _ResourceTileState extends State<ResourceTile> {
                           color: ProbitasColor.ProbitasTextPrimary.withOpacity(
                               0.7),
                           borderRadius: BorderRadius.circular(5.0))),
-                  YMargin(30),
+                  Spacer(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Row(
@@ -218,31 +329,8 @@ class _ResourceTileState extends State<ResourceTile> {
                           width: 70.0,
                           height: 100,
                           decoration: BoxDecoration(
-                              color: ProbitasColor.ProbitasTextSecondary,
                               borderRadius: BorderRadius.circular(5.0)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                widget.response!.courseCode!,
-                                style: Config.b2(context).copyWith(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                widget.response!.file!
-                                    .split(".")
-                                    .last
-                                    .toUpperCase(),
-                                style: Config.b2(context).copyWith(
-                                  color: ProbitasColor.ProbitasTextPrimary,
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: getResourceIcon(),
                         ),
                         XMargin(15),
                         Column(
@@ -281,12 +369,13 @@ class _ResourceTileState extends State<ResourceTile> {
                                 context: context,
                                 builder: (context) => DownloadScreen(
                                       url: widget.response!.file!,
+                                      title: widget.response!.courseTitle!,
                                     ));
                           },
                           icon: SvgPicture.asset(ImagesAsset.download,
                               color: isDarkMode
                                   ? ProbitasColor.ProbitasTextSecondary
-                                  : ProbitasColor.ProbitasPrimary),
+                                  : ProbitasColor.ProbitasSecondary),
                         )
                       ],
                     ),
@@ -300,7 +389,28 @@ class _ResourceTileState extends State<ResourceTile> {
                             ));
                           },
                           text: "View Material")
-                      : SizedBox.shrink()
+                      : SizedBox.shrink(),
+                  Spacer(),
+                  getUser.when(
+                    data: (data) => data.data!.user!.user!.id ==
+                            widget.response!.user!.id
+                        ? ProbitasDeleteButton(
+                            text: "Delete Material",
+                            onTap: () {
+                              ref.read(
+                                  deleteResourceProvider(widget.response!.id!));
+                              Navigator.pop(context);
+                              Future.delayed(const Duration(seconds: 3), () {
+                                ref
+                                    .refresh(resourcesNotifierProvider.notifier)
+                                    .getResource();
+                              });
+                            })
+                        : Container(),
+                    loading: () => Container(),
+                    error: (str, err) => Container(),
+                  ),
+                  Spacer(),
                 ],
               ),
             );
@@ -312,9 +422,11 @@ class _ResourceTileState extends State<ResourceTile> {
         height: 120,
         width: context.screenWidth(),
         decoration: BoxDecoration(
-          color: ProbitasColor.ProbitasTextSecondary,
-          borderRadius: BorderRadius.circular(12.0),
-        ),
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(
+                color: isDarkMode
+                    ? ProbitasColor.ProbitasTextPrimary
+                    : ProbitasColor.ProbitasSecondary.withOpacity(0.4))),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Row(
@@ -323,29 +435,9 @@ class _ResourceTileState extends State<ResourceTile> {
               Container(
                 width: 70.0,
                 height: 100,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasTextPrimary,
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.response!.courseCode!,
-                      style: Config.b2(context).copyWith(
-                          color: ProbitasColor.ProbitasSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      widget.response!.file!.split(".").last.toUpperCase(),
-                      style: Config.b2(context).copyWith(
-                        color: ProbitasColor.ProbitasSecondary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(5.0)),
+                child: getResourceIcon(),
               ),
               XMargin(15),
               Column(
@@ -356,7 +448,6 @@ class _ResourceTileState extends State<ResourceTile> {
                   Text(
                     widget.response!.courseTitle!,
                     style: Config.b2(context).copyWith(
-                      color: Colors.white,
                       fontSize: 12,
                     ),
                   ),
@@ -368,7 +459,6 @@ class _ResourceTileState extends State<ResourceTile> {
                       Text(
                           "By ${widget.response!.user!.fullName!.split(" ")[0]} ${widget.response!.user!.fullName!.split(" ")[1]}",
                           style: Config.b2(context).copyWith(
-                            color: Colors.white,
                             fontSize: 12,
                           )),
                     ],
@@ -382,59 +472,31 @@ class _ResourceTileState extends State<ResourceTile> {
     );
   }
 
-  Future<List<Directory>?> _getExternalStoragePath() {
-    return path.getExternalStorageDirectories(
-        type: path.StorageDirectory.documents);
-  }
-
-  Future _downloadSaveFileToStorage(String urlPath, String fileName) async {
-    try {
-      final dirList = await _getExternalStoragePath();
-      final path = dirList![0].path;
-      final file = File("$path/$fileName");
-      await dio.download(urlPath, file.path, onReceiveProgress: (rec, total) {
-        setState(() {
-          isLoading = true;
-          progress = ((rec / total) * 100).toStringAsFixed(0) + "%";
-          print(progress);
-        });
-      });
-      _fileFullPath = file.path;
-    } catch (e) {
-      print(e);
+  getResourceIcon() {
+    if (widget.response!.file!.split(".").last.toLowerCase() == "pdf") {
+      return SvgPicture.asset(ImagesAsset.pdf);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "png") {
+      return SvgPicture.asset(ImagesAsset.png);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "jpg") {
+      return SvgPicture.asset(ImagesAsset.jpg);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "jpeg") {
+      return SvgPicture.asset(ImagesAsset.jpg);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "doc") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "docx") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "xls") {
+      return SvgPicture.asset(ImagesAsset.xls);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "webp") {
+      return SvgPicture.asset(ImagesAsset.doc);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "xlsx") {
+      return SvgPicture.asset(ImagesAsset.xls);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "pptx") {
+      return SvgPicture.asset(ImagesAsset.ppt);
+    } else if (widget.response!.file!.split(".").last.toLowerCase() == "ppt") {
+      return SvgPicture.asset(ImagesAsset.ppt);
+    } else {
+      return SvgPicture.asset(ImagesAsset.file);
     }
   }
-
-  // Future openFile({required String url, String? fileName}) async {
-  //   final name = fileName ?? url.split('/').last;
-
-  //   final file = await downloadFile(url, name);
-  //   print(file);
-  //   if (file == null) return;
-
-  //   print("${file.path}");
-
-  //   OpenFile.open(file.path);
-  // }
-
-  // Future<File?> downloadFile(String url, String name) async {
-  //   final appStorage = await getApplicationDocumentsDirectory();
-  //   final file = File('${appStorage.path}/$name');
-  //   try {
-  //     final response = await Dio().get(url,
-  //         options: Options(
-  //           responseType: ResponseType.bytes,
-  //           followRedirects: false,
-  //           receiveTimeout: 0,
-  //         ));
-  //     print(response);
-  //     final raf = file.openSync(mode: FileMode.write);
-  //     raf.writeByteSync(response.data);
-  //     await raf.close();
-
-  //     return file;
-  //   } catch (e) {
-  //     return null;
-  //   }
-  // }
 }

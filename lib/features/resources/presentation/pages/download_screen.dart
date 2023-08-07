@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
@@ -13,8 +15,9 @@ import '../../../../core/error/toasts.dart';
 
 class DownloadScreen extends StatefulWidget {
   final String url;
+  final String title;
 
-  DownloadScreen({required this.url});
+  DownloadScreen({required this.url, required this.title});
   @override
   _DownloadScreenState createState() => _DownloadScreenState();
 }
@@ -97,8 +100,6 @@ class _DownloadScreenState extends State<DownloadScreen> {
         Directory? appDirectory = await getApplicationDocumentsDirectory();
         path = appDirectory.path + fileName;
       }
-
-      print('path is $path');
 
       File file = File(path);
       if (!await file.exists()) {

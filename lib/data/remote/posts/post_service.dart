@@ -12,6 +12,7 @@ abstract class PostService {
   Future<SinglePostResponse> getSinglePost(String postId);
   Future createComments(String postId, String text);
   Future<SingleCommentResponse> getPostsComments(String postId);
+  Future deletePost(String postId);
 }
 
 class PostServiceImpl extends PostService {
@@ -48,5 +49,10 @@ class PostServiceImpl extends PostService {
   @override
   Future<SingleCommentResponse> getPostsComments(String postId) async {
     return postRepository.getPostsComments(await cache.getToken(), postId);
+  }
+
+  @override
+  Future deletePost(String postId) async {
+    return postRepository.deletePost(await cache.getToken(), postId);
   }
 }

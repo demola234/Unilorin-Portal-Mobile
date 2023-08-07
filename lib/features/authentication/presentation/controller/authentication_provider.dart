@@ -14,6 +14,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
   var cache = getIt<Cache>();
   LoginNotifier(this._read) : super(LoginState.initial());
 
+  // ignore: unused_field
   final Reader _read;
 
   Future<void> login(String matricNumber, String password) async {
@@ -22,6 +23,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       await authService.login(matricNumber, password);
       NavigationService().replaceScreen(NavController());
     } catch (e) {
+      print(e);
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
     } finally {
       state = state.copyWith(viewState: ViewState.idle);

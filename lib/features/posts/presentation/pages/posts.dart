@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// ignore: unused_import
-import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:probitas_app/core/utils/states.dart';
-import 'package:probitas_app/features/dashboard/presentation/widget/empty_state/empty_state.dart';
 import 'package:probitas_app/features/posts/presentation/pages/add_post.dart';
 import 'package:probitas_app/features/posts/presentation/pages/post_overview.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -23,6 +20,7 @@ import '../../../../core/utils/customs/custom_drawers.dart';
 import '../../../../core/utils/customs/custom_error.dart';
 import '../../../../core/utils/image_viewer.dart';
 import '../../../../core/utils/navigation_service.dart';
+import '../../../dashboard/presentation/controller/dashboard_controller.dart';
 import '../../data/model/all_posts.dart';
 import '../controller/post_controller.dart';
 import '../provider/post_provider.dart';
@@ -139,7 +137,10 @@ class _PostFeedsState extends ConsumerState<PostFeeds> {
                                 children: [
                                   Text(
                                     "Posts Not Available",
-                                    style: Config.b3(context),
+                                    style: Config.b3(context).copyWith(
+                                      color: isDarkMode ? ProbitasColor.ProbitasTextPrimary 
+                : ProbitasColor.ProbitasPrimary
+                                    ),
                                   ),
                                 ],
                               );
@@ -219,6 +220,7 @@ class _PostsListState extends ConsumerState<PostsList> {
 
   @override
   Widget build(BuildContext context) {
+    final getUser = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     final scrollController = useScrollController();
@@ -226,7 +228,7 @@ class _PostsListState extends ConsumerState<PostsList> {
       void scrollListener() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
-          ref.read(postsNotifierProvider.notifier).getMorePosts();
+          ref.watch(postsNotifierProvider.notifier).getMorePosts();
         }
       }
 
@@ -300,58 +302,75 @@ class _PostsListState extends ConsumerState<PostsList> {
                           ),
                         ),
                         XMargin(10),
-                        Flexible(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 400,
-                                child: Text(
-                                  "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
-                                  style: Config.b2(context).copyWith(
-                                      color: isDarkMode
-                                          ? ProbitasColor.ProbitasTextPrimary
-                                          : ProbitasColor.ProbitasPrimary),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  textAlign: TextAlign.justify,
-                                ),
-                              ),
-                              YMargin(2.0),
-                              Text(
-                                widget.postsNotifier.posts![index].user!
-                                    .department!
-                                    .toString(),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Text(
+                                "${widget.postsNotifier.posts![index].user!.fullName!.split(" ")[1]} ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").first[0].toUpperCase()} . ${widget.postsNotifier.posts![index].user!.fullName!.split(" ").last[0].toUpperCase()}",
                                 style: Config.b2(context).copyWith(
-                                  color: isDarkMode
-                                      ? ProbitasColor.ProbitasTextPrimary
-                                          .withOpacity(0.5)
-                                      : ProbitasColor.ProbitasTextSecondary,
-                                ),
+                                    color: isDarkMode
+                                        ? ProbitasColor.ProbitasTextPrimary
+                                        : ProbitasColor.ProbitasPrimary),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
+                                textAlign: TextAlign.justify,
                               ),
-                            ],
-                          ),
+                            ),
+                            YMargin(2.0),
+                            Text(
+                              widget
+                                  .postsNotifier.posts![index].user!.department!
+                                  .toString(),
+                              style: Config.b2(context).copyWith(
+                                color: isDarkMode
+                                    ? ProbitasColor.ProbitasTextPrimary
+                                        .withOpacity(0.5)
+                                    : ProbitasColor.ProbitasTextSecondary,
+                              ),
+                            ),
+                          ],
                         ),
                         Spacer(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            PopupMenuButton(
-                              child: Icon(
-                                Icons.more_vert,
-                                color: isDarkMode
-                                    ? ProbitasColor.ProbitasTextPrimary
-                                    : ProbitasColor.ProbitasPrimary,
-                              ),
-                              onSelected: (selectedValue) {
-                                print(selectedValue);
-                              },
-                              itemBuilder: (BuildContext ctx) => [
-                                PopupMenuItem(
-                                    child: Text('Delete'), value: '1'),
-                              ],
+                            getUser.when(
+                              data: (data) => data.data!.user!.user!.id ==
+                                      widget
+                                          .postsNotifier.posts![index].user!.id
+                                  ? PopupMenuButton(
+                                      child: Icon(
+                                        Icons.more_vert,
+                                        color: isDarkMode
+                                            ? ProbitasColor.ProbitasTextPrimary
+                                            : ProbitasColor.ProbitasPrimary,
+                                      ),
+                                      itemBuilder: (BuildContext ctx) => [
+                                        PopupMenuItem(
+                                            child: Text('Delete'),
+                                            onTap: () {
+                                              ref.read(deletePostProvider(widget
+                                                  .postsNotifier
+                                                  .posts![index]
+                                                  .id!));
+                                              Future.delayed(
+                                                  const Duration(seconds: 4),
+                                                  () {
+                                                ref
+                                                    .refresh(
+                                                        postsNotifierProvider
+                                                            .notifier)
+                                                    .getPosts();
+                                              });
+                                            })
+                                      ],
+                                    )
+                                  : Container(),
+                              loading: () => Container(),
+                              error: (str, err) => Container(),
                             ),
                             YMargin(2.0),
                             Text(
@@ -540,7 +559,7 @@ class _UserLikesState extends ConsumerState<UserLikes> {
 }
 
 class PostListImage extends StatefulWidget {
-  PostList posts;
+  final PostList posts;
   PostListImage({required this.posts, Key? key}) : super(key: key);
 
   @override
@@ -549,6 +568,32 @@ class PostListImage extends StatefulWidget {
 
 class _PostListItemState extends State<PostListImage> {
   final pageController = PageController();
+  // late VideoPlayerController _controller;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   for (var i = 0; i < widget.posts.images!.length; i++) {
+  //     _controller = VideoPlayerController.network(widget.posts.images![i]);
+  //   }
+  //   _controller.initialize().then((_) {
+  //     if (mounted) {
+  //       setState(() {});
+  //       _controller.play();
+  //     }
+  //   });
+  // }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  // }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _controller.pause();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -562,18 +607,38 @@ class _PostListItemState extends State<PostListImage> {
               itemCount: widget.posts.images!.length,
               itemBuilder: (context, imageIndex) {
                 return GestureDetector(
-                  onTap: () {
-                    ImageViewUtils.showImagePreview(
-                        context, [widget.posts.images![imageIndex]]);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.posts.images![imageIndex],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                );
+                    onTap: () {
+                      ImageViewUtils.showImagePreview(
+                          context, [widget.posts.images![imageIndex]]);
+                    },
+                    // child: !widget.posts.images!.last.contains(".mp4")
+                    // ?
+                    child: Container(
+                      decoration: BoxDecoration(),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.posts.images![imageIndex],
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                    // : VisibilityDetector(
+                    //     key: Key("value"),
+                    //     onVisibilityChanged: (VisibilityInfo info) {
+                    //       debugPrint(
+                    //           "${info.visibleFraction} ${this.mounted}");
+                    //       if (info.visibleFraction >= 0.8 && this.mounted) {
+                    //         _controller.play();
+                    //         _controller.setVolume(1.0);
+                    //       } else {
+                    //         _controller.pause();
+                    //         _controller.setVolume(0.0);
+                    //       }
+                    //     },
+                    //     child: AspectRatio(
+                    //       aspectRatio: _controller.value.aspectRatio,
+                    //       child: VideoPlayer(_controller),
+                    //     ),
+                    //   ),
+                    );
               },
             )),
         widget.posts.images!.length > 1

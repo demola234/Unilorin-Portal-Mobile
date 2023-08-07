@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:probitas_app/core/error/exceptions.dart';
 import 'package:probitas_app/data/remote/news/news_service.dart';

@@ -1,15 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lottie/lottie.dart';
 import 'package:probitas_app/core/utils/config.dart';
 import 'package:probitas_app/features/dashboard/presentation/controller/dashboard_controller.dart';
 import '../../../core/constants/colors.dart';
 import '../../../../../core/utils/customs/custom_nav_bar.dart';
-import '../../../core/constants/image_path.dart';
 import '../../../core/utils/customs/custom_error.dart';
 import '../../../core/utils/image_viewer.dart';
-import '../../../core/utils/shimmer_loading.dart';
+
 
 class Profile extends ConsumerWidget {
   Profile({Key? key});
@@ -74,7 +72,7 @@ class Profile extends ConsumerWidget {
                                   ),
                                   YMargin(2.0),
                                   Text(
-                                    "${data.data!.user!.level!} Level",
+                                    "${data.data!.user!.level} Level",
                                     style: Config.b2(context).copyWith(
                                         color: isDarkMode
                                             ? ProbitasColor.ProbitasTextPrimary
@@ -124,62 +122,62 @@ class Profile extends ConsumerWidget {
                                 children: [
                                   YMargin(5.0),
                                   Text(
-                                    "Full Name: ${data.data!.user!.fullName!}",
+                                    "Full Name: ${data.data!.user!.fullName}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Sex: ${data.data!.user!.gender!}",
+                                    "Sex: ${data.data!.user!.gender}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Current Session: ${data.data!.user!.session!}",
+                                    "Current Session: ${data.data!.user!.session}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Phone Number: ${data.data!.user!.phoneNumber!}",
+                                    "Phone Number: ${data.data!.user!.phoneNumber}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Faculty: ${data.data!.user!.faculty!}",
+                                    "Faculty: ${data.data!.user!.faculty}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Department: ${data.data!.user!.department!}",
+                                    "Department: ${data.data!.user!.department}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Programme: ${data.data!.user!.course!}",
-                                    style: Config.b2(context),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  YMargin(5),
-                                  Text(
-                                    "Studentship Status: ${data.data!.user!.studentShipStatus!}",
+                                    "Programme: ${data.data!.user!.course}",
                                     style: Config.b2(context),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Charges Paid: ${data.data!.user!.chargesPaid!}",
+                                    "Studentship Status: ${data.data!.user!.studentShipStatus}",
                                     style: Config.b2(context),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   YMargin(5),
                                   Text(
-                                    "Mode Of Entry: ${data.data!.user!.modeOfEntry!}",
+                                    "Charges Paid: ${data.data!.user!.chargesPaid}",
+                                    style: Config.b2(context),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  YMargin(5),
+                                  Text(
+                                    "Mode Of Entry: ${data.data!.user!.modeOfEntry}",
                                     style: Config.b2(context),
                                   ),
                                   YMargin(5),
                                   Container(
                                     width: context.screenWidth() / 1.7,
                                     child: Text(
-                                      "Studentship Email: ${data.data!.user!.studentEmail!}",
+                                      "Studentship Email: ${data.data!.user!.studentEmail}",
                                       style: Config.b2(context),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,
@@ -189,7 +187,7 @@ class Profile extends ConsumerWidget {
                                   Container(
                                     width: context.screenWidth() / 1.7,
                                     child: Text(
-                                      "Permanent/Home Address:: ${data.data!.user!.address!}",
+                                      "Permanent/Home Address:: ${data.data!.user!.address}",
                                       style: Config.b2(context),
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 2,

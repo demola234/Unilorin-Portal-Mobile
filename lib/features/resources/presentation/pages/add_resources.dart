@@ -2,17 +2,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:probitas_app/core/constants/image_path.dart';
 import 'package:probitas_app/core/error/toasts.dart';
 import 'package:probitas_app/core/utils/states.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/error/exceptions.dart';
-import '../../../../core/utils/allowed_extension.dart';
 import '../../../../core/utils/components.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_nav_bar.dart';
 import '../../../posts/presentation/pages/posts.dart';
-import '../controller/resource_controller.dart';
 import '../provider/resources_provider.dart';
 
 class AddResources extends ConsumerStatefulWidget {
@@ -27,7 +24,6 @@ class _AddResourcesState extends ConsumerState<AddResources> {
   TextEditingController courseTitle = TextEditingController();
   var topic = TextEditingController();
   File? file;
-  bool _multiPick = true;
   String? selectedFile = "";
   String? fileType = "";
 
@@ -108,7 +104,7 @@ class _AddResourcesState extends ConsumerState<AddResources> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: ProbitasSmallButton(
                 title: "Upload File",
-                icon: ImagesAsset.file,
+                // icon: ImagesAsset.file,
                 onTap: _openFileExplorer,
               )),
         ),
@@ -200,15 +196,17 @@ class _AddResourcesState extends ConsumerState<AddResources> {
       await ref
           .watch(resourcesNotifierProvider.notifier)
           .createResource(courseCode.text, courseTitle.text, topic.text, file!);
-      ref.refresh(getResourcesNotifier);
+      Future.delayed(const Duration(seconds: 1), () {
+        ref.refresh(resourceNotifierProviders.notifier);
+      });
     } catch (e) {
       Toasts.showErrorToast(ErrorHelper.getLocalizedMessage(e));
-    }
+    } finally {}
   }
 
   void _openFileExplorer() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(type: FileType.custom, allowedExtensions: allowedExtensions);
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.any);
 
     // ignore: unnecessary_null_comparison
     if (result != null && result.files.map((e) => e.path) != null) {

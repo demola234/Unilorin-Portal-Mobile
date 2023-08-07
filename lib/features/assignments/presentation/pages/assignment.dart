@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:probitas_app/features/assignments/presentation/pages/submit_assignment.dart';
-import 'package:probitas_app/features/assignments/presentation/pages/submitted_assignment.dart';
+import 'package:probitas_app/features/assignments/presentation/pages/submited_assignment.dart';
+import 'package:probitas_app/features/assignments/presentation/pages/widgets/assignment_tile.dart';
 import '../../../../core/constants/colors.dart';
 import '../../../../core/utils/config.dart';
 import '../../../../core/utils/customs/custom_appbar.dart';
 import '../../../../core/utils/customs/custom_drawers.dart';
+import '../../../../core/utils/customs/custom_error.dart';
 import '../../../../core/utils/navigation_service.dart';
 import '../../../dashboard/presentation/controller/dashboard_controller.dart';
-import '../../../dashboard/presentation/pages/manage_schedules.dart';
+import '../controller/assignment_controller.dart';
 import 'create_assignment.dart';
 
 class Assignment extends ConsumerStatefulWidget {
@@ -21,178 +23,152 @@ class Assignment extends ConsumerStatefulWidget {
 
 class _AssignmentState extends ConsumerState<Assignment> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
+    final value = ref.watch(getAssignmentProvider);
+    final getUser = ref.watch(getUsersProvider);
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      key: _key,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
-        child: CustomAppbar(
-          onPressed: () {
-            _key.currentState!.openDrawer();
-          },
-        ),
-      ),
-      drawer: ProbitasDrawer(),
-      body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(children: [
-            YMargin(10),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text(
-                "Your Assignments",
-                style: Config.h3(context).copyWith(
-                  color: isDarkMode
-                      ? ProbitasColor.ProbitasTextPrimary
-                      : ProbitasColor.ProbitasPrimary,
-                  fontSize: 18,
-                ),
-              ),
-            ]),
-            YMargin(10),
-            Expanded(
-                child: Container(
-                    width: context.screenWidth(),
-                    child: ListView.builder(
-                        itemCount: 4,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return AssignmentTile();
-                        })))
-          ])),
-      floatingActionButton: Visibility(
-        // visible: ref.watch(getUsersProvider).asData!.value.data!.user.role,
-        child: SpeedDial(
-          //Speed dial menu
-          marginBottom: 10, //margin bottom
-          icon: Icons.add, //icon on Floating action button
-          activeIcon: Icons.close, //icon when menu is expanded on button
-          backgroundColor:
-              ProbitasColor.ProbitasSecondary, //background color of button
-          foregroundColor: Colors.white, //font color, icon color in button
-          activeBackgroundColor: ProbitasColor
-              .ProbitasTextPrimary, //background color when menu is expanded
-          activeForegroundColor: ProbitasColor.ProbitasSecondary,
-          buttonSize: 56.0, //button size
-          visible: true,
-          closeManually: true,
-          curve: Curves.bounceIn,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.5,
-
-          elevation: 0, //shadow elevation of button
-          shape: CircleBorder(), //shape of button
-          children: [
-            SpeedDialChild(
-              child: Icon(Icons.book_online),
-              backgroundColor: ProbitasColor.ProbitasSecondary,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              label: 'Submitted Assignment',
-              labelStyle: TextStyle(fontSize: 18.0),
-              onTap: () =>
-                  NavigationService().navigateToScreen(SubmittedAssignment()),
-              onLongPress: () =>
-                  NavigationService().navigateToScreen(SubmittedAssignment()),
-            ),
-            SpeedDialChild(
-              //speed dial child
-              child: Icon(Icons.add),
-              backgroundColor: ProbitasColor.ProbitasSecondary,
-              foregroundColor: Colors.white,
-              label: 'Create Assignment',
-              labelStyle: TextStyle(fontSize: 18.0),
-              elevation: 0,
-              onTap: () =>
-                  NavigationService().navigateToScreen(CreateAssignment()),
-              onLongPress: () =>
-                  NavigationService().navigateToScreen(CreateAssignment()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AssignmentTile extends StatelessWidget {
-  const AssignmentTile({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => NavigationService().navigateToScreen(SubmitAssignment()),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5.0),
-        height: 140,
-        width: context.screenWidth(),
-        decoration: BoxDecoration(
-            color: ProbitasColor.ProbitasTextSecondary,
-            borderRadius: BorderRadius.circular(12.0)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                width: 6.0,
-                height: 100,
-                decoration: BoxDecoration(
-                    color: ProbitasColor.ProbitasTextPrimary,
-                    borderRadius: BorderRadius.circular(12.0)),
-              ),
-              XMargin(15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  YMargin(20.0),
-                  Text(
-                    "LIS121",
-                    style: Config.b2(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  YMargin(2.0),
-                  Text(
-                    "Library and Information Techniques",
-                    style: Config.b2(context).copyWith(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Divider(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text("Due Date: Jun 10, 2022, 9:00 AM",
-                          style: Config.b2(context).copyWith(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text("By Stephen Peter",
-                          style: Config.b2(context).copyWith(
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                    ],
-                  ),
-                ],
-              )
-            ],
+        key: _key,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(70.0),
+          child: CustomAppbar(
+            onPressed: () {
+              _key.currentState!.openDrawer();
+            },
           ),
         ),
-      ),
-    );
+        drawer: ProbitasDrawer(),
+        body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(children: [
+              YMargin(10),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(
+                  "Your Assignments",
+                  style: Config.h3(context).copyWith(
+                    color: isDarkMode
+                        ? ProbitasColor.ProbitasTextPrimary
+                        : ProbitasColor.ProbitasPrimary,
+                    fontSize: 18,
+                  ),
+                ),
+              ]),
+              YMargin(10),
+              Expanded(
+                child: Container(
+                  width: context.screenWidth(),
+                  child: value.when(
+                    data: (data) => data.data.contains((element) =>
+                            element.dueDate.isAfter(DateTime.now()))
+                        ? ListView.builder(
+                            itemCount: data.data.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return data.data[index].dueDate
+                                      .isAfter(DateTime.now())
+                                  ? AssignmentTile(
+                                      onTap: () {
+                                        NavigationService().navigateToScreen(
+                                            SubmitAssignment(
+                                                assignmentId:
+                                                    data.data[index].id));
+                                      },
+                                      courseCode: data.data[index].courseCode,
+                                      courseTitle: data.data[index].courseTitle,
+                                      dueDate: data.data[index].dueDate,
+                                      lecturer: data.data[index].lecturer,
+                                      assignmentId: data.data[index].id,
+                                    )
+                                  : data.data.length > 2
+                                      ? Container()
+                                      : Container();
+                            })
+                        : Center(child: Text("No Assignment Found!")),
+                    loading: () => Center(
+                      child: CircularProgressIndicator(
+                        color: ProbitasColor.ProbitasSecondary,
+                      ),
+                    ),
+                    error: (err, str) => Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Center(
+                              child: Column(
+                                children: [
+                                  ErrorsWidget(
+                                    onTap: () =>
+                                        ref.refresh(getAssignmentProvider),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ])),
+        floatingActionButton: getUser.when(
+          data: (data) => data.data!.user!.user!.role == "CLASS_REP"
+              ? SpeedDial(
+                  marginBottom: 10,
+                  icon: Icons.add,
+                  activeIcon: Icons.close,
+                  backgroundColor: ProbitasColor.ProbitasSecondary,
+                  foregroundColor: Colors.white,
+                  activeBackgroundColor: ProbitasColor.ProbitasTextPrimary,
+                  activeForegroundColor: ProbitasColor.ProbitasSecondary,
+                  buttonSize: 56.0,
+                  visible: true,
+                  closeManually: true,
+                  curve: Curves.bounceIn,
+                  overlayColor: Colors.black,
+                  overlayOpacity: 0.5,
+                  elevation: 0,
+                  shape: CircleBorder(),
+                  children: [
+                    SpeedDialChild(
+                        child: Icon(Icons.book_online),
+                        backgroundColor: ProbitasColor.ProbitasSecondary,
+                        foregroundColor: Colors.white,
+                        labelBackgroundColor: isDarkMode
+                            ? ProbitasColor.ProbitasSecondary
+                            : ProbitasColor.ProbitasTextPrimary,
+                        elevation: 0,
+                        label: 'Submitted Assignment',
+                        labelStyle: TextStyle(fontSize: 18.0),
+                        onTap: () => NavigationService()
+                            .navigateToScreen(SubmittedAssignment()),
+                        onLongPress: () => NavigationService()
+                            .navigateToScreen(SubmittedAssignment())),
+                    SpeedDialChild(
+                      //speed dial child
+                      child: Icon(Icons.add),
+                      backgroundColor: ProbitasColor.ProbitasSecondary,
+                      foregroundColor: Colors.white,
+                      label: 'Create Assignment',
+                      labelStyle: TextStyle(fontSize: 18.0),
+                      labelBackgroundColor: isDarkMode
+                          ? ProbitasColor.ProbitasSecondary
+                          : ProbitasColor.ProbitasTextPrimary,
+                      elevation: 0,
+                      onTap: () => NavigationService()
+                          .navigateToScreen(CreateAssignment()),
+                      onLongPress: () => NavigationService()
+                          .navigateToScreen(CreateAssignment()),
+                    ),
+                  ],
+                )
+              : Container(),
+          loading: () => Container(),
+          error: (_, err) => Container(),
+        ));
   }
 }
